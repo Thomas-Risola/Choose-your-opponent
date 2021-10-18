@@ -1,2 +1,2 @@
-# Choose-your-opppnent
+# Choose-your-opponent
 Projet TDLOG/MOPSI
