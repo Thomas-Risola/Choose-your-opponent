@@ -1,2 +1,2 @@
-# Choose-your-oppenent
+# Choose-your-opppnent
 Projet TDLOG/MOPSI
