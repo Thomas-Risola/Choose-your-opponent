@@ -9,6 +9,6 @@ const int N=16;
 
 
 
-void setMatrixVictory(Imagine::Matrix<float> &M);
+void setMatrixVictory(Imagine::Matrix<double> &M);
 
-void display(const Imagine::Matrix<float> &M);
+void display(const Imagine::Matrix<double> &M);

@@ -28,13 +28,13 @@ void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::de
     }
 }
 
-void setDiagonalVictory(Imagine::Matrix<float> &M){
+void setDiagonalVictory(Imagine::Matrix<double> &M){
     for(int i=0; i<M.nrow(); i++){
         M(i,i) = 0;
     }
 }
 
-void setMatrixVictory(Imagine::Matrix<float> &M){
+void setMatrixVictory(Imagine::Matrix<double> &M){
     setDiagonalVictory(M);
     // Matchup J1
     M(0,1) = 0.554;
@@ -177,7 +177,7 @@ void setMatrixVictory(Imagine::Matrix<float> &M){
             M(i,j) = 1 - M(j,i);
 }
 
-void display(const Imagine::Matrix<float> &M) {
+void display(const Imagine::Matrix<double> &M) {
     for(int i = 0; i<M.nrow(); i++){
         std::cout << "( ";
         for(int j=0; j<M.ncol(); j++)
