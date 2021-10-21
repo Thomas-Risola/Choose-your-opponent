@@ -7,6 +7,6 @@ find_package(Imagine REQUIRED)
 
 project(Choose_your_opponent)
 
-add_executable(Choose_your_opponent main.cpp)
+add_executable(Choose_your_opponent main.cpp tools.cpp)
 
 ImagineUseModules(Choose_your_opponent Graphics)
