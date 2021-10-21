@@ -43,7 +43,13 @@ void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::fo
             if (nxt_pos==ranking.end()) break;
             nxt_pos++;
         }
+        nxt_pos=before_argmax_q;
+        nxt_pos++;
+        int chosen_player=*nxt_pos;
         ranking.erase_after(before_argmax_q);
+        X1.push_back(current_player);
+        X2.push_back(chosen_player);
+        opponent_choice_algorithm(X1,X2,ranking,probability_matrix);
     }
 }
 
