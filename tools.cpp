@@ -10,6 +10,8 @@ double p_S(const std::vector<bool>& S,const std::vector<int>& X1,const std::vect
         int x2=X2.at(i);
         if (x1<x2)
             rep*=probability_matrix(x1,x2);
+        else
+            rep*=probability_matrix(x2,x1);
     }
 }
 
