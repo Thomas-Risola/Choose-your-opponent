@@ -13,6 +13,7 @@ double p_S(const std::vector<bool>& S,const std::vector<int>& X1,const std::vect
         else
             rep*=probability_matrix(x2,x1);
     }
+    return rep;
 }
 
 void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::deque<double>& ranking,const Imagine::Matrix<double>& probability_matrix) {
