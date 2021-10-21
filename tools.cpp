@@ -34,14 +34,12 @@ void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::fo
         std::forward_list<double>::iterator nxt_pos=ranking.begin();
         int qmax=0;
         int q;
-        for (std::forward_list<double>::iterator pos=ranking.before_begin();pos!=ranking.end();++pos) {
+        for (std::forward_list<double>::iterator pos=ranking.before_begin();nxt_pos!=ranking.end();++pos,++nxt_pos) {
             q=qSaj(); // Utiliser nxt_pos
             if(qmax<q) {
                 before_argmax_q=pos;
                 qmax=q;
             }
-            if (nxt_pos==ranking.end()) break;
-            nxt_pos++;
         }
         nxt_pos=before_argmax_q;
         nxt_pos++;
