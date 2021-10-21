@@ -145,6 +145,7 @@ void setMatrixVictory(Imagine::Matrix<float> &M){
     M(13,15) = 0.500;
     // Matchup J15
     M(14,15) = 0.583;
+    // Contre Matchup
     for(int i = 0; i<M.nrow(); i++)
         for(int j=0; j<i; j++)
             M(i,j) = 1 - M(j,i);
