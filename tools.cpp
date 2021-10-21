@@ -30,9 +30,20 @@ void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::fo
     else {
         int current_player=ranking.front();
         ranking.pop_front();
-        int q=0;
-        for (std::forward_list<double>::iterator pos=ranking.begin();pos!=ranking.end();++pos) {
+        std::forward_list<double>::iterator before_argmax_q=ranking.before_begin();
+        std::forward_list<double>::iterator nxt_pos=ranking.begin();
+        int qmax=0;
+        int q;
+        for (std::forward_list<double>::iterator pos=ranking.before_begin();pos!=ranking.end();++pos) {
+            q=qSaj(); // Utiliser nxt_pos
+            if(qmax<q) {
+                before_argmax_q=pos;
+                qmax=q;
+            }
+            if (nxt_pos==ranking.end()) break;
+            nxt_pos++;
         }
+        ranking.erase_after(before_argmax_q);
     }
 }
 
