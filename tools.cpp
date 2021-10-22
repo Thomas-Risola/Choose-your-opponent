@@ -1,20 +1,27 @@
 #include "tools.h"
 
-double p_S(const std::vector<bool>& S,const std::vector<int>& X1,const std::vector<int>& X2,const Imagine::Matrix<double>& probability_matrix) {
-    // S: For all i, whether X1[i] wins agains X2[i]
-    // This function computes P(S) given X1 and X2, under the assumption of independence
-    assert(S.size()==X1.size());
-    double rep=1;
-    for (unsigned int i=0;i<S.size();i++) {
-        int x1=X1.at(i);
-        int x2=X2.at(i);
-        if (x1<x2)
-            rep*=probability_matrix(x1,x2);
-        else
-            rep*=probability_matrix(x2,x1);
+#include "DoubleTree.h"
+
+std::vector<double> p_S(const std::vector<int>& X1,const std::vector<int>& X2,const Imagine::Matrix<double>& probability_matrix) {
+    // utile pour creer l'arbre, il faut considerer les vecteurs comme etant un multiplicateur sur les branches
+    // J1 à gauche, J2 à droite
+    // se referer a la classe DoubleTree pour plus d'infos
+    std::vector<double> pS(std::pow(2,X1.size()));
+    std::vector<double> probaMatchJ1(X1.size());
+    std::vector<double> probaMatchJ2(X1.size());
+    for(unsigned int i=0; i<X1.size();i++){
+        probaMatchJ1[i] = probability_matrix(X1.at(i),X2.at(i));
+        probaMatchJ2[i] = probability_matrix(X2.at(i),X1.at(i));
     }
-    return rep;
+    // on cree un arbre avec 2^(N/2) proba qui correspondent à pS pour S in Omega(X,X')
+    // c'est la collection de tous les sets de winner possibles
+    DoubleTree probaOnLeaf(1, probaMatchJ1, probaMatchJ2, 1);
+    // on recupert notre information (tout à gauche tous le set X1 a gagné, à droite le set X2)
+    // chaque level correspond à un match entre X1[level] et X2[level], en haut X1[n-1] et X2[n-1]
+    // tout en bas entre X1[0] et X2[0]
+    return pS = probaOnLeaf.getLevel(X1.size());
 }
+
 
 void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::forward_list<double>& ranking,const Imagine::Matrix<double>& probability_matrix) {
     // X1,X2: For all i, X1[i] will play against X2[i].
@@ -35,7 +42,7 @@ void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::fo
         int qmax=0;
         int q;
         for (std::forward_list<double>::iterator pos=ranking.before_begin();pos!=ranking.end();++pos) {
-            q=qSaj(); // Utiliser nxt_pos
+            //q=qSaj(nxt_pos, qS, X1, X2, probability_matrix); // Utiliser nxt_pos
             if(qmax<q) {
                 before_argmax_q=pos;
                 qmax=q;
@@ -54,6 +61,27 @@ void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::fo
 }
 
 
+
+// qS etape precedente (exemple finale)
+// qSa etape suivante (exemple demi)
+double qSaj(int j, std::vector<double>& qS, std::vector<int>& X1, std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix){
+    if(X1.size() == 1 && X2.size() == 1){
+        // on est en finale
+        if(j == X1.at(0))
+            return probability_matrix(X1.front(),X2.front());
+        else
+            return probability_matrix(X2.front(),X1.front());
+    }
+    else{
+        double sum = 0;
+        std::vector<double> pS;
+        pS = p_S(X1, X2, probability_matrix);
+        for(unsigned int i=0; i<pS.size(); i++){
+            sum += pS[i]*qS[j];
+            return sum;
+        }
+    }
+}
 
 void setDiagonalVictory(Imagine::Matrix<double> &M){
     for(int i=0; i<M.nrow(); i++){

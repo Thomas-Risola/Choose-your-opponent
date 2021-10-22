@@ -2,7 +2,6 @@
 #include <Imagine/Graphics.h>
 #include "Imagine/LinAlg.h"
 #include <Imagine/Graphics.h>
-#include <vector>
 #include <forward_list>
 
 const int N=16;
