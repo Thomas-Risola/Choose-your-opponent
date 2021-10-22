@@ -23,19 +23,20 @@ std::vector<double> p_S(const std::vector<int>& X1,const std::vector<int>& X2,co
 }
 
 
-void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::forward_list<double>& ranking, std::vector<double> qS, const Imagine::Matrix<double>& probability_matrix) {
+void opponent_choice_optimization_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::forward_list<double>& ranking,int n,std::vector<double> qS, const Imagine::Matrix<double>& probability_matrix) {
     // X1,X2: For all i, X1[i] will play against X2[i].
-    // X1.size(): Number of pairs already decided
+    // n: Total number of players this round
     // probability_matrix: Matrix containing all win probabilities between players
     // ranking: players who haven't chosen yet. Read ranking[j]: Player ranked j+1 among those who haven't chosen (after execution, only the 2 last players stay in ranking)
-    if (X1.size()==probability_matrix.nrow()-1) {
+    assert(n>=2);
+    if (X1.size()==n/2-1) {
         std::forward_list<double>::iterator pos=ranking.begin();
         X1.push_back(*pos);
         pos++;
         X2.push_back(*pos);
     }
     else {
-        std::vector<double> qSa;
+        std::vector<double> qSa; // GROS PROBLÈME: Variable locale, perdue au niveau suivant
         int current_player=ranking.front();
         ranking.pop_front();
         std::forward_list<double>::iterator before_argmax_q_j=ranking.before_begin();
@@ -56,7 +57,7 @@ void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::fo
         ranking.erase_after(before_argmax_q_j);
         X1.push_back(current_player);
         X2.push_back(chosen_player);
-        opponent_choice_algorithm(X1,X2,ranking,qSa,probability_matrix);
+        opponent_choice_optimization_algorithm(X1,X2,ranking,n,qSa,probability_matrix);
     }
 }
 
