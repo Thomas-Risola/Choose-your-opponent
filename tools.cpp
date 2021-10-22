@@ -27,6 +27,8 @@ void opponent_choice_optimization_algorithm(std::vector<int>& X1,std::vector<int
     // X1,X2: For all i, X1[i] will play against X2[i].
     // n: Total number of players this round
     // probability_matrix: Matrix containing all win probabilities between players
+    // QSa: Tournament win probability for each player under the current scenario. Shall be empty for a new round
+    // QOmega: Tournament win probabilities for each scenario in the previous (higher) rounds.
     // ranking: players who haven't chosen yet. Read ranking[j]: Player ranked j+1 among those who haven't chosen (after execution, only the 2 last players stay in ranking)
     assert(n>=2);
     if (X1.size()==n/2-1) {
