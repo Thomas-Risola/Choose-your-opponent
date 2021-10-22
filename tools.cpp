@@ -23,7 +23,7 @@ std::vector<double> p_S(const std::vector<int>& X1,const std::vector<int>& X2,co
 }
 
 
-void opponent_choice_optimization_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::forward_list<double>& ranking,int n,std::vector<double> qS, const Imagine::Matrix<double>& probability_matrix) {
+void opponent_choice_optimization_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::forward_list<double>& ranking,int n,std::vector<double> QSa,std::vector<double> QOmega, const Imagine::Matrix<double>& probability_matrix) {
     // X1,X2: For all i, X1[i] will play against X2[i].
     // n: Total number of players this round
     // probability_matrix: Matrix containing all win probabilities between players
@@ -36,7 +36,7 @@ void opponent_choice_optimization_algorithm(std::vector<int>& X1,std::vector<int
         X2.push_back(*pos);
     }
     else {
-        std::vector<double> qSa; // GROS PROBLÈME: Variable locale, perdue au niveau suivant
+        // std::vector<double> qSa; GROS PROBLÈME: Variable locale, perdue au niveau suivant
         int current_player=ranking.front();
         ranking.pop_front();
         std::forward_list<double>::iterator before_argmax_q_j=ranking.before_begin();
@@ -44,20 +44,20 @@ void opponent_choice_optimization_algorithm(std::vector<int>& X1,std::vector<int
         double qmax_j=0;
         double q_j;
         for (std::forward_list<double>::iterator pos=ranking.before_begin();nxt_pos!=ranking.end();++pos,++nxt_pos) {
-            q_j = qSaj(*nxt_pos, qS, X1, X2, probability_matrix); // Utiliser nxt_pos
+            q_j = qSaj(*nxt_pos, QOmega, X1, X2, probability_matrix); // Utiliser nxt_pos
             if(qmax_j<q_j) {
                 before_argmax_q_j=pos;
                 qmax_j=q_j;
-                qSa.push_back(qmax_j);
             }
         }
+        QSa.push_back(qmax_j);
         nxt_pos=before_argmax_q_j;
         nxt_pos++;
         int chosen_player=*nxt_pos;
         ranking.erase_after(before_argmax_q_j);
         X1.push_back(current_player);
         X2.push_back(chosen_player);
-        opponent_choice_optimization_algorithm(X1,X2,ranking,n,qSa,probability_matrix);
+        opponent_choice_optimization_algorithm(X1,X2,ranking,n,QSa,QOmega,probability_matrix);
     }
 }
 
