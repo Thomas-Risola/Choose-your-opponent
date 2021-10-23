@@ -28,11 +28,11 @@ public:
     // Set information of this node
     void setData(double d);
     // Return the number of children of this node
-    double nbChildren() const;
+    int nbChildren() const;
     // Return the child at pos, if any (left-most child at position 0)
-    DoubleTree* getChild(double pos) const;
+    DoubleTree* getChild(int pos) const;
     // Replace the exisiting child at pos (left-most child at position 0)
-    void setChild(double pos, DoubleTree* newChild);
+    void setChild(int pos, DoubleTree* newChild);
     // Add newChild as supplementary right-most child of this node
     void addAsLastChild(DoubleTree* newChild);
     // Remove right-most child of this node
@@ -40,9 +40,9 @@ public:
     // To see the tree
     void display(std::string prefix = "", std::string indent = "  ") const;
     // Return the depth of the deepest leaf
-    double maxDepth() const;
+    int maxDepth() const;
     // Return the depth of the lowest leaf
-    double minDepth() const;
+    int minDepth() const;
     // Return the vector data of the level;
     std::vector<double> getLevel(int level);
 };

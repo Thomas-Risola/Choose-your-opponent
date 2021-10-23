@@ -40,7 +40,7 @@ DoubleTree::DoubleTree(int n, std::vector<double> dataLeft, std::vector<double> 
 
 // Destruct a node and all its descendents
 DoubleTree::~DoubleTree(){
-    for(double i=0; i< nbChildren(); i++){
+    for(int i=0; i< nbChildren(); i++){
         delete children[i];
     }
     // lign for the verification
@@ -58,21 +58,21 @@ void DoubleTree::setData(double d){
 }
 
 // Return the number of children of this node
-double DoubleTree::nbChildren() const{
+int DoubleTree::nbChildren() const{
     return children.size();
 }
 
 // Return the child at pos, if any (left-most child at position 0)
 // Return child at position pos if pos is valid
 // Throw "out of range" if pos is not valid (between 0 and nbChildren()-1)
-DoubleTree* DoubleTree::getChild(double pos) const{
+DoubleTree* DoubleTree::getChild(int pos) const{
     return children.at(pos);
 }
 
 // Replace the exisiting child at pos (left-most child at position 0)
 // Return child at position pos if pos is valid
 // Throw "out of range" if pos is not valid (between 0 and nbChildren()-1)
-void DoubleTree::setChild(double pos, DoubleTree* newChild){
+void DoubleTree::setChild(int pos, DoubleTree* newChild){
     children.at(pos) = newChild;
 }
 
@@ -99,7 +99,7 @@ void DoubleTree::removeLastChild(){
 void DoubleTree::display(std::string prefix, std::string indent) const{
     std::cout << prefix ;
     std::cout << data << std::endl;
-    for(double i=0; i<nbChildren(); i++){
+    for(int i=0; i<nbChildren(); i++){
         getChild(i)->display(prefix+indent,indent);
     }
 
@@ -108,13 +108,13 @@ void DoubleTree::display(std::string prefix, std::string indent) const{
 // Return the depth of the deepest leaf
 // on parcourt en profondeur chaque branche car de toute facon il faudra parcourir tout l'arbre pour etre sur
 // de ne pas louper une feuille plus profonde
-double DoubleTree::maxDepth() const{
+int DoubleTree::maxDepth() const{
     if(nbChildren() == 0){
         return 0;
     }
     else{
-        double Depth = 0;
-        for(double i = 0; i<nbChildren(); i++){
+        int Depth = 0;
+        for(int i = 0; i<nbChildren(); i++){
                 Depth = std::max(getChild(i)->maxDepth(), Depth);
         }
         return Depth+1;
@@ -123,7 +123,7 @@ double DoubleTree::maxDepth() const{
 
 // Return the depth of the lowest leaf
 // on parcourt en largeur car c'est le moyen le plus rapide de dectecter une branche sans enfant
-double DoubleTree::minDepth() const{
+int DoubleTree::minDepth() const{
     std::list<DoubleTree*> thisLevel;
     std::list<DoubleTree*> nextLevel;
     double compteur = 0;
@@ -131,7 +131,7 @@ double DoubleTree::minDepth() const{
         return compteur;
     }
     else if(nbChildren() > 0){
-        for(double i=0; i<nbChildren(); i++){
+        for(int i=0; i<nbChildren(); i++){
             nextLevel.push_back(getChild(i));
         }
         compteur ++;
@@ -142,7 +142,7 @@ double DoubleTree::minDepth() const{
         if(thisLevel.front()->nbChildren() == 0){
             return compteur;
         }
-        for(double i=0; i<thisLevel.front()->nbChildren(); i++){
+        for(int i=0; i<thisLevel.front()->nbChildren(); i++){
             nextLevel.push_back(thisLevel.front()->getChild(i));
         }
         thisLevel.pop_front();
@@ -163,7 +163,7 @@ std::vector<double> DoubleTree::getLevel(int level){
     std::vector<double> dataLevel(std::pow(2,level));
     double compteur = 0;
 
-    for(double i=0; i<nbChildren(); i++){
+    for(int i=0; i<nbChildren(); i++){
         nextLevel.push_back(getChild(i));
     }
     compteur ++;
@@ -178,7 +178,7 @@ std::vector<double> DoubleTree::getLevel(int level){
     }
 
     while (thisLevel.empty() == false) {
-        for(double i=0; i<thisLevel.front()->nbChildren(); i++){
+        for(int i=0; i<thisLevel.front()->nbChildren(); i++){
             nextLevel.push_back(thisLevel.front()->getChild(i));
         }
         thisLevel.pop_front();
