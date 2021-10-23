@@ -3,6 +3,7 @@
 #include "Imagine/LinAlg.h"
 #include <Imagine/Graphics.h>
 #include <forward_list>
+#include <map>
 
 const int N=16;
 

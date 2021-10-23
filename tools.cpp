@@ -1,6 +1,6 @@
 #include "tools.h"
-
 #include "DoubleTree.h"
+#include "VectorTree.h"
 
 std::vector<double> p_S(const std::vector<int>& X1,const std::vector<int>& X2,const Imagine::Matrix<double>& probability_matrix) {
     // utile pour creer l'arbre, il faut considerer les vecteurs comme etant un multiplicateur sur les branches
@@ -58,6 +58,138 @@ void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::fo
         X2.push_back(chosen_player);
         opponent_choice_algorithm(X1,X2,ranking,qSa,probability_matrix);
     }
+}
+
+// retourne les parties d'un ensemble ici P(n), set est le set des joueurs
+std::vector< std::vector<int> > subsets(const std::vector<int>& set)
+{
+    // Output
+    std::vector< std::vector<int> > ss;
+    // If empty set, return set containing empty set
+    if (set.empty()) {
+        ss.push_back(set);
+        return ss;
+    }
+
+    // If only one element, return itself and empty set
+    if (set.size() == 1) {
+        std::vector<int> empty;
+        ss.push_back(empty);
+        ss.push_back(set);
+        return ss;
+    }
+
+    // Otherwise, get all but last element
+    std::vector<int> allbutlast;
+    for (unsigned int i=0;i<(set.size()-1);i++) {
+        allbutlast.push_back( set[i] );
+    }
+    // Get subsets of set formed by excluding the last element of the input set
+    std::vector< std::vector<int> > ssallbutlast = subsets(allbutlast);
+    // First add these sets to the output
+    for (unsigned int i=0;i<ssallbutlast.size();i++) {
+        ss.push_back(ssallbutlast[i]);
+    }
+    // Now add to each set in ssallbutlast the last element of the input
+    for (unsigned int i=0;i<ssallbutlast.size();i++) {
+        ssallbutlast[i].push_back( set[set.size()-1] );
+    }
+    // Add these new sets to the output
+    for (unsigned int i=0;i<ssallbutlast.size();i++) {
+        ss.push_back(ssallbutlast[i]);
+    }
+
+    return ss;
+
+}
+
+// parmi les parties on prend seulement celle de taille k
+std::vector< std::vector<int> > takeSizeK(const std::vector<std::vector<int>>& subsets, unsigned int k){
+    std::vector< std::vector<int> > ssk;
+    for(unsigned int i = 0; i< subsets.size(); i++){
+        std::vector<int> c = subsets[i];
+        if( c.size() == k){
+            ssk.push_back(subsets[i]);
+        }
+    }
+    return ssk;
+}
+
+// retourne les parties de taille k d'un ensemble (ici celui du set des joueurs)
+std::vector< std::vector<int> > subsetsOfSizeK(const std::vector<int>& set, unsigned int k){
+    return(takeSizeK(subsets(set),k));
+}
+
+// algorithme recursif pour construire la liste de tous les scenarios possibles
+// on construit la liste de tous les matchs possibles du set
+// on parcourt les match, pour chaque match:
+// on met dans X1 le joueur 1 et X2 le joueur 2
+// on enleve du set de joueur ces deux joueurs
+// on applique la recursivite
+// on continue ensuite le parcours avec le match suivant possible
+void constructX1AndX2(const std::vector<int>& set,std::vector<int> X1, std::vector<int> X2, std::vector<std::vector<std::vector<int>>>& X1AndX2){
+    if(set.size() == 2){
+        X1.push_back(set[0]);
+        X2.push_back(set[1]);
+        std::vector<std::vector<int>> scenario;
+        scenario.push_back(X1);
+        scenario.push_back(X2);
+        X1AndX2.push_back(scenario);
+    }
+    else{
+
+        std::vector<std::vector<int>> listMatch;
+        for(unsigned int j=0; j<set.size();j++)
+            for(unsigned int i=0; i<j;i++){
+                listMatch.push_back({set[i],set[j]});
+            }
+    // jusqua listMatch.size()/2 sinon on retombe 2 fois sur le meme match
+        for(unsigned int i=0; i<listMatch.size()/2; i++){
+            X1.push_back(listMatch[i][0]);
+            X2.push_back(listMatch[i][1]);
+            std::vector<int> newSet = set;
+
+            newSet.erase(std::remove(newSet.begin(), newSet.end(), listMatch[i][0]), newSet.end());
+            newSet.erase(std::remove(newSet.begin(), newSet.end(), listMatch[i][1]), newSet.end());
+            constructX1AndX2(newSet, X1, X2, X1AndX2);
+
+            X1.pop_back();
+            X2.pop_back();
+        }
+    }
+}
+
+// Retourne tous les scenarios possibles pour X1 et X2 sachant que les joueurs du set on trouvé leur opponent
+// On suppose set trié dans le bon ordre (ça change pas grand chose en vrai mais ça coute rien)
+std::vector<std::vector< std::vector<int>>> constructScenarios(const std::vector<int>& set){
+    // Output
+    std::vector<std::vector<std::vector<int>>> X1AndX2;
+    // If empty set, return set containing empty set
+    if (set.empty()) {
+        std::vector<std::vector<int>> empty;
+        X1AndX2.push_back(empty);
+        return X1AndX2;
+    }
+
+    // If only two elements, return X1 et X2
+    else if (set.size() == 2) {
+        std::vector<int> X1;
+        std::vector<int> X2;
+        // on met le meilleur rang dans X1
+        X1.push_back(set[1]);
+        X2.push_back(set[0]);
+
+        std::vector<std::vector<int>> scenario;
+        scenario.push_back(X1);
+        scenario.push_back(X2);
+        X1AndX2.push_back(scenario);
+        return X1AndX2;
+    }
+    // Otherwise
+    std::vector<int> X1;
+    std::vector<int> X2;
+    constructX1AndX2(set, X1, X2, X1AndX2);
+    return X1AndX2;
 }
 
 

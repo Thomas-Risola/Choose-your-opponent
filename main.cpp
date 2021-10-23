@@ -1,6 +1,7 @@
 #include <iostream>
 #include "tools.h"
 #include "DoubleTree.h"
+#include "VectorTree.h"
 
 using namespace std;
 
