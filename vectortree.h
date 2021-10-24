@@ -25,6 +25,7 @@ public:
     // Return the number of (sub)trees in this tree (nodes and leaves)
     virtual int nTrees() const = 0;
 
+    std::vector<double> operator()(const std::vector<int>&,unsigned int) const;
     std::vector<double>& operator()(const std::vector<int>&,unsigned int);
 
     ///// VectorLeaf methods
