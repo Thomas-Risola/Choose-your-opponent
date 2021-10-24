@@ -37,6 +37,10 @@ public:
 
     ///// VectorNode methods
 
+    // Return the player in the node
+    // Throw domain_error if not a Node
+    virtual unsigned int player() const = 0;
+
     // Return the child of this tree in direction d
     // Throw domain_error if not a Node
     virtual const VectorTree* child(int d) const = 0;
@@ -73,6 +77,11 @@ public:
 
     ///// VectorNode methods
 
+    // Supposed to return the player in the node
+    // But throw domain_error as not a Node
+    virtual unsigned int player() const {
+        throw new std::domain_error("Not a Node");}
+
     // Supposed to return the child of this tree in direction d
     // But throw domain_error as not a Node
     VectorTree* child(int) const {
@@ -85,24 +94,25 @@ public:
 };
 
 class VectorNode : public VectorTree {
+    unsigned int j_player;
     VectorTree* children[2];
 public:
     // Tell if this tree is a leaf
     bool isLeaf() const {return false;}
 
     // Construct a new branching node given an array of 2 trees
-    VectorNode(VectorTree* qtrees[2]) {
+    VectorNode(VectorTree* qtrees[2],unsigned int J): j_player(J) {
         for (int i = 0; i < 2; i++) children[i] = qtrees[i];
     }
 
     // Construct a new branching node with empty (null) children
-    VectorNode() {
+    VectorNode(): j_player(0) {
         for (int i = 0; i < 2; i++) children[i] = 0;
     }
 
     // Construct a new branching node given 2 children
     VectorNode(VectorTree* child0,
-             VectorTree* child1) {
+             VectorTree* child1,unsigned int J): j_player(J) {
         children[0] = child0;children[1] = child1;
     }
 
@@ -144,6 +154,9 @@ public:
     std::vector<double>& value() { throw new std::domain_error("Not a Leaf"); }
 
     ///// VectorNode methods
+
+    // Return the player in this node
+    virtual unsigned int player() const {return j_player;};
 
     // Return the child of this tree in direction d
     const VectorTree* child(int d) const {

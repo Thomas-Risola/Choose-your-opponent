@@ -2,6 +2,21 @@
 #include "vectortree.h"
 #include "DoubleTree.h"
 
+VectorTree* empty_Q_P_N(unsigned int N,unsigned int c_player=0) {
+    // Initializes the set of tournament win probabilities for each possible player set (with 0 values)
+    // Each node can be read as: "Is c_player in contention? If yes, descend left, if not, descend right
+    // The final probabilities will be in the bottom leftmost leaf
+    if (N!=0) {
+        VectorTree* c1=empty_Q_P_N(N-1,c_player+1);
+        VectorTree* c2=empty_Q_P_N(N-1,c_player+1);
+        return new VectorNode(c1,c2,c_player);
+    }
+    else {
+        std::vector<double> qS(c_player,0);
+        return new VectorLeaf(qS);
+    }
+}
+
 std::vector<double> p_S(const std::vector<int>& X1,const std::vector<int>& X2,const Imagine::Matrix<double>& probability_matrix) {
     // utile pour creer l'arbre, il faut considerer les vecteurs comme etant un multiplicateur sur les branches
     // J1 à gauche, J2 à droite
@@ -21,7 +36,6 @@ std::vector<double> p_S(const std::vector<int>& X1,const std::vector<int>& X2,co
     // tout en bas entre X1[0] et X2[0]
     return pS = probaOnLeaf.getLevel(X1.size());
 }
-
 
 void opponent_choice_optimization_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::forward_list<double>& ranking,unsigned int n,std::vector<double> QSa,std::vector<double> QOmega, const Imagine::Matrix<double>& probability_matrix) {
     // X1,X2: For all i, X1[i] will play against X2[i].
