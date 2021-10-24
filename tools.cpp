@@ -1,10 +1,9 @@
 #include "tools.h"
-#include "vectortree.h"
 #include "DoubleTree.h"
 
-VectorTree* empty_Q_P_N(unsigned int N,unsigned int c_player=0) {
+VectorTree* empty_Q_P_N(unsigned int N,int c_player=0) {
     // Initializes the set of tournament win probabilities for each possible player set (with 0 values)
-    // Each node can be read as: "Is c_player in contention? If yes, descend left, if not, descend right
+    // Each node can be read as: "Is c_player in contention? If yes, descend left, if not, descend right"
     // The final probabilities will be in the bottom leftmost leaf
     if (N!=0) {
         VectorTree* c1=empty_Q_P_N(N-1,c_player+1);
@@ -12,8 +11,23 @@ VectorTree* empty_Q_P_N(unsigned int N,unsigned int c_player=0) {
         return new VectorNode(c1,c2,c_player);
     }
     else {
-        std::vector<double> qS(c_player,0);
-        return new VectorLeaf(qS);
+        std::vector<double> QS(c_player,0);
+        return new VectorLeaf(QS);
+    }
+}
+
+std::vector<double>& VectorTree::operator()(const std::vector<int>& sorted_S,unsigned int pos=0) {
+    // Gets the probabilities for each player corresponding to the scenario sorted_S
+    // Assumes sorted_S is sorted according to player ID (not ranking)
+    if (isLeaf()) {
+        assert(sorted_S.size()<=value().size());
+        return value();
+    }
+    else {
+        if (sorted_S.at(pos)==player())
+            return child(0)->operator()(sorted_S,pos+1);
+        else
+            return child(1)->operator()(sorted_S,pos);
     }
 }
 
@@ -37,12 +51,11 @@ std::vector<double> p_S(const std::vector<int>& X1,const std::vector<int>& X2,co
     return pS = probaOnLeaf.getLevel(X1.size());
 }
 
-void opponent_choice_optimization_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::forward_list<double>& ranking,unsigned int n,std::vector<double> QSa,std::vector<double> QOmega, const Imagine::Matrix<double>& probability_matrix) {
-    // X1,X2: For all i, X1[i] will play against X2[i].
+void opponent_choice_optimization_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::forward_list<double>& ranking,unsigned int n,VectorTree* QOmega, const Imagine::Matrix<double>& probability_matrix) {
+    // X1,X2: For all i, X1[i] will play against X2[i]. Algorithm return value; shall be empty as argument
     // n: Number of players this round
     // probability_matrix: Matrix containing all win probabilities between players
-    // QSa: Tournament win probability for each player under the current scenario. Shall be empty for a new round
-    // QOmega: Tournament win probabilities for each scenario in the previous (higher) rounds.
+    // QOmega: Tree containing the tournament win probabilities for each player in all scenarii. Will be updated
     // ranking: players who haven't chosen yet. Read ranking[j]: Player ranked j+1 among those who haven't chosen (after execution, only the 2 last players stay in ranking)
     assert(n>=2);
     while (X1.size()!=n/2-1) {
@@ -73,8 +86,6 @@ void opponent_choice_optimization_algorithm(std::vector<int>& X1,std::vector<int
     X2.push_back(*pos);
 }
 
-
-
 double qSaj(int j, std::vector<double>& qS, std::vector<int>& X1, std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix){
     if(X1.size() == 1 && X2.size() == 1){
         // on est en finale
@@ -93,6 +104,8 @@ double qSaj(int j, std::vector<double>& qS, std::vector<int>& X1, std::vector<in
         }
     }
 }
+
+
 
 void setDiagonalVictory(Imagine::Matrix<double> &M){
     for(int i=0; i<M.nrow(); i++){

@@ -25,6 +25,8 @@ public:
     // Return the number of (sub)trees in this tree (nodes and leaves)
     virtual int nTrees() const = 0;
 
+    std::vector<double>& operator()(const std::vector<int>&,unsigned int);
+
     ///// VectorLeaf methods
 
     // Return the value of this Tree
@@ -94,14 +96,14 @@ public:
 };
 
 class VectorNode : public VectorTree {
-    unsigned int j_player;
+    int j_player;
     VectorTree* children[2];
 public:
     // Tell if this tree is a leaf
     bool isLeaf() const {return false;}
 
     // Construct a new branching node given an array of 2 trees
-    VectorNode(VectorTree* qtrees[2],unsigned int J): j_player(J) {
+    VectorNode(VectorTree* qtrees[2],int J): j_player(J) {
         for (int i = 0; i < 2; i++) children[i] = qtrees[i];
     }
 
@@ -112,7 +114,7 @@ public:
 
     // Construct a new branching node given 2 children
     VectorNode(VectorTree* child0,
-             VectorTree* child1,unsigned int J): j_player(J) {
+             VectorTree* child1,int J): j_player(J) {
         children[0] = child0;children[1] = child1;
     }
 
