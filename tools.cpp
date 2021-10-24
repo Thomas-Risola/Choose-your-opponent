@@ -171,7 +171,6 @@ double qSj(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const
 }
 
 
-
 void setDiagonalVictory(Imagine::Matrix<double> &M){
     for(int i=0; i<M.nrow(); i++){
         M(i,i) = 0;

@@ -15,8 +15,6 @@ double qSj(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const
 
 void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<int>& XN1,std::vector<int>& XN2,VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix);
 
-
-
 void setMatrixVictory(Imagine::Matrix<double> &M);
 
 void display(const Imagine::Matrix<double> &M);
