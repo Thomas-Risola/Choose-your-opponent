@@ -77,7 +77,7 @@ std::vector<double> p_S(std::vector<std::vector<int>>& set_sorted_S,const std::v
     }
     // on cree un arbre avec 2^(N/2) proba qui correspondent à pS pour S in Omega(X,X')
     // c'est la collection de tous les sets de winner possibles
-    DoubleTree probaOnLeaf(1, probaMatchJ1, probaMatchJ2, 1);
+    DoubleTree probaOnLeaf(X1.size(), probaMatchJ1, probaMatchJ2, 1);
     // on recupert notre information (tout à gauche tous le set X1 a gagné, à droite le set X2)
     // chaque level correspond à un match entre X1[level] et X2[level], en haut X1[n-1] et X2[n-1]
     // tout en bas entre X1[0] et X2[0]
@@ -122,7 +122,7 @@ std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>&
         std::vector<double> qX=opponent_choice_optimization_algorithm_rec(XN1_candidate,XN2_candidate,X1,X2,ranking,QOmega,XN,probability_matrix);
         ranking.insert_after(pos,chosen_player);
         X2.pop_back();
-        if(qXmax.at(chosen_player)<qX.at(chosen_player)) {
+        if(qXmax.at(ind_curr_player)<qX.at(ind_curr_player)) {
             before_argmax_q_j=pos;
             XN1=XN1_candidate; // Copies chères, pas autre moyen?
             XN2=XN2_candidate;
@@ -138,15 +138,26 @@ void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<
     // ranking: Players that play this round, must be sorted according to player RANKING
     // QOmega: Tree containing the tournament win probabilities for each player in all scenarii, will be updated
     // probability_matrix: Matrix containing all win probabilities between players
-    std::vector<int> X1;
-    std::vector<int> X2;
+    std::vector<int> X1,X2;
     std::vector<int> XN(ranking);
     std::forward_list<int> f_list_ranking;
-    for (unsigned int i=0;i<ranking.size();i++)
-        f_list_ranking.push_front(ranking.back());
+    for (int i=ranking.size()-1;i>=0;i--)
+        f_list_ranking.push_front(ranking.at(i));
     std::sort(XN.begin(),XN.end());
     qS=opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,f_list_ranking,QOmega,XN,probability_matrix);
     (*QOmega)(XN)=qS;
+}
+
+void algorithm_entire_competition(std::vector<double>& qS,std::vector<std::vector<int>>& X1_array,std::vector<std::vector<int>>& X2_array,const std::vector<int>& ranking,const Imagine::Matrix<double>& probability_matrix) {
+    // qS: Tournament win probabilities for each player (Output)
+    // X1_array,X2_array: Optimal pairings at each round (Output)
+    // ranking: All players, must be sorted according to player RANKING (Input)
+    // probability_matrix: Matrix containing all win probabilities between players (Input)
+    std::vector<double> qS_round;
+    std::vector<int> X1_round,X2_round;
+    VectorTree* QOmega=empty_Q_P_N(ranking.size());
+    ComparePlayers comp(ranking);
+    // Quid nunquam?
 }
 
 double qSj(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix) {

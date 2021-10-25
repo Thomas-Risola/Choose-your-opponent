@@ -29,12 +29,12 @@ DoubleTree::DoubleTree(int n, double dataLeft, double dataRight, double newData)
 DoubleTree::DoubleTree(int n, std::vector<double> dataLeft, std::vector<double> dataRight, double newData){
     data = newData;
     if(n == 1){
-        addAsLastChild(new DoubleTree(data*dataLeft[n]));
-        addAsLastChild(new DoubleTree(data*dataRight[n]));
+        addAsLastChild(new DoubleTree(data*dataLeft.at(n-1)));
+        addAsLastChild(new DoubleTree(data*dataRight.at(n-1)));
     }
     else{
-        addAsLastChild(new DoubleTree(n-1, dataLeft, dataRight, newData*dataLeft[n]));
-        addAsLastChild(new DoubleTree(n-1, dataLeft, dataRight, newData*dataRight[n]));
+        addAsLastChild(new DoubleTree(n-1, dataLeft, dataRight, newData*dataLeft.at(n-1)));
+        addAsLastChild(new DoubleTree(n-1, dataLeft, dataRight, newData*dataRight.at(n-1)));
     }
 }
 

@@ -10,6 +10,8 @@
 // Arbre binaire de vecteurs de double
 class VectorTree {
 public:
+    virtual ~VectorTree()=default;
+
     // Tell if this tree is a leaf
     virtual bool isLeaf() const = 0;
 
@@ -100,6 +102,8 @@ class VectorNode : public VectorTree {
     int j_player;
     VectorTree* children[2];
 public:
+    ~VectorNode() {delete children[0];delete children[1];}
+
     // Tell if this tree is a leaf
     bool isLeaf() const {return false;}
 
