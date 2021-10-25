@@ -129,7 +129,6 @@ std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>&
     while (XN.at(ind_curr_player)!=current_player) {ind_curr_player++;}
     ranking.pop_front();
     X1.push_back(current_player);
-    std::forward_list<int>::iterator before_argmax_q_j=ranking.before_begin(); //inutile
     std::forward_list<int>::iterator nxt_pos=ranking.begin();
     std::vector<int> XN1_candidate;
     std::vector<int> XN2_candidate;
@@ -142,7 +141,6 @@ std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>&
         ranking.insert_after(pos,chosen_player);
         X2.pop_back();
         if(qXmax.at(ind_curr_player)<qX.at(ind_curr_player)) {
-            before_argmax_q_j=pos; //inutile
             XN1=XN1_candidate; // Copies chères, pas autre moyen?
             XN2=XN2_candidate;
             qXmax=qX;
