@@ -25,7 +25,7 @@ std::vector<double>& VectorTree::operator()(const std::vector<int>& sorted_S,uns
         return value();
     }
     else {
-        if (sorted_S.at(pos)==player())
+        if (sorted_S.size()!=pos && sorted_S.at(pos)==player())
             return child(0)->operator()(sorted_S,pos+1);
         else
             return child(1)->operator()(sorted_S,pos);
@@ -36,7 +36,7 @@ std::vector<double>& VectorTree::operator()(const std::vector<int>& sorted_S,uns
         return value();
     }
     else {
-        if (sorted_S.at(pos)==player())
+        if (sorted_S.size()!=pos && sorted_S.at(pos)==player())
             return child(0)->operator()(sorted_S,pos+1);
         else
             return child(1)->operator()(sorted_S,pos);
@@ -161,8 +161,8 @@ void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<
     if (ranking.size()==1) {
         X1=ranking;
         X2.clear();
-        qS=std::vector<double>(1,1);
-        (*QOmega)(ranking)=qS;
+        qS=std::vector<double>(1,ranking.front());
+        (*QOmega)(ranking).at(ranking.front())=1;
         return;}
     std::vector<int> XN(ranking);
     std::forward_list<int> f_list_ranking;
@@ -170,7 +170,9 @@ void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<
         f_list_ranking.push_front(ranking.at(i));
     std::sort(XN.begin(),XN.end());
     qS=opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,f_list_ranking,QOmega,XN,probability_matrix);
-    (*QOmega)(XN)=qS;
+    std::vector<double>& store_qS=(*QOmega)(XN);
+    for (unsigned int i=0;i<XN.size();i++)
+        store_qS.at(XN.at(i))=qS.at(i);
 }
 
 void algorithm_entire_competition(std::vector<double>& qS,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const Imagine::Matrix<double>& probability_matrix) {
