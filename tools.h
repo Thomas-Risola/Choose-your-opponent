@@ -6,15 +6,12 @@
 #include "vectortree.h"
 
 struct ComparePlayers {
-    std::vector<int> ranking;
-    ComparePlayers(const std::vector<int>& rk): ranking(rk) {}
-    bool operator()(int i,int j) {
-        int arg_i=0;
-        int arg_j=0;
-        while (arg_i<ranking.size() && ranking.at(arg_i)!=i) arg_i++;
-        while (arg_j<ranking.size() && ranking.at(arg_j)!=i) arg_j++;
-        return (arg_i<arg_j);
+    std::vector<int> inv_ranking;
+    ComparePlayers(const std::vector<int>& ranking): inv_ranking(ranking.size()) {
+        for (unsigned int i=0;i<ranking.size();i++)
+            inv_ranking.at(ranking.at(i))=i;
     }
+    bool operator()(int i,int j) {return (inv_ranking.at(i)<inv_ranking.at(j));}
 };
 
 VectorTree* empty_Q_P_N(const unsigned int N,int c_player=0);

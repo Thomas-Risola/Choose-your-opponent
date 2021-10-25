@@ -45,13 +45,13 @@ std::vector<double>& VectorTree::operator()(const std::vector<int>& sorted_S,uns
 
 void S_kN(std::vector<int>& S,VectorTree* tree,int k,VectorTree* QOmega,const ComparePlayers& comp,const Imagine::Matrix<double>& probability_matrix) {
     // Calls the algorithm on all scenarii in tree
-    if (tree->isLeaf() && k==0) {
+    if (tree->isLeaf()) {if (k==0) {
         std::vector<double> qS;
         std::vector<int> X1,X2;
         std::vector<int> ranking=S;
         std::sort(ranking.begin(),ranking.end(),comp);
         opponent_choice_optimization_algorithm(qS,X1,X2,QOmega,ranking,probability_matrix);
-    }
+    }}
     else {
         if (k!=0) {
             S.push_back(tree->player());
