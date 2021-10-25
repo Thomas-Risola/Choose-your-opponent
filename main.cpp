@@ -12,7 +12,10 @@ int main()
 {
     setMatrixVictory(victoryMatrix);
     //display(victoryMatrix);
-    //const std::vector<int>& XN,const Rank& comp,const Imagine::Matrix<double>& probability_matrix)
     int petit_N=4;
+    vector<double> qS;
+    vector<int> X1,X2,ranking;
+    for (int i=0;i<petit_N;i++) ranking.push_back((2+i)%petit_N);
+    algorithm_entire_competition(qS,X1,X2,ranking,victoryMatrix);
     return 0;
 }
