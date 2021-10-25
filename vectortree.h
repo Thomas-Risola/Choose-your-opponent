@@ -176,30 +176,31 @@ public:
     }
 };
 
-std::ostream& operator<<(std::ostream& flux,std::vector<double> v) {
+template <typename T> std::ostream& operator<<(std::ostream& flux,std::vector<T> v) {
     for (unsigned int i=0;i<v.size();i++)
         flux << v.at(i) << ' ';
+    flux << ' ';
     return flux;
 }
 
 // For debugging
 /// Display a tree on standard output
-
-void display(VectorTree* qt, std::string prefix = "", void(*prt)(std::vector<double>) = 0){
-    if(! qt) // Null tree
-        std::cout << prefix << " ." << std::endl;
-    else {
-        if (qt->isLeaf()) { // If tree is leaf
-            std::cout << prefix << " = ";
-            if (prt)
-                (*prt)(qt->value());
-            else
-                std::cout << qt->value();
-            std::cout << std::endl;
-        } else { // If tree is a branch node
-            const std::string dirName[2] = {"OUI", "NON"};
-            for (int d = 0; d < 2; d++)
-                display(qt->child(d), prefix+"-"+dirName[d]);
-        }
-    }
-}
+// Compile error
+//void display(VectorTree* qt, std::string prefix = "", void(*prt)(std::vector<double>) = 0){
+//    if(! qt) // Null tree
+//        std::cout << prefix << " ." << std::endl;
+//    else {
+//        if (qt->isLeaf()) { // If tree is leaf
+//            std::cout << prefix << " = ";
+//            if (prt)
+//                (*prt)(qt->value());
+//            else
+//                std::cout << qt->value();
+//            std::cout << std::endl;
+//        } else { // If tree is a branch node
+//            const std::string dirName[2] = {"OUI", "NON"};
+//            for (int d = 0; d < 2; d++)
+//                display(qt->child(d), prefix+"-"+dirName[d]);
+//        }
+//    }
+//}

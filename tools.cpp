@@ -1,7 +1,7 @@
 #include "tools.h"
 #include "DoubleTree.h"
 
-VectorTree* empty_Q_P_N(const unsigned int N,int c_player=0) {
+VectorTree* empty_Q_P_N(const unsigned int N,int c_player) {
     // Initializes the set of tournament win probabilities for each possible player set (with 0 values)
     // Each node can be read as: "Is c_player in contention? If yes, descend left, if not, descend right"
     // The final probabilities will be in the bottom leftmost leaf
@@ -132,19 +132,20 @@ std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>&
     return qXmax;
 }
 
-void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<int>& XN1,std::vector<int>& XN2,VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix) {
+void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<int>& XN1,std::vector<int>& XN2,VectorTree* QOmega,const std::vector<int>& ranking,const Imagine::Matrix<double>& probability_matrix) {
     // qS: Win probabilities for each player (Output)
     // XN1,XN2: Optimal matching (Output)
-    // XN: Players that play this round, must be sorted according to player ID (not ranking)
+    // ranking: Players that play this round, must be sorted according to player RANKING
     // QOmega: Tree containing the tournament win probabilities for each player in all scenarii, will be updated
     // probability_matrix: Matrix containing all win probabilities between players
     std::vector<int> X1;
     std::vector<int> X2;
-    std::forward_list<int> ranking;
-    for (unsigned int i=0;i<XN.size();i++)
-        ranking.push_front(XN.at(i));
-    ranking.sort(comp); // Définir un foncteur, le mettre en argument
-    qS=opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix);
+    std::vector<int> XN(ranking);
+    std::forward_list<int> f_list_ranking;
+    for (unsigned int i=0;i<ranking.size();i++)
+        f_list_ranking.push_front(ranking.back());
+    std::sort(XN.begin(),XN.end());
+    qS=opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,f_list_ranking,QOmega,XN,probability_matrix);
     (*QOmega)(XN)=qS;
 }
 
@@ -163,10 +164,9 @@ double qSj(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const
         std::vector<std::vector<int>> set_sorted_S;
         std::vector<double> pS
         =p_S(set_sorted_S,X1,X2,probability_matrix);
-        for(unsigned int i=0; i<pS.size(); i++){
+        for(unsigned int i=0; i<pS.size(); i++)
             sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j);
-            return sum;
-        }
+    return sum;
     }
 }
 
