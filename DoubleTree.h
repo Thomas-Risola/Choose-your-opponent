@@ -20,7 +20,7 @@ public:
     // Create a binaryTree with depth n where every leftChild has the date of his parent * leftData[i]
     // and every rightChild has the date of his parent * rightData
     // newdata is the data of the first node
-    DoubleTree(int n, std::vector<double> dataLeft, std::vector<double> dataRight, double newData);
+    DoubleTree(int n_ini,int n, std::vector<double> dataLeft, std::vector<double> dataRight, double newData);
     // Destruct a node and all its descendents
     ~DoubleTree();
     // Return information of this node

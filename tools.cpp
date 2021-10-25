@@ -96,7 +96,7 @@ std::vector<double> p_S(std::vector<std::vector<int>>& set_sorted_S,const std::v
     }
     // on cree un arbre avec 2^(N/2) proba qui correspondent à pS pour S in Omega(X,X')
     // c'est la collection de tous les sets de winner possibles
-    DoubleTree probaOnLeaf(X1.size(), probaMatchJ1, probaMatchJ2, 1);
+    DoubleTree probaOnLeaf(X1.size(),X1.size(), probaMatchJ1, probaMatchJ2, 1);
     // on recupert notre information (tout à gauche tous le set X1 a gagné, à droite le set X2)
     // chaque level correspond à un match entre X1[level] et X2[level], en haut X1[n-1] et X2[n-1]
     // tout en bas entre X1[0] et X2[0]
