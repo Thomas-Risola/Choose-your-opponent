@@ -110,8 +110,6 @@ std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>&
     // Returns: win probabilities for each player in XN
     assert(XN.size()>=2);
     assert(X1.size()==X2.size());
-    if (X1==std::vector<int>({2}) && X2==std::vector<int>({3}))
-        std::cout << X1 << "  " << X2 << std::endl;
     if (X1.size()==XN.size()/2-1) {
         std::forward_list<int>::iterator pos=ranking.begin();
         X1.push_back(*pos);
