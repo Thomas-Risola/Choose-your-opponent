@@ -104,12 +104,14 @@ std::vector<double> p_S(std::vector<std::vector<int>>& set_sorted_S,const std::v
     return p_S_rec(&probaOnLeaf,set_sorted_S,X1,X2,S_player_stack);
 }
 
-std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,std::forward_list<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix) {
+std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,std::forward_list<int> ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix) {
     // X1,X2: For all i, X1[i] will play against X2[i]. Used only by recursion, shall be empty as argument
     // ranking: players who haven't chosen yet. Read ranking[j]: Player ranked j+1 among those who haven't chosen
     // Returns: win probabilities for each player in XN
     assert(XN.size()>=2);
     assert(X1.size()==X2.size());
+    if (X1==std::vector<int>({2}) && X2==std::vector<int>({3}))
+        std::cout << X1 << "  " << X2 << std::endl;
     if (X1.size()==XN.size()/2-1) {
         std::forward_list<int>::iterator pos=ranking.begin();
         X1.push_back(*pos);
@@ -129,7 +131,7 @@ std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>&
     while (XN.at(ind_curr_player)!=current_player) {ind_curr_player++;}
     ranking.pop_front();
     X1.push_back(current_player);
-    std::forward_list<int>::iterator before_argmax_q_j=ranking.before_begin();
+    std::forward_list<int>::iterator before_argmax_q_j=ranking.before_begin(); //inutile
     std::forward_list<int>::iterator nxt_pos=ranking.begin();
     std::vector<int> XN1_candidate;
     std::vector<int> XN2_candidate;
@@ -142,12 +144,13 @@ std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>&
         ranking.insert_after(pos,chosen_player);
         X2.pop_back();
         if(qXmax.at(ind_curr_player)<qX.at(ind_curr_player)) {
-            before_argmax_q_j=pos;
+            before_argmax_q_j=pos; //inutile
             XN1=XN1_candidate; // Copies chères, pas autre moyen?
             XN2=XN2_candidate;
             qXmax=qX;
         }
     }
+    X1.pop_back();
     return qXmax;
 }
 
