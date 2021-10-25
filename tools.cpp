@@ -188,6 +188,7 @@ void algorithm_entire_competition(std::vector<double>& qS,std::vector<int>& X1,s
     for (int i=0;i<n;i++)
         S_kN(S,QOmega,pow(2,i),QOmega,comp,probability_matrix);
     opponent_choice_optimization_algorithm(qS,X1,X2,QOmega,ranking,probability_matrix);
+    QOmega->display();
 }
 
 double qSj(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix) {
