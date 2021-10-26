@@ -14,6 +14,9 @@ private:
 public:
     // Create a node with given information
     VectorTree(std::vector<double> d);
+    // Create a Tree with all possible scenario and the vector probability associated as the last leaf
+    // n == Card(S) and , numberOfPlayer = Card(Sa)
+    VectorTree(int numberOfPlayer, std::vector<double> newData);
     // Create a binaryTree with depth n where every leftChild has the vector data of his parent + leftData[n]
     // and every rightChild has the vector data of his parent + rightData[n]
     // newdata is the data of the first node (= empty vector usually)

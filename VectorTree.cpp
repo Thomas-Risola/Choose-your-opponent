@@ -8,6 +8,14 @@ VectorTree::VectorTree(std::vector<double> d){
     data = d;
 }
 
+// Create a Tree with all possible scenario and the vector probability associated as the last leaf
+// newData.size() == Card(S) and , numberOfPlayer = Card(Sa)
+VectorTree::VectorTree(int numberOfPlayer, std::vector<double> newData){
+    data = newData;
+
+}
+
+
 // Create a binaryTree with depth n where every leftChild has the vector data of his parent + leftData[n]
 // and every rightChild has the vector data of his parent + rightData[n]
 // newdata is the data of the first node (= empty vector usually)
@@ -98,7 +106,8 @@ void VectorTree::removeLastChild(){
 void VectorTree::display(std::string prefix, std::string indent) const{
     std::cout << prefix ;
     for(unsigned int i=0; i<data.size(); i++)
-        std::cout << data[i] << std::endl;
+        std::cout << data[i] << indent;
+    std::cout << std::endl;
     for(int i=0; i<nbChildren(); i++){
         getChild(i)->display(prefix+indent,indent);
     }

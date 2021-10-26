@@ -17,3 +17,14 @@ void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::fo
 void setMatrixVictory(Imagine::Matrix<double> &M);
 
 void display(const Imagine::Matrix<double> &M);
+
+std::vector< std::vector<int> > subsetsOfSizeK(const std::vector<int>& set, unsigned int k);
+
+std::vector<std::vector< std::vector<int>>> constructScenarios(const std::vector<int>& set);
+
+std::vector<std::vector<int>> identifyScenario(std::vector<std::vector<std::vector<int>>> ChoiceOfSmallerSubset, std::vector<int> X1 , std::vector<int> X2);
+
+void chooseEnFonctionDuScenario(int &iChoosed, const int& playerWhoChoose, const int &i, std::vector<std::vector<std::vector<int>>> &ChoiceOfSmallerSubset, std::vector<int> X1, std::vector<int> X2, std::vector<double> QOmega, const Imagine::Matrix<double>& probability_matrix);
+
+void identifyScenarioToSupress(const std::vector<int> &X1, const std::vector<int> &X2, std::vector<std::vector<std::vector<int>>> &ChoiceOfSmallerSubset, const int &iChoosed, const int &playerWhoChoose);
+

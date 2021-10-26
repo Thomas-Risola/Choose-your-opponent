@@ -60,6 +60,115 @@ void opponent_choice_algorithm(std::vector<int>& X1,std::vector<int>& X2,std::fo
     }
 }
 
+
+// donne la proba + le meilleur choix du joueur j
+std::vector<std::vector<int>> oneIter(int sizeOfSetOfUndecidedPlayer, std::vector<std::vector<std::vector<int>>> ChoiceOfSmallerSubset , std::vector<int> setOfPlayer, const Imagine::Matrix<double>& probability_matrix, std::vector<double> QOmega){
+    //for(unsigned int sizeOfSetOfUndecidedPlayer=1;  sizeOfSetOfUndecidedPlayer<setOfPlayer.size()/2;  sizeOfSetOfUndecidedPlayer++){
+    // C'est le U definit dans le papier: les joueurs qui ont pas décidés
+    std::vector<std::vector<int>> everyU = subsetsOfSizeK(setOfPlayer, 2* sizeOfSetOfUndecidedPlayer);
+    for(unsigned int k=0; k<everyU.size(); k++){
+        std::vector<int> U = everyU[k];
+        std::vector<int> setOfDecidedPlayers = setOfPlayer;
+        for(unsigned int l=0; l<U.size(); l++)
+            setOfDecidedPlayers.erase(std::remove(setOfDecidedPlayers.begin(), setOfDecidedPlayers.end(), U[l]), setOfDecidedPlayers.end());
+        std::vector<std::vector<std::vector<int>>> scenarios = constructScenarios(setOfDecidedPlayers);
+        // playerWhoChoose est le player j de l'article
+        int playerWhoChoose = *std::min_element(U.begin(), U.end());
+        U.erase(std::remove(U.begin(), U.end(), playerWhoChoose), U.end());
+        for(unsigned int l = 0; l < scenarios.size(); l++){
+            int j = 0;
+            int iChoosed = 0;
+            // scenarios[l][0] == X1  et scenarios[l][1] == X2
+            std::vector<int> X1 = scenarios[l][0];
+            std::vector<int> X2 = scenarios[l][1];
+            for( unsigned int i = 0; i < U.size(); i++){
+                int iChoosed = 0;
+                chooseEnFonctionDuScenario(iChoosed, playerWhoChoose, i, ChoiceOfSmallerSubset, X1, X2, QOmega, probability_matrix);
+            }
+        }
+    }
+}
+
+void chooseEnFonctionDuScenario(int &iChoosed, const int& playerWhoChoose, const int &i, std::vector<std::vector<std::vector<int>>> &ChoiceOfSmallerSubset, std::vector<int> X1, std::vector<int> X2, std::vector<double> QOmega, const Imagine::Matrix<double>& probability_matrix){
+        std::vector<int> X1Copy = X1;
+        std::vector<int> X2Copy = X2;
+        X1.push_back(playerWhoChoose);
+        X2.push_back(i);
+        // on identifie le scenario correspondant aux choix optimaux des autres joueurs restants
+        identifyScenario(ChoiceOfSmallerSubset, X1, X2);
+        std::vector<std::vector<int>> fillScenario = identifyScenario(ChoiceOfSmallerSubset,X1,X2);
+        // on remplit les scenarios avec ce qui a ete decide avant par les joueurs
+        // faire de ça une fonction qui retourne i, j et qmax_j
+        // il me faut QOmega associé à chaque scenario
+        double qmax_j = 0;
+        int j =0;
+            for(unsigned int m = X1.size()+1 ; m < fillScenario[0].size(); m++){
+                X1.push_back(fillScenario[0][m]);
+                X2.push_back(fillScenario[1][m]);
+            }
+            double q_j = qSaj(playerWhoChoose, QOmega , X1, X2, probability_matrix);
+            if(qmax_j<q_j) {
+                qmax_j=q_j;
+                j = playerWhoChoose;
+                iChoosed = i;
+            }
+
+        // On indentifie les scenarios à supprimer à partir du X1 et X2 avant choix de player et i
+        // On supprime les scenarios qui sont sous optimaux si j choisit i par recurrence on sait comment j+1 va choisir
+        // donc on peut supprimer les scenarios ou j+1 choisit qqun d'autre
+        identifyScenarioToSupress(X1Copy, X2Copy, ChoiceOfSmallerSubset, iChoosed, playerWhoChoose);
+
+        // ChoiceOfSmallerSubset = ChoiceOfSmallerSubset qu'on a identifie - les choix non optimaux
+        // au bout de N/2 iter on a ChoiceOfSmallerSubset = tous les bons choix!
+        // une fois qu'on aura tous les choix, le calcul de la proba final se fait avec le scenario en question et qSaj
+        X1 = X1Copy;
+        X2 = X2Copy;
+    }
+
+
+void identifyScenarioToSupress(const std::vector<int> &X1, const std::vector<int> &X2, std::vector<std::vector<std::vector<int>>> &ChoiceOfSmallerSubset, const int &iChoosed, const int &playerWhoChoose){
+    for(unsigned int i=0; i<ChoiceOfSmallerSubset.size(); i++){
+        unsigned int j = 0;
+        while ( j < X1.size()+1) {
+            if(j != X1.size()){
+                if(ChoiceOfSmallerSubset[i][0][j] == X1[j] && ChoiceOfSmallerSubset[i][1][j] == X2[j]){
+                    j ++;
+                }
+                else {
+                    continue;
+                }
+            }
+            else{
+                if(ChoiceOfSmallerSubset[i][0][j] == playerWhoChoose && ChoiceOfSmallerSubset[i][1][j] != iChoosed){
+                        ChoiceOfSmallerSubset.erase(std::remove(ChoiceOfSmallerSubset.begin(), ChoiceOfSmallerSubset.end(), ChoiceOfSmallerSubset[i]), ChoiceOfSmallerSubset.end());
+                }
+            }
+        }
+    }
+}
+
+// il ne reste effectivement plus qu'un scenario comme ça car on a enlever les nons optimaux à chaque fois
+std::vector<std::vector<int>> identifyScenario(std::vector<std::vector<std::vector<int>>> ChoiceOfSmallerSubset, std::vector<int> X1 , std::vector<int> X2){
+    if(ChoiceOfSmallerSubset.size() == 0){
+        std::vector<std::vector<int>> empty;
+        return empty;
+    }
+    for(unsigned int i=0; i<ChoiceOfSmallerSubset.size(); i++){
+        unsigned int j = 0;
+        while ( j < X1.size()) {
+            if(ChoiceOfSmallerSubset[i][0][j] == X1[j] && ChoiceOfSmallerSubset[i][1][j] == X2[j]){
+                j ++;
+            }
+            else {
+                continue;
+            }
+        }
+        if(j == X1.size())
+            return ChoiceOfSmallerSubset[i];
+    }
+}
+
+
 // retourne les parties d'un ensemble ici P(n), set est le set des joueurs
 std::vector< std::vector<int> > subsets(const std::vector<int>& set)
 {
@@ -106,7 +215,7 @@ std::vector< std::vector<int> > subsets(const std::vector<int>& set)
 // parmi les parties on prend seulement celle de taille k
 std::vector< std::vector<int> > takeSizeK(const std::vector<std::vector<int>>& subsets, unsigned int k){
     std::vector< std::vector<int> > ssk;
-    for(unsigned int i = 0; i< subsets.size(); i++){
+    for(size_t i = 0; i < subsets.size(); i++){
         std::vector<int> c = subsets[i];
         if( c.size() == k){
             ssk.push_back(subsets[i]);
