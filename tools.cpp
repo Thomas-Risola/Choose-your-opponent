@@ -44,8 +44,9 @@ std::vector<double>& VectorTree::operator()(const std::vector<int>& sorted_S,uns
 }
 
 void S_kN(std::vector<int>& S,VectorTree* tree,int k,VectorTree* QOmega,const ComparePlayers& comp,const Imagine::Matrix<double>& probability_matrix) {
-    // Calls the algorithm on all scenarii in tree
+    // Calls the algorithm on all scenarii in tree with k players
     if (tree->isLeaf()) {if (k==0) {
+        // Cas d'arrêt (appel de la fonction pour le scénario S
         std::vector<double> qS;
         std::vector<int> X1,X2;
         std::vector<int> ranking=S;
@@ -53,11 +54,14 @@ void S_kN(std::vector<int>& S,VectorTree* tree,int k,VectorTree* QOmega,const Co
         opponent_choice_optimization_algorithm(qS,X1,X2,QOmega,ranking,probability_matrix);
     }}
     else {
+        // Descente dans l'arbre tout en garantissant qu'il y a k joueurs
         if (k!=0) {
+            // Descente à gauche
             S.push_back(tree->player());
             S_kN(S,tree->child(0),k-1,QOmega,comp,probability_matrix);
             S.pop_back();
         }
+        // Descente à droite
         S_kN(S,tree->child(1),k,QOmega,comp,probability_matrix);
     }
 }
@@ -65,18 +69,20 @@ void S_kN(std::vector<int>& S,VectorTree* tree,int k,VectorTree* QOmega,const Co
 std::vector<double> p_S_rec(const DoubleTree* probaOnLeaf,std::vector<std::vector<int>>& set_sorted_S,
            const std::vector<int>& X1,const std::vector<int>& X2,std::vector<int>& current_unsorted_S,unsigned int pos=0) {
     if (probaOnLeaf->nbChildren()==0) {
+        // Cas d'arrêt, on ajoute le scénario et sa probabilité à l'output
         std::vector<int> sorted_S=current_unsorted_S;
         std::sort(sorted_S.begin(),sorted_S.end()); // comparaison selon le numéro de joueur donc opérateur de comparaison implicite
         set_sorted_S.push_back(sorted_S);
         return std::vector<double>(1,probaOnLeaf->getData());
     }
+    // On descend de manière récursive dans l'arbre pour parcourir les scénarios
     current_unsorted_S.push_back(X1.at(pos));
     std::vector<double> pS=p_S_rec(probaOnLeaf->getChild(0),set_sorted_S,X1,X2,current_unsorted_S,pos+1);
     current_unsorted_S.back()=X2.at(pos);
     std::vector<double> p2=p_S_rec(probaOnLeaf->getChild(1),set_sorted_S,X1,X2,current_unsorted_S,pos+1);
     current_unsorted_S.pop_back();
     for (unsigned int i=0;i<p2.size();i++)
-        pS.push_back(p2.at(i));
+        pS.push_back(p2.at(i)); // On concatène les probabilités
     return pS;
 }
 
