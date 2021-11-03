@@ -104,26 +104,29 @@ std::vector<double> p_S(std::vector<std::vector<int>>& set_sorted_S,const std::v
     return p_S_rec(&probaOnLeaf,set_sorted_S,X1,X2,S_player_stack);
 }
 
-std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,std::forward_list<int> ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix) {
-    // X1,X2: For all i, X1[i] will play against X2[i]. Used only by recursion, shall be empty as argument
-    // ranking: players who haven't chosen yet. Read ranking[j]: Player ranked j+1 among those who haven't chosen
-    // Returns: win probabilities for each player in XN
-    assert(XN.size()>=2);
-    assert(X1.size()==X2.size());
-    if (X1.size()==XN.size()/2-1) {
-        std::forward_list<int>::iterator pos=ranking.begin();
-        X1.push_back(*pos);
-        pos++;
-        X2.push_back(*pos);
-        std::vector<double> qX;
-        for (unsigned int i=0;i<XN.size();i++)
-            qX.push_back(qSj(XN.at(i),QOmega,X1,X2,probability_matrix));
-        XN1=X1; // Copies chères, pas autre moyen?
-        XN2=X2;
-        X1.pop_back();
-        X2.pop_back();
-        return qX;
-    }
+std::vector<double> base_case_opponent_choice_optimization_algorithm_rec(
+        std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,
+        std::forward_list<int> ranking,const VectorTree* QOmega,const std::vector<int>& XN,
+        const Imagine::Matrix<double>& probability_matrix) {
+    std::forward_list<int>::iterator pos=ranking.begin();
+    X1.push_back(*pos);
+    pos++;
+    X2.push_back(*pos);
+    std::vector<double> qX;
+    for (unsigned int i=0;i<XN.size();i++)
+        qX.push_back(qSj(XN.at(i),QOmega,X1,X2,probability_matrix));
+    XN1=X1; // Copies chères, pas autre moyen?
+    XN2=X2;
+    X1.pop_back();
+    X2.pop_back();
+    return qX;
+}
+
+std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,const std::forward_list<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix);
+std::vector<double> recursive_step_opponent_choice_optimization_algorithm_rec(
+        std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,
+        std::forward_list<int> ranking,const VectorTree* QOmega,const std::vector<int>& XN,
+        const Imagine::Matrix<double>& probability_matrix) {
     int current_player=ranking.front();
     int ind_curr_player=0;
     while (XN.at(ind_curr_player)!=current_player) {ind_curr_player++;}
@@ -150,6 +153,18 @@ std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>&
     return qXmax;
 }
 
+std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,const std::forward_list<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix) {
+    // X1,X2: For all i, X1[i] will play against X2[i]. Used only by recursion, shall be empty as argument
+    // ranking: players who haven't chosen yet. Read ranking[j]: Player ranked j+1 among those who haven't chosen
+    // Returns: win probabilities for each player in XN
+    assert(XN.size()>=2);
+    assert(X1.size()==X2.size());
+    if (X1.size()==XN.size()/2-1)
+        base_case_opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix);
+    else
+        recursive_step_opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix);
+}
+
 void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<int>& XN1,std::vector<int>& XN2,VectorTree* QOmega,const std::vector<int>& ranking,const Imagine::Matrix<double>& probability_matrix) {
     // qS: Win probabilities for each player (Output)
     // XN1,XN2: Optimal matching (Output)
@@ -158,11 +173,11 @@ void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<
     // probability_matrix: Matrix containing all win probabilities between players
     std::vector<int> X1,X2;
     if (ranking.size()==1) {
-        X1=ranking;
-        X2.clear();
+        // S'il n'y a qu'un joueur, il a déjà gagné
         qS=std::vector<double>(1,ranking.front());
         (*QOmega)(ranking).at(ranking.front())=1;
         return;}
+    // S'il y a plus de joueurs
     std::vector<int> XN(ranking);
     std::forward_list<int> f_list_ranking;
     for (int i=ranking.size()-1;i>=0;i--)
