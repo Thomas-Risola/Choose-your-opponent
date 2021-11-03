@@ -26,7 +26,7 @@ std::vector<double>& VectorTree::operator()(const std::vector<int>& sorted_S,uns
     }
     else {
         if (sorted_S.size()!=pos && sorted_S.at(pos)==player())
-            return child(0)->operator()(sorted_S,pos+1);
+            return child(0)->operator()(sorted_S,pos+1); // Si le joueur en question joue, on regarde le cas où il est là
         else
             return child(1)->operator()(sorted_S,pos);
     }
@@ -112,54 +112,52 @@ std::vector<double> p_S(std::vector<std::vector<int>>& set_sorted_S,const std::v
 
 std::vector<double> base_case_opponent_choice_optimization_algorithm_rec(
         std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,
-        std::forward_list<int> ranking,const VectorTree* QOmega,const std::vector<int>& XN,
+        const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,
         const Imagine::Matrix<double>& probability_matrix) {
-    std::forward_list<int>::iterator pos=ranking.begin();
-    X1.push_back(*pos);
-    pos++;
-    X2.push_back(*pos);
+    X1.push_back(ranking.front()); // Construction de la solution
+    X2.push_back(ranking.back());
     std::vector<double> qX;
     for (unsigned int i=0;i<XN.size();i++)
         qX.push_back(qSj(XN.at(i),QOmega,X1,X2,probability_matrix));
-    XN1=X1; // Copies chères, pas autre moyen?
+    XN1=X1; // Stockage des solutions
     XN2=X2;
-    X1.pop_back();
+    X1.pop_back(); // Restauration de l'intégrité de X1,X2
     X2.pop_back();
     return qX;
 }
 
-std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,const std::forward_list<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix);
+std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix);
 std::vector<double> recursive_step_opponent_choice_optimization_algorithm_rec(
         std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,
-        std::forward_list<int> ranking,const VectorTree* QOmega,const std::vector<int>& XN,
+        const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,
         const Imagine::Matrix<double>& probability_matrix) {
-    int current_player=ranking.front();
+    int current_player=ranking.front(); // On prend le 1er joueur
     int ind_curr_player=0;
-    while (XN.at(ind_curr_player)!=current_player) {ind_curr_player++;}
-    ranking.pop_front();
-    X1.push_back(current_player);
-    std::forward_list<int>::iterator nxt_pos=ranking.begin();
+    while (XN.at(ind_curr_player)!=current_player) ind_curr_player++; // On trouve l'indice qui correspond à ce joueur
+    X1.push_back(current_player); // Construction de la solution
     std::vector<int> XN1_candidate;
     std::vector<int> XN2_candidate;
     std::vector<double> qXmax(XN.size(),0);
-    for (std::forward_list<int>::iterator pos=ranking.before_begin();nxt_pos!=ranking.end();++pos,nxt_pos=pos,++nxt_pos) {
-        int chosen_player=*nxt_pos;
-        ranking.erase_after(pos); // ne pas utiliser nxt_pos en dessous, invalide
-        X2.push_back(chosen_player);
-        std::vector<double> qX=opponent_choice_optimization_algorithm_rec(XN1_candidate,XN2_candidate,X1,X2,ranking,QOmega,XN,probability_matrix);
-        ranking.insert_after(pos,chosen_player);
-        X2.pop_back();
+    std::vector<int> new_ranking;
+    for (unsigned int i=1;i<ranking.size();i++) {
+        int chosen_player=ranking.at(i); // Choix du joueur i
+        for (unsigned int j=1;j<ranking.size();j++) if (i!=j)
+            new_ranking.push_back(ranking.at(j)); // Contruction du ranking sans les joueurs déjà fixés
+        X2.push_back(chosen_player); // Construction de la solution
+        std::vector<double> qX=opponent_choice_optimization_algorithm_rec(XN1_candidate,XN2_candidate,X1,X2,new_ranking,QOmega,XN,probability_matrix);
+        X2.pop_back(); // Restauration de l'intégrité de X2
         if(qXmax.at(ind_curr_player)<qX.at(ind_curr_player)) {
-            XN1=XN1_candidate; // Copies chères, pas autre moyen?
+            XN1=XN1_candidate; // Stockage des solutions
             XN2=XN2_candidate;
             qXmax=qX;
         }
+        new_ranking.clear();
     }
-    X1.pop_back();
+    X1.pop_back(); // Restauration de l'intégrité de X1
     return qXmax;
 }
 
-std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,const std::forward_list<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix) {
+std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix) {
     // X1,X2: For all i, X1[i] will play against X2[i]. Used only by recursion, shall be empty as argument
     // ranking: players who haven't chosen yet. Read ranking[j]: Player ranked j+1 among those who haven't chosen
     // Returns: win probabilities for each player in XN
@@ -185,12 +183,9 @@ void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<
         return;}
     // S'il y a plus de joueurs
     std::vector<int> XN(ranking);
-    std::forward_list<int> f_list_ranking;
-    for (int i=ranking.size()-1;i>=0;i--)
-        f_list_ranking.push_front(ranking.at(i));
-    std::sort(XN.begin(),XN.end());
-    qS=opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,f_list_ranking,QOmega,XN,probability_matrix);
-    std::vector<double>& store_qS=(*QOmega)(XN);
+    std::sort(XN.begin(),XN.end()); // Tri des joueurs selon leur numéro
+    qS=opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix);
+    std::vector<double>& store_qS=(*QOmega)(XN); // Enregistrement des probabilités dans QOmega
     for (unsigned int i=0;i<XN.size();i++)
         store_qS.at(XN.at(i))=qS.at(i);
 }
@@ -200,14 +195,14 @@ void algorithm_entire_competition(std::vector<double>& qS,std::vector<int>& X1,s
     // X1,X2: Optimal pairings at each round (Output)
     // ranking: All players, must be sorted according to player RANKING (Input)
     // probability_matrix: Matrix containing all win probabilities between players (Input)
-    VectorTree* QOmega=empty_Q_P_N(ranking.size());
+    VectorTree* QOmega=empty_Q_P_N(ranking.size()); // Arbre de probabilités de victoire dans chaque scénario
     ComparePlayers comp(ranking);
     int n=log2(ranking.size());
     assert(pow(2,n)==ranking.size());assert(n>0);assert(n<5);
     std::vector<int> S;
     for (int i=0;i<n;i++)
-        S_kN(S,QOmega,pow(2,i),QOmega,comp,probability_matrix);
-    opponent_choice_optimization_algorithm(qS,X1,X2,QOmega,ranking,probability_matrix);
+        S_kN(S,QOmega,pow(2,i),QOmega,comp,probability_matrix); // Appel de l'algorithme en finale, demi finale, quart de fnale, etc. afin de remplir QOmega
+    opponent_choice_optimization_algorithm(qS,X1,X2,QOmega,ranking,probability_matrix); // Appel de l'algorithme pour leniveau souhaité
     QOmega->display();
 }
 
@@ -225,9 +220,9 @@ double qSj(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const
         double sum = 0;
         std::vector<std::vector<int>> set_sorted_S;
         std::vector<double> pS
-        =p_S(set_sorted_S,X1,X2,probability_matrix);
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
         for(unsigned int i=0; i<pS.size(); i++)
-            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j);
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités de gagner le tournoi
     return sum;
     }
 }

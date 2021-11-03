@@ -2,7 +2,6 @@
 #include <Imagine/Graphics.h>
 #include "Imagine/LinAlg.h"
 #include <Imagine/Graphics.h>
-#include <forward_list>
 #include "vectortree.h"
 
 struct ComparePlayers {
