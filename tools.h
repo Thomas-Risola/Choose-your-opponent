@@ -2,6 +2,7 @@
 #include <Imagine/Graphics.h>
 #include "Imagine/LinAlg.h"
 #include <Imagine/Graphics.h>
+#include <map>
 #include <forward_list>
 #include "vectortree.h"
 
@@ -9,8 +10,7 @@ struct ComparePlayers {
     std::vector<int> inv_ranking;
     ComparePlayers(const std::vector<int>& ranking): inv_ranking(ranking.size()) {
         for (unsigned int i=0;i<ranking.size();i++)
-            inv_ranking.at(ranking.at(i))=i;
-    }
+            inv_ranking.at(ranking.at(i))=i;}
     bool operator()(int i,int j) {return (inv_ranking.at(i)<inv_ranking.at(j));}
 };
 
