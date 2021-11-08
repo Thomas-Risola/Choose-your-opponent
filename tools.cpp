@@ -141,8 +141,15 @@ std::vector<double> recursive_step_opponent_choice_optimization_algorithm_rec(
     std::vector<int> new_ranking;
     for (unsigned int i=1;i<ranking.size();i++) {
         int chosen_player=ranking.at(i); // Choix du joueur i
-        for (unsigned int j=1;j<ranking.size();j++) if (i!=j)
-            new_ranking.push_back(ranking.at(j)); // Contruction du ranking sans les joueurs déjà fixés
+        for (unsigned int j=1;j<ranking.size();j++)
+            if (i!=j) // && (!huitieme || verif(current_player,chosen_player)))
+
+                // huitieme est un bool quon code avant les boucles avec la taille de XN
+                // Il suffit de savoir si i peut jouer contre j !
+                // sil ya un probleme il ferme la branche
+                // condition à coder pour l'admissibilité dans le IF!!!!
+
+                new_ranking.push_back(ranking.at(j)); // Contruction du ranking sans les joueurs déjà fixés
         X2.push_back(chosen_player); // Construction de la solution
         std::vector<double> qX=opponent_choice_optimization_algorithm_rec(XN1_candidate,XN2_candidate,X1,X2,new_ranking,QOmega,XN,probability_matrix);
         X2.pop_back(); // Restauration de l'intégrité de X2
