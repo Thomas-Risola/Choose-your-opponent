@@ -5,9 +5,11 @@ import numpy as np
 
 
 class Team:
-    def __init__(self, name, elo):
+    def __init__(self, name, elo, nationality=0, group=0):
         self.name = name
         self.elo = elo
+        self.nationality = nationality
+        self.group = group
 
     def __str__(self):
         print(self.name + " " + self.elo)
@@ -17,6 +19,12 @@ class Team:
 
     def __set_elo__(self, elo):
         self.elo = elo
+        
+    def __set_nationality__(self, nationality):
+        self.name = nationality
+
+    def __set_group__(self, group):
+        self.elo = group
 
 
 # functions to generate url
