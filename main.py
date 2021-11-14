@@ -1,7 +1,7 @@
 import ParseurMatrix as pm
 
 if __name__ == '__main__':
-    day = 11
+    day = 14
     month = 12
     year = 2021
     team_list = [pm.Team("Man City", 0), pm.Team("Bayern", 0), pm.Team("Liverpool", 0), pm.Team("Chelsea", 0),
