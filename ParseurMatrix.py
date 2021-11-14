@@ -21,10 +21,10 @@ class Team:
         self.elo = elo
         
     def __set_nationality__(self, nationality):
-        self.name = nationality
+        self.nationality = nationality
 
     def __set_group__(self, group):
-        self.elo = group
+        self.group = group
 
 
 # functions to generate url
