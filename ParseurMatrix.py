@@ -135,4 +135,4 @@ def compute_competition_ranking(team_list):
         else:
               runner_up_list.append(team_list[i])
     for i in range(number_of_teams//2):
-        
+        #Argmax(team_list.point #nope
