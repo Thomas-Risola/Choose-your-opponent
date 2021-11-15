@@ -124,3 +124,15 @@ def playable_match_matrix(team_list, day, month, year):
     set_team_info_from_soup(soup, team_list)
 
     return fill_playable_match_matrix(team_list)
+
+def compute_competition_ranking(team_list):
+    number_of_teams = len(team_list)
+    group_winner_list = []
+    runner_up_list = []
+    for i in range(number_of_teams):
+        if(team_list[i].group_rank = 1):
+              group_winner_list.append(team_list[i])
+        else:
+              runner_up_list.append(team_list[i])
+    for i in range(number_of_teams//2):
+        
