@@ -5,7 +5,7 @@ import numpy as np
 
 
 class Team:
-    def __init__(self, name, elo, nationality=0, group=0, group_rank=0, point=0, GD=0, GF=0, competition_rank=0):
+    def __init__(self, name, elo, nationality=0, group=0, group_rank=0, point=0, GD=0, GF=0, competition_rank=1):
         self.name = name
         self.elo = elo
         self.nationality = nationality
@@ -95,8 +95,8 @@ def victory_matrix(team_list, day, month, year):
 ######## Parser on UEFA site ########
 
 def can_1_play_2(team1, team2):
-    if(team1.group = team2.group or team1.nationalité = team2.nationality):
-         return fasse
+    if(team1.group = team2.group or team1.nationality = team2.nationality):
+         return false
     else:
          return true
 
@@ -133,6 +133,19 @@ def compute_competition_ranking(team_list):
         if(team_list[i].group_rank = 1):
               group_winner_list.append(team_list[i])
         else:
-              runner_up_list.append(team_list[i])
+            runner_up_list.append(team_list[i])
+    compare_point(group_winner_list) 
+    
+            
+            
+def compare_point(team_list):
+    number_of_teams = len(team_list)              
+    for i in range(number_of_teams):
+        for j in range(i+1, number_of_team):
+            if(team_list[i].point > team_list[j].point):
+                team_list[j] += 1
+                
+                
     for i in range(number_of_teams//2):
-        #Argmax(team_list.point #nope
+        
+                
