@@ -5,11 +5,16 @@ import numpy as np
 
 
 class Team:
-    def __init__(self, name, elo, nationality=0, group=0):
+    def __init__(self, name, elo, nationality=0, group=0, group_rank=0, point=0, GD=0, GF=0, competition_rank=0):
         self.name = name
         self.elo = elo
         self.nationality = nationality
         self.group = group
+        self.group_rank = group_rank
+        self.point = point
+        self.GD = GD
+        self.GF = GF
+        self.competition_rank = competition_rank
 
     def __str__(self):
         print(self.name + " " + self.elo)
@@ -86,3 +91,36 @@ def victory_matrix(team_list, day, month, year):
     set_elo_from_soup(soup, team_list)
 
     return fill_victory_matrix(team_list)
+
+######## Parser on UEFA site ########
+
+def can_1_play_2(team1, team2):
+    if(team1.group = team2.group or team1.nationalité = team2.nationality):
+         return fasse
+    else:
+         return true
+
+def fill_playable_match_matrix(team_list):
+number_of_teams = len(team_list)
+    matrix = np.zeros((number_of_teams, number_of_teams))
+    for i in range(number_of_teams):
+        matrix[i][i] = false
+        for j in range(i+1, number_of_teams):
+            matrix[i][j] = can_1_play_2(team_list[i], team_list[j])
+            matrix[j][i] = matrix[i][j]
+    return matrix
+
+def playable_match_matrix(team_list, day, month, year):
+    # specify the url from the date you want
+    http = urllib3.PoolManager()
+    url = get_uefa_url(year)
+
+    # get page
+    response = http.request('GET', url)
+
+    # make it usable
+    soup = BeautifulSoup(response.data, "html.parser")
+
+    set_team_info_from_soup(soup, team_list)
+
+    return fill_playable_match_matrix(team_list)
