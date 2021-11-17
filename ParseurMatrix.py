@@ -41,7 +41,7 @@ class Team:
         self.point = point
 
     def set_goal_difference(self, goal_difference):
-        pass
+        self.goal_difference = goal_difference
 
     def set_goal_for(self, goal_for):
         self.goal_for = goal_for
@@ -72,7 +72,7 @@ def set_info_from_ranking(ranking, team):
     # elo is what contain the elo information
     elo = team_info.find("td", attrs={"class": "r"})
     # we find the nationality in the name of the flag on the site
-    nationlity = team_info.find("img")
+    nationality = team_info.find("img")
     # .string to get  only the info
     # then we convert into int
     team.set_elo(int(elo.string))
@@ -215,7 +215,7 @@ def compare_point(team_list):
                 team_list[j] += 1
 
 
-# compare team goal_differebce then add rank to the one with lowest point
+# compare team goal_difference then add rank to the one with lowest point
 def compare_goal_difference(team_list):
     number_of_teams = len(team_list)
     for i in range(number_of_teams):
