@@ -243,3 +243,5 @@ def set_info_from_what(ranking, team):
     team.set_elo(int(elo.string))
 
                 
+def name_converter_from_clubelo_to_uefa_group(team_list):
+    return 0
