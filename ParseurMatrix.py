@@ -57,39 +57,25 @@ def get_clubelo_url(str_date):
     return "http://clubelo.com/" + str_date + "/Ranking"
 
 
-# set elos for all teams
-def set_elo_from_soup(soup, team_list):
+# set elos and nationalities for all teams
+def set_info_from_clubelo(soup, team_list):
     ranking = soup.find("table", attrs={"class": "ranking"})
     for team in team_list:
-        set_elo_from_ranking(ranking, team)
+        set_info_from_ranking(ranking, team)
 
 
-# set elo for one team
-def set_elo_from_ranking(ranking, team):
+# set elo and nationality for one team
+def set_info_from_ranking(ranking, team):
     team_info = ranking.find("a", string=team.name).parent.parent
     # elo is what contain the elo information
     elo = team_info.find("td", attrs={"class": "r"})
-    # .string to get  only the elo
-    # then we convert into int
-    team.set_elo(int(elo.string))
-
-    
-# set elos for all teams
-def set_nationality_from_soup(soup, team_list):
-    ranking = soup.find("table", attrs={"class": "ranking"})
-    for team in team_list:
-        set_elo_from_ranking(ranking, team)
-
-
-# set elo for one team
-def set_nationality_from_ranking(ranking, team):
-    team_info = ranking.find("a", string=team.name).parent.parent
-    # nationality is what contain the elo information given by the
-    # photo of the flag on our case
+    # we find the nationality in the name of the flag on the site
     nationlity = team_info.find("img")
-    # .string to get  only the elo
+    # .string to get  only the info
     # then we convert into int
+    team.set_elo(int(elo.string))  
     team.set_nationality(nationality.string)
+   
 
 # do what you think it does with elo formulas
 def victory_probability_1vs2(team1, team2):
@@ -98,7 +84,7 @@ def victory_probability_1vs2(team1, team2):
 
 
 # set probabilities into a matrix
-def fill_victory_matrix(team_list):
+def victory_matrix(team_list):
     number_of_teams = len(team_list)
     matrix = np.zeros((number_of_teams, number_of_teams))
     for i in range(number_of_teams):
@@ -108,7 +94,33 @@ def fill_victory_matrix(team_list):
     return matrix
 
 
-def victory_matrix(team_list, day, month, year):
+
+######## Parser on UEFA group site on google ########
+
+def can_1_play_2(team1, team2):
+    if(team1.group = team2.group or team1.nationality = team2.nationality):
+         return false
+    else:
+         return true
+
+def playable_match_matrix(team_list):
+number_of_teams = len(team_list)
+    matrix = np.zeros((number_of_teams, number_of_teams))
+    for i in range(number_of_teams):
+        matrix[i][i] = false
+        for j in range(i+1, number_of_teams):
+            # symetric matrix
+            matrix[i][j] = can_1_play_2(team_list[i], team_list[j])
+            matrix[j][i] = matrix[i][j]
+    return matrix
+
+def get_uefa_group_url():
+    return "https://www.google.com/search?client=firefox-b-d&q=uefa#sie=lg;/g/11j8x175ph;2;/m/0c1q0;st;fp;1;;"
+
+def search_and_fill_team_info(team_list, day, month, year):
+    
+    ## parse pn clubelo site
+    
     # specify the url from the date you want
     http = urllib3.PoolManager()
 
@@ -123,31 +135,11 @@ def victory_matrix(team_list, day, month, year):
 
     set_elo_from_soup(soup, team_list)
 
-    return fill_victory_matrix(team_list)
-
-######## Parser on UEFA group site on google ########
-
-def can_1_play_2(team1, team2):
-    if(team1.group = team2.group or team1.nationality = team2.nationality):
-         return false
-    else:
-         return true
-
-def fill_playable_match_matrix(team_list):
-number_of_teams = len(team_list)
-    matrix = np.zeros((number_of_teams, number_of_teams))
-    for i in range(number_of_teams):
-        matrix[i][i] = false
-        for j in range(i+1, number_of_teams):
-            # symetric matrix
-            matrix[i][j] = can_1_play_2(team_list[i], team_list[j])
-            matrix[j][i] = matrix[i][j]
-    return matrix
-
-def playable_match_matrix(team_list, day, month, year):
+    ## parse on UEFA group site
+    
     # specify the url from the date you want
     http = urllib3.PoolManager()
-    url = get_uefa_group_url(year)
+    url = get_uefa_group_url()
 
     # get page
     response = http.request('GET', url)
@@ -173,21 +165,40 @@ def compute_competition_ranking(team_list):
     # then we start comparing the points of each team to rank them
     compare_point(group_winner_list) 
     compare_point(runner_up_list) 
+    all_tie_case = build_tie_case(team_list) 
     # if there are tie cases we compare on Goal Difference
-    compare_goal_difference(team_list)
-    # if there are tie cases we compare on Goal For
-    compare_goal_for(team_list)
+    if( len(all_tie_cas) > 0 ):
+        compare_goal_difference(team_list)
+        all_tie_case = build_tie_case(team_list)
+        # if there are tie cases we compare on Goal For
+        if( len(all_tie_cas) > 0 ):
+            compare_goal_for(team_list)
     # we then hope that all cases are cleared or we should add 
     # the other decider rules
     
     
 # do what it does
-def search_tie_case(team_list):   
-    return 0
+def search_tie_case(team_list):
+    number_of_teams = len(team_list)
+    competition_rank_list
+    for i in range(number_of_teams):
+        competition_rank_list[i] =team_list[i].competition_rank
+    unique, counts = np.unique(competion_rank_list ,return_counts=True)
+    return dict(zip(unique, counts))
     
 # return lists of tie cases
 def build_tie_case(team_list):
-    return 0
+    number_of_teams = len(team_list)
+    rank_count = search_tie_case(team_list) 
+    all_tie_case = []
+    for i in range(len(rank_count)):
+        if rank_count[i] >= 2:
+            tie_case = []
+            for j in range(number_of_teams):
+                if team_list[j] == rank_count[i]:
+                    tie_case.append(team_list[j])
+            all_tie_case.append(tie_case)  
+    return all_tie_case
        
 # compare team point then add rank to the one with lowest point
 def compare_point(team_list):
@@ -214,4 +225,21 @@ def compare_goal_for(team_list):
                 team_list[j] += 1
                 
         
+        
+# set elos for all teams
+def set_info_from_groups(soup, team_list):
+    ranking = soup.find("div", attrs={"class": "EAFAEc"})
+    for team in team_list:
+        set_info_from_what(ranking, team)
+
+
+# set elo for one team
+def set_info_from_what(ranking, team):
+    team_info = ranking.find("a", string=team.name).parent.parent
+    # elo is what contain the elo information
+    elo = team_info.find("td", attrs={"class": "r"})
+    # .string to get  only the elo
+    # then we convert into int
+    team.set_elo(int(elo.string))
+
                 
