@@ -98,16 +98,16 @@ def victory_matrix(team_list):
 
 def can_1_play_2(team1, team2):
     if team1.group == team2.group or team1.nationality == team2.nationality:
-        return false
+        return False
     else:
-        return true
+        return True
 
 
 def playable_match_matrix(team_list):
     number_of_teams = len(team_list)
     matrix = np.zeros((number_of_teams, number_of_teams))
     for i in range(number_of_teams):
-        matrix[i][i] = false
+        matrix[i][i] = False
         for j in range(i + 1, number_of_teams):
             # symmetric matrix
             matrix[i][j] = can_1_play_2(team_list[i], team_list[j])
@@ -141,7 +141,7 @@ def search_and_fill_team_info(team_list, day, month, year):
     response = http.request('GET', url)
     # make it usable
     soup = BeautifulSoup(response.data, "html.parser")
-    #set_team_info_from_soup(soup, team_list)
+    # set_team_info_from_soup(soup, team_list)
 
 
 def compute_competition_ranking(team_list):
@@ -160,11 +160,11 @@ def compute_competition_ranking(team_list):
     compare_point(runner_up_list)
     all_tie_case = build_tie_case(team_list)
     # if there are tie cases we compare on Goal Difference
-    if len(all_tie_cas) > 0:
+    if len(all_tie_case) > 0:
         compare_goal_difference(team_list)
         all_tie_case = build_tie_case(team_list)
         # if there are tie cases we compare on Goal For
-        if len(all_tie_cas) > 0:
+        if len(all_tie_case) > 0:
             compare_goal_for(team_list)
     # we then hope that all cases are cleared or we should add 
     # the other decider rules
@@ -176,7 +176,7 @@ def search_tie_case(team_list):
     competition_rank_list = []
     for i in range(number_of_teams):
         competition_rank_list.append(team_list[i].competition_rank)
-    unique, counts = np.unique(competion_rank_list, return_counts=True)
+    unique, counts = np.unique(competition_rank_list, return_counts=True)
     return dict(zip(unique, counts))
 
 
@@ -199,7 +199,7 @@ def build_tie_case(team_list):
 def compare_point(team_list):
     number_of_teams = len(team_list)
     for i in range(number_of_teams):
-        for j in range(i + 1, number_of_team):
+        for j in range(i + 1, number_of_teams):
             if team_list[i].point > team_list[j].point:
                 team_list[j] += 1
 
@@ -208,7 +208,7 @@ def compare_point(team_list):
 def compare_goal_difference(team_list):
     number_of_teams = len(team_list)
     for i in range(number_of_teams):
-        for j in range(i + 1, number_of_team):
+        for j in range(i + 1, number_of_teams):
             if team_list[i].goal_difference > team_list[j].goal_difference:
                 team_list[j] += 1
 
@@ -217,7 +217,7 @@ def compare_goal_difference(team_list):
 def compare_goal_for(team_list):
     number_of_teams = len(team_list)
     for i in range(number_of_teams):
-        for j in range(i + 1, number_of_team):
+        for j in range(i + 1, number_of_teams):
             if team_list[i].goal_for > team_list[j].goal_for:
                 team_list[j] += 1
 
