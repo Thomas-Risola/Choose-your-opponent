@@ -72,11 +72,11 @@ def set_info_from_ranking(ranking, team):
     # elo is what contain the elo information
     elo = team_info.find("td", attrs={"class": "r"})
     # we find the nationality in the name of the flag on the site
-    nationality = team_info.find("img")
+    nationality = team_info.find("img").get("alt")
     # .string to get  only the info
     # then we convert into int
     team.set_elo(int(elo.string))
-    team.set_nationality(nationality.string)
+    team.set_nationality(nationality)
 
 
 # do what you think it does with elo formulas
@@ -120,6 +120,18 @@ def get_uefa_group_url():
 
 
 def search_and_fill_team_info(team_list, day, month, year):
+    # parse on UEFA group site
+
+    # specify the url from the date you want
+    http = urllib3.PoolManager()
+    url = get_uefa_group_url()
+    # get page
+    response = http.request('GET', url)
+    # make it usable
+    soup = BeautifulSoup(response.data, "html.parser")
+    team_list = set_info_from_uefa_groups(soup)
+
+    name_converter_from_clubelo_to_uefa_group(team_list)
     # parse on clubelo site
 
     # specify the url from the date you want
@@ -132,16 +144,6 @@ def search_and_fill_team_info(team_list, day, month, year):
     soup = BeautifulSoup(response.data, "html.parser")
     set_info_from_clubelo(soup, team_list)
 
-    # parse on UEFA group site
-
-    # specify the url from the date you want
-    http = urllib3.PoolManager()
-    url = get_uefa_group_url()
-    # get page
-    response = http.request('GET', url)
-    # make it usable
-    soup = BeautifulSoup(response.data, "html.parser")
-    # set_team_info_from_soup(soup, team_list)
 
 
 def compute_competition_ranking(team_list):
@@ -223,14 +225,14 @@ def compare_goal_for(team_list):
 
 
 # set elos for all teams
-def set_info_from_groups(soup, team_list):
-    ranking = soup.find("div", attrs={"class": "EAFAEc"})
+def set_info_from_uefa_groups(soup):
+    group = soup.find("div", attrs={"class": "EAFAEc"})
     for team in team_list:
-        set_info_from_uefa_group(ranking, team)
+        set_info_from_group(group, team)
 
 
 # set elo for one team
-def set_info_from_uefa_group(ranking, team):
+def set_info_from_group(ranking, team):
     team_info = ranking.find("a", string=team.name).parent.parent
     # elo is what contain the elo information
     elo = team_info.find("td", attrs={"class": "r"})
