@@ -96,8 +96,6 @@ def victory_matrix(team_list):
     return matrix
 
 
-# Parser on UEFA group site on google #
-
 def can_1_play_2(team1, team2):
     if team1.group == team2.group or team1.nationality == team2.nationality:
         return false
@@ -111,7 +109,7 @@ def playable_match_matrix(team_list):
     for i in range(number_of_teams):
         matrix[i][i] = false
         for j in range(i + 1, number_of_teams):
-            # symetric matrix
+            # symmetric matrix
             matrix[i][j] = can_1_play_2(team_list[i], team_list[j])
             matrix[j][i] = matrix[i][j]
     return matrix
@@ -122,44 +120,35 @@ def get_uefa_group_url():
 
 
 def search_and_fill_team_info(team_list, day, month, year):
-    # parse pn clubelo site
+    # parse on clubelo site
 
     # specify the url from the date you want
     http = urllib3.PoolManager()
-
     str_date = convert_date_to_string(day, month, year)
     url = get_clubelo_url(str_date)
-
     # get page
     response = http.request('GET', url)
-
     # make it usable
     soup = BeautifulSoup(response.data, "html.parser")
-
-    set_elo_from_soup(soup, team_list)
+    set_info_from_clubelo(soup, team_list)
 
     # parse on UEFA group site
 
     # specify the url from the date you want
     http = urllib3.PoolManager()
     url = get_uefa_group_url()
-
     # get page
     response = http.request('GET', url)
-
     # make it usable
     soup = BeautifulSoup(response.data, "html.parser")
-
-    set_team_info_from_soup(soup, team_list)
-
-    return fill_playable_match_matrix(team_list)
+    #set_team_info_from_soup(soup, team_list)
 
 
 def compute_competition_ranking(team_list):
     number_of_teams = len(team_list)
     group_winner_list = []
     runner_up_list = []
-    # first we compare wether the team has won its group or not
+    # first we compare whether the team has won its group or not
     for i in range(number_of_teams):
         if team_list[i].group_rank == 1:
             group_winner_list.append(team_list[i])
@@ -211,7 +200,7 @@ def compare_point(team_list):
     number_of_teams = len(team_list)
     for i in range(number_of_teams):
         for j in range(i + 1, number_of_team):
-            if (team_list[i].point > team_list[j].point):
+            if team_list[i].point > team_list[j].point:
                 team_list[j] += 1
 
 
@@ -220,7 +209,7 @@ def compare_goal_difference(team_list):
     number_of_teams = len(team_list)
     for i in range(number_of_teams):
         for j in range(i + 1, number_of_team):
-            if (team_list[i].goal_difference > team_list[j].goal_difference):
+            if team_list[i].goal_difference > team_list[j].goal_difference:
                 team_list[j] += 1
 
 
@@ -229,7 +218,7 @@ def compare_goal_for(team_list):
     number_of_teams = len(team_list)
     for i in range(number_of_teams):
         for j in range(i + 1, number_of_team):
-            if (team_list[i].goal_for > team_list[j].goal_for):
+            if team_list[i].goal_for > team_list[j].goal_for:
                 team_list[j] += 1
 
 
@@ -237,11 +226,11 @@ def compare_goal_for(team_list):
 def set_info_from_groups(soup, team_list):
     ranking = soup.find("div", attrs={"class": "EAFAEc"})
     for team in team_list:
-        set_info_from_what(ranking, team)
+        set_info_from_uefa_group(ranking, team)
 
 
 # set elo for one team
-def set_info_from_what(ranking, team):
+def set_info_from_uefa_group(ranking, team):
     team_info = ranking.find("a", string=team.name).parent.parent
     # elo is what contain the elo information
     elo = team_info.find("td", attrs={"class": "r"})

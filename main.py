@@ -8,7 +8,7 @@ if __name__ == '__main__':
                  pm.Team("Juventus", 0), pm.Team("Paris SG", 0), pm.Team("Dortmund", 0), pm.Team("Real Madrid", 0),
                  pm.Team("Porto", 0), pm.Team("RB Leipzig", 0), pm.Team("Atlético", 0), pm.Team("Barcelona", 0),
                  pm.Team("Sevilla", 0), pm.Team("Lazio", 0), pm.Team("Atalanta", 0), pm.Team("Gladbach", 0)]
-
+    pm.set_info_from_clubelo(team_list)
     victory_matrix = pm.victory_matrix(team_list, day, month, year)
     print(victory_matrix)
     # we need to save the matrix to use it in C++ MOPSI Program
