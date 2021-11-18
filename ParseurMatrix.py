@@ -6,7 +6,7 @@ import numpy as np
 
 # class gathering team data
 class Team:
-    def __init__(self, name="a", elo=0, nationality=0, group=0, group_rank=0, point=0, goal_difference=0, goal_for=0,
+    def __init__(self, name="a", elo=0, nationality="a", group="a", group_rank=0, point=0, goal_difference=0, goal_for=0,
                  competition_rank=1):
         self.name = name
         self.elo = elo
@@ -19,8 +19,8 @@ class Team:
         self.competition_rank = competition_rank
 
     # finir methode str mais pas super utile pour linstant
-    def __str__(self):
-        print(self.name + " " + str(self.elo))
+    def str(self):
+        print("name: " + self.name + "\n" + "elo: " + str(self.elo) + "\n" + "nationality: " + self.nationality + "\n" + "group: " + self.group + "\n" + "group_rank: " + str(self.group_rank) + "\n" + "point: " + str(self.point) + "\n" + "goal_difference: " + str(self.goal_difference) + "\n" + "goal_for: " + str(self.goal_for) + "\n" + "competition_rank: " + str(self.competition_rank))
 
     def set_name(self, name):
         self.name = name
@@ -115,8 +115,8 @@ def playable_match_matrix(team_list):
     return matrix
 
 
-def get_uefa_group_url():
-    return "https://www.google.com/search?client=firefox-b-d&q=uefa#sie=lg;/g/11j8x175ph;2;/m/0c1q0;st;fp;1;;"
+def get_uefa_group_url(year):
+    return "https://www.skysports.com/champions-league-table/" + str(year)
 
 
 def search_and_fill_team_info(day, month, year, number_of_teams=16):
@@ -124,7 +124,7 @@ def search_and_fill_team_info(day, month, year, number_of_teams=16):
 
     # specify the url from the date you want
     http = urllib3.PoolManager()
-    url = get_uefa_group_url()
+    url = get_uefa_group_url(year)
     # get page
     response = http.request('GET', url)
     # make it usable
@@ -156,19 +156,21 @@ def compute_competition_ranking(team_list):
         if team_list[i].group_rank == 1:
             group_winner_list.append(team_list[i])
         else:
-            team_list[i].competition_rank = number_of_teams + 1
+            team_list[i].competition_rank = number_of_teams//2 + 1
             runner_up_list.append(team_list[i])
     # then we start comparing the points of each team to rank them
     compare_point(group_winner_list)
     compare_point(runner_up_list)
-    all_tie_case = build_tie_case(team_list)
+    all_tie_case1 = build_tie_case(team_list)
     # if there are tie cases we compare on Goal Difference
-    if len(all_tie_case) > 0:
-        compare_goal_difference(team_list)
-        all_tie_case = build_tie_case(team_list)
-        # if there are tie cases we compare on Goal For
-        if len(all_tie_case) > 0:
-            compare_goal_for(team_list)
+    if len(all_tie_case1) > 0:
+        for i in range(len(all_tie_case1)):
+            compare_goal_difference(all_tie_case1[i])
+            all_tie_case2 = build_tie_case(team_list)
+            # if there are tie cases we compare on Goal For
+            if len(all_tie_case2) > 0:
+                for i in range(len(all_tie_case2)):
+                    compare_goal_for(all_tie_case2[i])
     # we then hope that all cases are cleared or we should add 
     # the other decider rules
 
@@ -188,11 +190,11 @@ def build_tie_case(team_list):
     number_of_teams = len(team_list)
     rank_count = search_tie_case(team_list)
     all_tie_case = []
-    for i in range(len(rank_count)):
-        if rank_count[i] >= 2:
+    for key in rank_count:
+        if rank_count[key] >= 2:
             tie_case = []
             for j in range(number_of_teams):
-                if team_list[j] == rank_count[i]:
+                if team_list[j].competition_rank == key:
                     tie_case.append(team_list[j])
             all_tie_case.append(tie_case)
     return all_tie_case
@@ -204,7 +206,7 @@ def compare_point(team_list):
     for i in range(number_of_teams):
         for j in range(i + 1, number_of_teams):
             if team_list[i].point > team_list[j].point:
-                team_list[j] += 1
+                team_list[j].competition_rank += 1
 
 
 # compare team goal_difference then add rank to the one with lowest point
@@ -213,7 +215,7 @@ def compare_goal_difference(team_list):
     for i in range(number_of_teams):
         for j in range(i + 1, number_of_teams):
             if team_list[i].goal_difference > team_list[j].goal_difference:
-                team_list[j] += 1
+                team_list[j].competition_rank += 1
 
 
 # compare team goal_for then add rank to the one with lowest point
@@ -222,36 +224,45 @@ def compare_goal_for(team_list):
     for i in range(number_of_teams):
         for j in range(i + 1, number_of_teams):
             if team_list[i].goal_for > team_list[j].goal_for:
-                team_list[j] += 1
+                team_list[j].competition_rank += 1
 
 
 # set elos for all teams
 def set_info_from_uefa_groups(soup, team_list):
-    group = soup.find("div", attrs={"class": "EAFAEc"})
-    for team in team_list:
-        set_info_from_group(group, team)
+    groups = soup.find("div", attrs={"class": "page-filters__offset"})
+    name_list = groups.find_all("td", attrs={"class": "standing-table__cell standing-table__cell--name"})
+    team_info_list = soup.find_all("td", attrs={"class": "standing-table__cell"})
+    number_of_player_in_competition = len(name_list)
+    number_of_info_for_each_team_on_the_site = 11
+    team_id = 0
+    for i in range(number_of_player_in_competition):
+        if int(team_info_list[i*number_of_info_for_each_team_on_the_site].string) < 3:
+            team_list[team_id].set_name(name_list[i].get('data-short-name'))
+            team_list[team_id].set_group_rank(int(team_info_list[i*number_of_info_for_each_team_on_the_site].string))
+            set_other_info_from_group(team_info_list, team_list[team_id], number_of_info_for_each_team_on_the_site, i)
+            team_id += 1
 
 
-# set elo for one team
-def set_info_from_group(ranking, team):
-    name = ranking.find("span")
-    team.set_name(name.string)
-    team_info = ranking.find("span", string=team.name).parent.parent
-
-    group_name = team_info.find("div", attrs={"class": "fwXO9b XAPH9c"})
-
-    team.set_group(group_name)
+# set goal for, goal diff, point for one team
+def set_other_info_from_group(info_list, team, number_of_info_for_each_team_on_the_site, soup_index):
+    team.set_goal_for(int(info_list[soup_index*number_of_info_for_each_team_on_the_site + 6].string))
+    team.set_goal_difference(int(info_list[soup_index*number_of_info_for_each_team_on_the_site + 8].string))
+    team.set_point(int(info_list[soup_index*number_of_info_for_each_team_on_the_site + 9].string))
 
 
 def name_converter_from_clubelo_to_uefa_group(team_list):
-    uefa_group_name = {"0": "Bayern", "1": "Man City", "3": "Liverpool", "4": "Chelsea", "5": "Real", "6": "Paris-SG",
-                       "7": "Manchester United", "8": "Ajax", "9": "Inter", "10": "Atlético Madrid", "11": "Arsenal",
-                       "12": "West Ham", "13": "Barcelona", "14": "Séville", "15": "Dortmund", "16": "Juventus",
-                       "17": "Porto", "18": "Naples", "19": "Milan", "20": "Atalanta", "21": "RB Leipzig",
-                       "22": "Villarreal", "23": "Tottenham", "24": "Real Sociedad", "25": "RB Salzburg",
-                       "26": "FC Bruges", "27": "Sporting", "28": "Besiktas", "29": "Sheriff", "30": "Chakhtar",
-                       "31": "Benfica", "32": "Dynamo Kyiv", "33": "Young Boys", "34": "Lille", "35": "Wolfsbourg",
-                       "36": "Zenit", "37": " Malmö"}
+    uefa_group_name = {"0": "Bayern Munich", "1": "Manchester City", "3": "Liverpool", "4": "Chelsea",
+                       "5": "Real Madrid", "6": "Paris Saint-Germain",
+                       "7": "Manchester United", "8": "Ajax", "9": "Inter Milan", "10": "Atletico Madrid",
+                       "11": "Arsenal",
+                       "12": "West Ham", "13": "Barcelona", "14": "Sevilla", "15": "Borussia Dortmund",
+                       "16": "Juventus",
+                       "17": "FC Porto", "18": "Naples", "19": "AC Milan", "20": "Atalanta", "21": "RB Leipzig",
+                       "22": "Villarreal", "23": "Tottenham", "24": "Real Sociedad", "25": "Red Bull Salzburg",
+                       "26": "Club Brugge", "27": "Sporting Lisbon", "28": "Besiktas", "29": "Sheriff Tiraspol(Mol)",
+                       "30": "Shakhtar Donetsk",
+                       "31": "Benfica", "32": "Dynamo Kiev", "33": "BSC Young Boys Bern", "34": "Lille", "35": "Wolfsburg",
+                       "36": "Zenit St. Petersburg", "37": "Malmo FF"}
     clubelo_name = {"0": "Bayern", "1": "Man City", "3": "Liverpool", "4": "Chelsea", "5": "Real Madrid",
                     "6": "Paris SG", "7": "Man United", "8": "Ajax", "9": "Inter", "10": "Atlético", "11": "Arsenal",
                     "12": "West Ham", "13": "Barcelona", "14": "Sevilla", "15": "Dortmund", "16": "Juventus",
@@ -259,7 +270,7 @@ def name_converter_from_clubelo_to_uefa_group(team_list):
                     "22": "Villarreal", "23": "Tottenham", "24": "Real Sociedad", "25": "Salzburg", "26": "Brugge",
                     "27": "Sporting", "28": "Beşiktaş", "29": "Sheriff", "30": "Шахтар", "31": "Benfica",
                     "32": "Динамо Київ", "33": "Young Boys", "34": "Lille", "35": "Wolfsburg", "36": "Зенит",
-                    "37": " Malmö"}
+                    "37": "Malmö"}
     for team in team_list:
         key = get_key(team.name, uefa_group_name)
         team.set_name(clubelo_name[key])
