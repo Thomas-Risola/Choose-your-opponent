@@ -2,15 +2,12 @@ import ParseurMatrix as pm
 
 if __name__ == '__main__':
     day = 14
-    month = 12
+    month = 11
     year = 2021
-    team_list = [pm.Team("Man City", 0), pm.Team("Bayern", 0), pm.Team("Liverpool", 0), pm.Team("Chelsea", 0),
-                 pm.Team("Juventus", 0), pm.Team("Paris SG", 0), pm.Team("Dortmund", 0), pm.Team("Real Madrid", 0),
-                 pm.Team("Porto", 0), pm.Team("RB Leipzig", 0), pm.Team("Atlético", 0), pm.Team("Barcelona", 0),
-                 pm.Team("Sevilla", 0), pm.Team("Lazio", 0), pm.Team("Atalanta", 0), pm.Team("Gladbach", 0)]
-    pm.search_and_fill_team_info(team_list, day, month, year)
+    team_list = pm.search_and_fill_team_info(day, month, year)
     victory_matrix = pm.victory_matrix(team_list)
     print(victory_matrix)
+    print(team_list[0].nationality)
     print(team_list[0].nationality)
     # we need to save the matrix to use it in C++ MOPSI Program
     # or we can try to execute this in the C++ program?

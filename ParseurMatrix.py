@@ -6,7 +6,7 @@ import numpy as np
 
 # class gathering team data
 class Team:
-    def __init__(self, name, elo, nationality=0, group=0, group_rank=0, point=0, goal_difference=0, goal_for=0,
+    def __init__(self, name="a", elo=0, nationality=0, group=0, group_rank=0, point=0, goal_difference=0, goal_for=0,
                  competition_rank=1):
         self.name = name
         self.elo = elo
@@ -20,7 +20,7 @@ class Team:
 
     # finir methode str mais pas super utile pour linstant
     def __str__(self):
-        print(self.name + " " + self.elo)
+        print(self.name + " " + str(self.elo))
 
     def set_name(self, name):
         self.name = name
@@ -119,7 +119,7 @@ def get_uefa_group_url():
     return "https://www.google.com/search?client=firefox-b-d&q=uefa#sie=lg;/g/11j8x175ph;2;/m/0c1q0;st;fp;1;;"
 
 
-def search_and_fill_team_info(team_list, day, month, year):
+def search_and_fill_team_info(day, month, year, number_of_teams=16):
     # parse on UEFA group site
 
     # specify the url from the date you want
@@ -129,7 +129,8 @@ def search_and_fill_team_info(team_list, day, month, year):
     response = http.request('GET', url)
     # make it usable
     soup = BeautifulSoup(response.data, "html.parser")
-    team_list = set_info_from_uefa_groups(soup)
+    team_list = [Team(str(i)) for i in range(number_of_teams)]
+    set_info_from_uefa_groups(soup, team_list)
 
     name_converter_from_clubelo_to_uefa_group(team_list)
     # parse on clubelo site
@@ -143,7 +144,7 @@ def search_and_fill_team_info(team_list, day, month, year):
     # make it usable
     soup = BeautifulSoup(response.data, "html.parser")
     set_info_from_clubelo(soup, team_list)
-
+    return team_list
 
 
 def compute_competition_ranking(team_list):
@@ -225,7 +226,7 @@ def compare_goal_for(team_list):
 
 
 # set elos for all teams
-def set_info_from_uefa_groups(soup):
+def set_info_from_uefa_groups(soup, team_list):
     group = soup.find("div", attrs={"class": "EAFAEc"})
     for team in team_list:
         set_info_from_group(group, team)
@@ -233,13 +234,38 @@ def set_info_from_uefa_groups(soup):
 
 # set elo for one team
 def set_info_from_group(ranking, team):
-    team_info = ranking.find("a", string=team.name).parent.parent
-    # elo is what contain the elo information
-    elo = team_info.find("td", attrs={"class": "r"})
-    # .string to get  only the elo
-    # then we convert into int
-    team.set_elo(int(elo.string))
+    name = ranking.find("span")
+    team.set_name(name.string)
+    team_info = ranking.find("span", string=team.name).parent.parent
+
+    group_name = team_info.find("div", attrs={"class": "fwXO9b XAPH9c"})
+
+    team.set_group(group_name)
 
 
 def name_converter_from_clubelo_to_uefa_group(team_list):
-    return 0
+    uefa_group_name = {"0": "Bayern", "1": "Man City", "3": "Liverpool", "4": "Chelsea", "5": "Real", "6": "Paris-SG",
+                       "7": "Manchester United", "8": "Ajax", "9": "Inter", "10": "Atlético Madrid", "11": "Arsenal",
+                       "12": "West Ham", "13": "Barcelona", "14": "Séville", "15": "Dortmund", "16": "Juventus",
+                       "17": "Porto", "18": "Naples", "19": "Milan", "20": "Atalanta", "21": "RB Leipzig",
+                       "22": "Villarreal", "23": "Tottenham", "24": "Real Sociedad", "25": "RB Salzburg",
+                       "26": "FC Bruges", "27": "Sporting", "28": "Besiktas", "29": "Sheriff", "30": "Chakhtar",
+                       "31": "Benfica", "32": "Dynamo Kyiv", "33": "Young Boys", "34": "Lille", "35": "Wolfsbourg",
+                       "36": "Zenit", "37": " Malmö"}
+    clubelo_name = {"0": "Bayern", "1": "Man City", "3": "Liverpool", "4": "Chelsea", "5": "Real Madrid",
+                    "6": "Paris SG", "7": "Man United", "8": "Ajax", "9": "Inter", "10": "Atlético", "11": "Arsenal",
+                    "12": "West Ham", "13": "Barcelona", "14": "Sevilla", "15": "Dortmund", "16": "Juventus",
+                    "17": "Porto", "18": "Napoli", "19": "Milan", "20": "Atalanta", "21": "RB Leipzig",
+                    "22": "Villarreal", "23": "Tottenham", "24": "Real Sociedad", "25": "Salzburg", "26": "Brugge",
+                    "27": "Sporting", "28": "Beşiktaş", "29": "Sheriff", "30": "Шахтар", "31": "Benfica",
+                    "32": "Динамо Київ", "33": "Young Boys", "34": "Lille", "35": "Wolfsburg", "36": "Зенит",
+                    "37": " Malmö"}
+    for team in team_list:
+        key = get_key(team.name, uefa_group_name)
+        team.set_name(clubelo_name[key])
+
+
+def get_key(val, my_dict):
+    for key, value in my_dict.items():
+        if val == value:
+            return key
