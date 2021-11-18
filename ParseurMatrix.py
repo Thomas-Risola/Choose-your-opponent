@@ -105,7 +105,7 @@ def can_1_play_2(team1, team2):
 
 def playable_match_matrix(team_list):
     number_of_teams = len(team_list)
-    matrix = np.zeros((number_of_teams, number_of_teams))
+    matrix = np.empty((number_of_teams, number_of_teams), dtype=bool)
     for i in range(number_of_teams):
         matrix[i][i] = False
         for j in range(i + 1, number_of_teams):
@@ -227,7 +227,7 @@ def compare_goal_for(team_list):
                 team_list[j].competition_rank += 1
 
 
-# set elos for all teams
+# set info for all teams
 def set_info_from_uefa_groups(soup, team_list):
     groups = soup.find("div", attrs={"class": "page-filters__offset"})
     name_list = groups.find_all("td", attrs={"class": "standing-table__cell standing-table__cell--name"})
@@ -237,11 +237,13 @@ def set_info_from_uefa_groups(soup, team_list):
     team_id = 0
     for i in range(number_of_player_in_competition):
         if int(team_info_list[i*number_of_info_for_each_team_on_the_site].string) < 3:
+            group_name_info = name_list[team_id].parent.parent.parent
+            group_name = group_name_info.find("caption", attrs={"class": "standing-table__caption"})
+            team_list[team_id].set_group(group_name.string)
             team_list[team_id].set_name(name_list[i].get('data-short-name'))
             team_list[team_id].set_group_rank(int(team_info_list[i*number_of_info_for_each_team_on_the_site].string))
             set_other_info_from_group(team_info_list, team_list[team_id], number_of_info_for_each_team_on_the_site, i)
             team_id += 1
-
 
 # set goal for, goal diff, point for one team
 def set_other_info_from_group(info_list, team, number_of_info_for_each_team_on_the_site, soup_index):

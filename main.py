@@ -15,6 +15,8 @@ if __name__ == '__main__':
         print("\n")
     for i in range(len(team_list)):
         print(team_list[i].competition_rank)
+    play_match = pm.playable_match_matrix(team_list)
+    print(play_match)
 
     # we need to save the matrix to use it in C++ MOPSI Program
     # or we can try to execute this in the C++ program?
