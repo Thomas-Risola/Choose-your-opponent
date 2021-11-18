@@ -19,7 +19,6 @@ class Team:
         self.goal_for = goal_for
         self.competition_rank = competition_rank
 
-    # finir methode str mais pas super utile pour linstant
     def str(self):
         print("name: " + self.name + "\n" + "elo: " + str(
             self.elo) + "\n" + "nationality: " + self.nationality + "\n" + "group: " + self.group + "\n" + "group_rank: " + str(
