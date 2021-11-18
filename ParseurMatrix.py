@@ -166,11 +166,12 @@ def compute_competition_ranking(team_list):
     if len(all_tie_case1) > 0:
         for i in range(len(all_tie_case1)):
             compare_goal_difference(all_tie_case1[i])
-            all_tie_case2 = build_tie_case(team_list)
-            # if there are tie cases we compare on Goal For
-            if len(all_tie_case2) > 0:
-                for i in range(len(all_tie_case2)):
-                    compare_goal_for(all_tie_case2[i])
+    all_tie_case2 = build_tie_case(team_list)
+
+    # if there are tie cases we compare on Goal For
+    if len(all_tie_case2) > 0:
+        for j in range(len(all_tie_case2)):
+            compare_goal_for(all_tie_case2[j])
     # we then hope that all cases are cleared or we should add 
     # the other decider rules
 
@@ -207,6 +208,8 @@ def compare_point(team_list):
         for j in range(i + 1, number_of_teams):
             if team_list[i].point > team_list[j].point:
                 team_list[j].competition_rank += 1
+            elif team_list[i].point < team_list[j].point:
+                team_list[i].competition_rank += 1
 
 
 # compare team goal_difference then add rank to the one with lowest point
@@ -216,7 +219,8 @@ def compare_goal_difference(team_list):
         for j in range(i + 1, number_of_teams):
             if team_list[i].goal_difference > team_list[j].goal_difference:
                 team_list[j].competition_rank += 1
-
+            elif team_list[i].goal_difference < team_list[j].goal_difference:
+                team_list[i].competition_rank += 1
 
 # compare team goal_for then add rank to the one with lowest point
 def compare_goal_for(team_list):
@@ -225,7 +229,8 @@ def compare_goal_for(team_list):
         for j in range(i + 1, number_of_teams):
             if team_list[i].goal_for > team_list[j].goal_for:
                 team_list[j].competition_rank += 1
-
+            elif team_list[i].goal_for < team_list[j].goal_for:
+                team_list[i].competition_rank += 1
 
 # set info for all teams
 def set_info_from_uefa_groups(soup, team_list):
@@ -237,7 +242,7 @@ def set_info_from_uefa_groups(soup, team_list):
     team_id = 0
     for i in range(number_of_player_in_competition):
         if int(team_info_list[i*number_of_info_for_each_team_on_the_site].string) < 3:
-            group_name_info = name_list[team_id].parent.parent.parent
+            group_name_info = name_list[i].parent.parent.parent
             group_name = group_name_info.find("caption", attrs={"class": "standing-table__caption"})
             team_list[team_id].set_group(group_name.string)
             team_list[team_id].set_name(name_list[i].get('data-short-name'))

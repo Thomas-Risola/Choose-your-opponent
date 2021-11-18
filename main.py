@@ -1,7 +1,5 @@
 import ParseurMatrix as pm
 
-
-
 if __name__ == '__main__':
     day = 14
     month = 11
@@ -13,10 +11,10 @@ if __name__ == '__main__':
     for i in range(len(team_list)):
         team_list[i].str()
         print("\n")
-    for i in range(len(team_list)):
-        print(team_list[i].competition_rank)
     play_match = pm.playable_match_matrix(team_list)
     print(play_match)
-
+    team_list = sorted(team_list, key=lambda team: team.competition_rank)
+    for i in range(len(team_list)):
+        print("rank of", team_list[i].name, ": ", team_list[i].competition_rank)
     # we need to save the matrix to use it in C++ MOPSI Program
     # or we can try to execute this in the C++ program?
