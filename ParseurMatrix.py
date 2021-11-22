@@ -21,9 +21,9 @@ class Team:
 
     def str(self):
         print("name: " + self.name + "\n" + "elo: " + str(
-            self.elo) + "\n" + "nationality: " + self.nationality + "\n" + "group: " + self.group + "\n" + "group_rank: " + str(
-            self.group_rank) + "\n" + "point: " + str(self.point) + "\n" + "goal_difference: " + str(
-            self.goal_difference) + "\n" + "goal_for: " + str(self.goal_for) + "\n" + "competition_rank: " + str(
+            self.elo) + "\n" + "nationality: " + self.nationality + "\n" + "group: " + self.group + "\n" +
+            "group_rank: " + str(self.group_rank) + "\n" + "point: " + str(self.point) + "\n" + "goal_difference: "
+            + str(self.goal_difference) + "\n" + "goal_for: " + str(self.goal_for) + "\n" + "competition_rank: " + str(
             self.competition_rank))
 
     def set_name(self, name):
