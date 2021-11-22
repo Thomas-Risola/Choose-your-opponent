@@ -265,7 +265,7 @@ def set_other_info_from_group(info_list, team, number_of_info_for_each_team_on_t
 
 
 def name_converter_from_clubelo_to_uefa_group(team_list):
-    uefa_group_name = {"0": "Bayern Munich", "1": "Manchester City", "3": "Liverpool", "4": "Chelsea",
+    uefa_group_name = {"1": "Bayern Munich", "2": "Manchester City", "3": "Liverpool", "4": "Chelsea",
                        "5": "Real Madrid", "6": "Paris Saint-Germain",
                        "7": "Manchester United", "8": "Ajax", "9": "Inter Milan", "10": "Atletico Madrid",
                        "11": "Arsenal",
@@ -278,7 +278,7 @@ def name_converter_from_clubelo_to_uefa_group(team_list):
                        "31": "Benfica", "32": "Dynamo Kiev", "33": "BSC Young Boys Bern", "34": "Lille",
                        "35": "Wolfsburg",
                        "36": "Zenit St. Petersburg", "37": "Malmo FF"}
-    clubelo_name = {"0": "Bayern", "1": "Man City", "3": "Liverpool", "4": "Chelsea", "5": "Real Madrid",
+    clubelo_name = {"1": "Bayern", "2": "Man City", "3": "Liverpool", "4": "Chelsea", "5": "Real Madrid",
                     "6": "Paris SG", "7": "Man United", "8": "Ajax", "9": "Inter", "10": "Atlético", "11": "Arsenal",
                     "12": "West Ham", "13": "Barcelona", "14": "Sevilla", "15": "Dortmund", "16": "Juventus",
                     "17": "Porto", "18": "Napoli", "19": "Milan", "20": "Atalanta", "21": "RB Leipzig",
