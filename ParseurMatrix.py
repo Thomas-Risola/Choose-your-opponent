@@ -140,7 +140,6 @@ def search_and_fill_team_info(day, month, year, number_of_teams=16):
     # parse on clubelo site
 
     # specify the url from the date you want
-    http = urllib3.PoolManager()
     str_date = convert_date_to_string(day, month, year)
     url = get_clubelo_url(str_date)
     # get page

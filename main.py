@@ -2,7 +2,7 @@ import ParseurMatrix as pm
 
 if __name__ == '__main__':
 
-    day = 8
+    day = 12
     month = 11
     year = 2021
     team_list = pm.search_and_fill_team_info(day, month, year)
