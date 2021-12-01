@@ -114,6 +114,9 @@ std::vector<double> base_case_opponent_choice_optimization_algorithm_rec(
         std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,
         const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,
         const Imagine::Matrix<double>& probability_matrix) {
+    assert(ranking.size()%2 == 0);
+    if(ranking.size() == 0)
+        return std::vector<double>(XN.size(),0);
     X1.push_back(ranking.front()); // Construction de la solution
     X2.push_back(ranking.back());
     std::vector<double> qX;
@@ -131,6 +134,8 @@ std::vector<double> recursive_step_opponent_choice_optimization_algorithm_rec(
         std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,
         const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,
         const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix) {
+    if(ranking.size() == 0)
+        return std::vector<double>(XN.size(),0);
     int current_player=ranking.front(); // On prend le 1er joueur
     int ind_curr_player=0;
     while (XN.at(ind_curr_player)!=current_player) ind_curr_player++; // On trouve l'indice qui correspond à ce joueur
@@ -141,44 +146,51 @@ std::vector<double> recursive_step_opponent_choice_optimization_algorithm_rec(
     std::vector<int> new_ranking;
     for (unsigned int i=1;i<ranking.size();i++) {
         int chosen_player=ranking.at(i); // Choix du joueur i
-        for (unsigned int j=1;j<ranking.size();j++)
-            if (i!=j){// && XN.size() == 8 && play_matrix(i,j)) // && (!huitieme || verif(current_player,chosen_player)))
-                if(XN.size() == 8 && play_matrix(i,j))
+        if(XN.size() != 8){ // si on est pas a la premiere etape du tournoi !!!LE 8 EST A CHANGER!!!
+            for (unsigned int j=1;j<ranking.size();j++)
+                if (i!=j)
                     new_ranking.push_back(ranking.at(j)); // Contruction du ranking sans les joueurs déjà fixés
-                else if(XN.size() != 8)
-                    new_ranking.push_back(ranking.at(j));
-
-                //
-                //ATTENTION pour linstant le bool pour 8 eme est juste le chiffre 8 et il est mis pour
-                // tester les quarts et non les 8eme
-                //
-
-                // huitieme est un bool quon code avant les boucles avec la taille de XN
-                // Il suffit de savoir si i peut jouer contre j !
-                // sil ya un probleme il ferme la branche              
+            X2.push_back(chosen_player); // Construction de la solution
+            std::vector<double> qX=opponent_choice_optimization_algorithm_rec(XN1_candidate,XN2_candidate,X1,X2,new_ranking,QOmega,XN,probability_matrix,play_matrix);
+            X2.pop_back(); // Restauration de l'intégrité de X2
+            if(qXmax.at(ind_curr_player)<qX.at(ind_curr_player)) {
+                XN1=XN1_candidate; // Stockage des solutions
+                XN2=XN2_candidate;
+                qXmax=qX;
             }
-        X2.push_back(chosen_player); // Construction de la solution
-        std::vector<double> qX=opponent_choice_optimization_algorithm_rec(XN1_candidate,XN2_candidate,X1,X2,new_ranking,QOmega,XN,probability_matrix,play_matrix);
-        X2.pop_back(); // Restauration de l'intégrité de X2
-        if(qXmax.at(ind_curr_player)<qX.at(ind_curr_player)) {
-            XN1=XN1_candidate; // Stockage des solutions
-            XN2=XN2_candidate;
-            qXmax=qX;
+            new_ranking.clear();
         }
-        new_ranking.clear();
+        else if(XN.size() == 8 && play_matrix(current_player,chosen_player)){ //1ere etape du tournoi + que les matchs jouables
+            for (unsigned int j=1;j<ranking.size();j++)
+                if (i!=j)
+                    new_ranking.push_back(ranking.at(j)); // Contruction du ranking sans les joueurs déjà fixés
+            X2.push_back(chosen_player); // Construction de la solution
+            std::vector<double> qX=opponent_choice_optimization_algorithm_rec(XN1_candidate,XN2_candidate,X1,X2,new_ranking,QOmega,XN,probability_matrix,play_matrix);
+            X2.pop_back(); // Restauration de l'intégrité de X2
+            if(qXmax.at(ind_curr_player)<qX.at(ind_curr_player)) {
+                XN1=XN1_candidate; // Stockage des solutions
+                XN2=XN2_candidate;
+                qXmax=qX;
+            }
+            new_ranking.clear();
+        }
+
     }
     X1.pop_back(); // Restauration de l'intégrité de X1
     return qXmax;
 }
 
-std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix) {
+std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,
+                    std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const VectorTree* QOmega,
+                    const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix) {
     // X1,X2: For all i, X1[i] will play against X2[i]. Used only by recursion, shall be empty as argument
     // ranking: players who haven't chosen yet. Read ranking[j]: Player ranked j+1 among those who haven't chosen
     // Returns: win probabilities for each player in XN
     assert(XN.size()>=2);
     assert(X1.size()==X2.size());
+    //std::cout << ranking.size() << std::endl;
     if (X1.size()==XN.size()/2-1)
-        return base_case_opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix);
+        return base_case_opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix);  
     return recursive_step_opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix,play_matrix);
 }
 
@@ -419,4 +431,6 @@ void setPlayMatrix(Imagine::Matrix<bool> &M){
             M(i,j) = false;
             M(j,i) = false;
         }
+    M(0,6) = false;
+    M(6,0) = false;
 }
