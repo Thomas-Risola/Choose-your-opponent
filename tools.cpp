@@ -146,7 +146,7 @@ std::vector<double> recursive_step_opponent_choice_optimization_algorithm_rec(
     std::vector<int> new_ranking;
     for (unsigned int i=1;i<ranking.size();i++) {
         int chosen_player=ranking.at(i); // Choix du joueur i
-        if(XN.size() != 8){ // si on est pas a la premiere etape du tournoi !!!LE 8 EST A CHANGER!!!
+        if(XN.size() != 8 || play_matrix(current_player,chosen_player)){ // si on est pas a la premiere etape du tournoi !!!LE 8 EST A CHANGER!!!
             for (unsigned int j=1;j<ranking.size();j++)
                 if (i!=j)
                     new_ranking.push_back(ranking.at(j)); // Contruction du ranking sans les joueurs déjà fixés
@@ -160,21 +160,6 @@ std::vector<double> recursive_step_opponent_choice_optimization_algorithm_rec(
             }
             new_ranking.clear();
         }
-        else if(XN.size() == 8 && play_matrix(current_player,chosen_player)){ //1ere etape du tournoi + que les matchs jouables
-            for (unsigned int j=1;j<ranking.size();j++)
-                if (i!=j)
-                    new_ranking.push_back(ranking.at(j)); // Contruction du ranking sans les joueurs déjà fixés
-            X2.push_back(chosen_player); // Construction de la solution
-            std::vector<double> qX=opponent_choice_optimization_algorithm_rec(XN1_candidate,XN2_candidate,X1,X2,new_ranking,QOmega,XN,probability_matrix,play_matrix);
-            X2.pop_back(); // Restauration de l'intégrité de X2
-            if(qXmax.at(ind_curr_player)<qX.at(ind_curr_player)) {
-                XN1=XN1_candidate; // Stockage des solutions
-                XN2=XN2_candidate;
-                qXmax=qX;
-            }
-            new_ranking.clear();
-        }
-
     }
     X1.pop_back(); // Restauration de l'intégrité de X1
     return qXmax;
