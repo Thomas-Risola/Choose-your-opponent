@@ -129,11 +129,16 @@ std::vector<double> base_case_opponent_choice_optimization_algorithm_rec(
     return qX;
 }
 
+bool verif_constraints(const int current_player,const int chosen_player,const std::vector<int>& XN,const Imagine::Matrix<bool>& play_matrix) {
+    return XN.size() != 8 || play_matrix(current_player,chosen_player); // si on est pas a la premiere etape du tournoi !!!LE 8 EST A CHANGER!!!
+    //(je propose de rajouter un argument; soit un entier, il faudra comparer XN.size() avec ce dernier, soit un bool , remplace XN.size()!=??)
+}
+
 std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix,bool greedy);
 std::vector<double> maximization_function_optimization_algorithm(
         std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,
         const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,
-        int current_player,int ind_curr_player,
+        const int current_player,const int ind_curr_player,
         const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix) {
     assert(XN.at(ind_curr_player)==current_player);
     std::vector<int> XN1_candidate;
@@ -142,7 +147,7 @@ std::vector<double> maximization_function_optimization_algorithm(
     std::vector<int> new_ranking;
     for (unsigned int i=1;i<ranking.size();i++) {
         int chosen_player=ranking.at(i); // Choix du joueur i
-        if(XN.size() != 8 || play_matrix(current_player,chosen_player)) { // si on est pas a la premiere etape du tournoi !!!LE 8 EST A CHANGER!!!
+        if(verif_constraints(current_player,chosen_player,XN,play_matrix)) {
             for (unsigned int j=1;j<ranking.size();j++)
                 if (i!=j)
                     new_ranking.push_back(ranking.at(j)); // Contruction du ranking sans les joueurs déjà fixés
@@ -160,6 +165,35 @@ std::vector<double> maximization_function_optimization_algorithm(
     return qXmax;
 }
 
+std::vector<double> maximization_function_greedy_algorithm(
+        std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,
+        const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,
+        const int current_player,const int ind_curr_player,
+        const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix) {
+    assert(XN.at(ind_curr_player)==current_player);
+    unsigned int rnk_chos_player;
+    int chosen_player=-1;
+    double pmax=0;
+    for (unsigned int i=1;i<ranking.size();i++) {
+        int chosen_player_candidate=ranking.at(i); // Choix du joueur i
+        if(verif_constraints(current_player,chosen_player,XN,play_matrix))
+            if (pmax<probability_matrix(current_player,chosen_player_candidate)) {
+                pmax=probability_matrix(current_player,chosen_player_candidate);
+                rnk_chos_player=i;
+                chosen_player=chosen_player_candidate;
+            }
+    }
+    if (chosen_player==-1) return std::vector<double>(XN.size(),0);
+    std::vector<int> new_ranking;
+    for (unsigned int j=1;j<ranking.size();j++)
+        if (rnk_chos_player!=j)
+            new_ranking.push_back(ranking.at(j)); // Contruction du ranking sans les joueurs déjà fixés
+    X2.push_back(chosen_player); // Construction de la solution
+    std::vector<double> qXmax=opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,new_ranking,QOmega,XN,probability_matrix,play_matrix,true);
+    X2.pop_back(); // Restauration de l'intégrité de X2
+    return qXmax;
+}
+
 std::vector<double> recursive_step_opponent_choice_optimization_algorithm_rec(
         std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,
         const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,
@@ -172,7 +206,7 @@ std::vector<double> recursive_step_opponent_choice_optimization_algorithm_rec(
     X1.push_back(current_player); // Construction de la solution
     std::vector<double> qX;
     if (greedy)
-        ;
+        qX=maximization_function_greedy_algorithm(XN1,XN2,X1,X2,ranking,QOmega,XN,current_player,ind_curr_player,probability_matrix,play_matrix);
     else
         qX=maximization_function_optimization_algorithm(XN1,XN2,X1,X2,ranking,QOmega,XN,current_player,ind_curr_player,probability_matrix,play_matrix);
     X1.pop_back(); // Restauration de l'intégrité de X1
