@@ -176,7 +176,7 @@ std::vector<double> maximization_function_greedy_algorithm(
     double pmax=0;
     for (unsigned int i=1;i<ranking.size();i++) {
         int chosen_player_candidate=ranking.at(i); // Choix du joueur i
-        if(verif_constraints(current_player,chosen_player,XN,play_matrix))
+        if(verif_constraints(current_player,chosen_player_candidate,XN,play_matrix))
             if (pmax<probability_matrix(current_player,chosen_player_candidate)) {
                 pmax=probability_matrix(current_player,chosen_player_candidate);
                 rnk_chos_player=i;
