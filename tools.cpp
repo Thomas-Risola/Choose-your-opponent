@@ -43,7 +43,7 @@ std::vector<double>& VectorTree::operator()(const std::vector<int>& sorted_S,uns
     }
 }
 
-void S_kN(std::vector<int>& S,VectorTree* tree,int k,VectorTree* QOmega,const ComparePlayers& comp,const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix) {
+void S_kN(std::vector<int>& S,VectorTree* tree,int k,VectorTree* QOmega,const ComparePlayers& comp,const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix,bool greedy) {
     // Calls the algorithm on all scenarii in tree with k players
     if (tree->isLeaf()) {if (k==0) {
         // Cas d'arrêt (appel de la fonction pour le scénario S
@@ -51,18 +51,18 @@ void S_kN(std::vector<int>& S,VectorTree* tree,int k,VectorTree* QOmega,const Co
         std::vector<int> X1,X2;
         std::vector<int> ranking=S;
         std::sort(ranking.begin(),ranking.end(),comp);
-        opponent_choice_optimization_algorithm(qS,X1,X2,QOmega,ranking,probability_matrix,play_matrix);
+        opponent_choice_optimization_algorithm(qS,X1,X2,QOmega,ranking,probability_matrix,play_matrix,greedy);
     }}
     else {
         // Descente dans l'arbre tout en garantissant qu'il y a k joueurs
         if (k!=0) {
             // Descente à gauche
             S.push_back(tree->player());
-            S_kN(S,tree->child(0),k-1,QOmega,comp,probability_matrix,play_matrix);
+            S_kN(S,tree->child(0),k-1,QOmega,comp,probability_matrix,play_matrix,greedy);
             S.pop_back();
         }
         // Descente à droite
-        S_kN(S,tree->child(1),k,QOmega,comp,probability_matrix,play_matrix);
+        S_kN(S,tree->child(1),k,QOmega,comp,probability_matrix,play_matrix,greedy);
     }
 }
 
@@ -129,29 +129,25 @@ std::vector<double> base_case_opponent_choice_optimization_algorithm_rec(
     return qX;
 }
 
-std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix);
-std::vector<double> recursive_step_opponent_choice_optimization_algorithm_rec(
+std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix,bool greedy);
+std::vector<double> maximization_function_optimization_algorithm(
         std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,
         const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,
-        const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix) {
-    if(ranking.size() == 0)
-        return std::vector<double>(XN.size(),0);
-    int current_player=ranking.front(); // On prend le 1er joueur
-    int ind_curr_player=0;
-    while (XN.at(ind_curr_player)!=current_player) ind_curr_player++; // On trouve l'indice qui correspond à ce joueur
-    X1.push_back(current_player); // Construction de la solution
+        int current_player,int ind_curr_player,
+        const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix) {
+    assert(XN.at(ind_curr_player)==current_player);
     std::vector<int> XN1_candidate;
     std::vector<int> XN2_candidate;
     std::vector<double> qXmax(XN.size(),0);
     std::vector<int> new_ranking;
     for (unsigned int i=1;i<ranking.size();i++) {
         int chosen_player=ranking.at(i); // Choix du joueur i
-        if(XN.size() != 8 || play_matrix(current_player,chosen_player)){ // si on est pas a la premiere etape du tournoi !!!LE 8 EST A CHANGER!!!
+        if(XN.size() != 8 || play_matrix(current_player,chosen_player)) { // si on est pas a la premiere etape du tournoi !!!LE 8 EST A CHANGER!!!
             for (unsigned int j=1;j<ranking.size();j++)
                 if (i!=j)
                     new_ranking.push_back(ranking.at(j)); // Contruction du ranking sans les joueurs déjà fixés
             X2.push_back(chosen_player); // Construction de la solution
-            std::vector<double> qX=opponent_choice_optimization_algorithm_rec(XN1_candidate,XN2_candidate,X1,X2,new_ranking,QOmega,XN,probability_matrix,play_matrix);
+            std::vector<double> qX=opponent_choice_optimization_algorithm_rec(XN1_candidate,XN2_candidate,X1,X2,new_ranking,QOmega,XN,probability_matrix,play_matrix,false);
             X2.pop_back(); // Restauration de l'intégrité de X2
             if(qXmax.at(ind_curr_player)<qX.at(ind_curr_player)) {
                 XN1=XN1_candidate; // Stockage des solutions
@@ -161,13 +157,31 @@ std::vector<double> recursive_step_opponent_choice_optimization_algorithm_rec(
             new_ranking.clear();
         }
     }
-    X1.pop_back(); // Restauration de l'intégrité de X1
     return qXmax;
+}
+
+std::vector<double> recursive_step_opponent_choice_optimization_algorithm_rec(
+        std::vector<int>& XN1,std::vector<int>& XN2,std::vector<int>& X1,std::vector<int>& X2,
+        const std::vector<int>& ranking,const VectorTree* QOmega,const std::vector<int>& XN,
+        const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix,bool greedy) {
+    if(ranking.size() == 0)
+        return std::vector<double>(XN.size(),0);
+    int current_player=ranking.front(); // On prend le 1er joueur
+    int ind_curr_player=0;
+    while (XN.at(ind_curr_player)!=current_player) ind_curr_player++; // On trouve l'indice qui correspond à ce joueur
+    X1.push_back(current_player); // Construction de la solution
+    std::vector<double> qX;
+    if (greedy)
+        ;
+    else
+        qX=maximization_function_optimization_algorithm(XN1,XN2,X1,X2,ranking,QOmega,XN,current_player,ind_curr_player,probability_matrix,play_matrix);
+    X1.pop_back(); // Restauration de l'intégrité de X1
+    return qX;
 }
 
 std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>& XN1,std::vector<int>& XN2,
                     std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const VectorTree* QOmega,
-                    const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix) {
+                    const std::vector<int>& XN,const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix,bool greedy) {
     // X1,X2: For all i, X1[i] will play against X2[i]. Used only by recursion, shall be empty as argument
     // ranking: players who haven't chosen yet. Read ranking[j]: Player ranked j+1 among those who haven't chosen
     // Returns: win probabilities for each player in XN
@@ -176,16 +190,19 @@ std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>&
     //std::cout << ranking.size() << std::endl;
     if (X1.size()==XN.size()/2-1)
         return base_case_opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix);  
-    return recursive_step_opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix,play_matrix);
+    return recursive_step_opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix,play_matrix,greedy);
 }
 
-void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<int>& XN1,std::vector<int>& XN2,VectorTree* QOmega,const std::vector<int>& ranking,const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix) {
+void opponent_choice_optimization_algorithm(
+        std::vector<double>& qS,std::vector<int>& XN1,std::vector<int>& XN2,VectorTree* QOmega,const std::vector<int>& ranking,
+        const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix,bool greedy) {
     // qS: Win probabilities for each player (Output)
     // XN1,XN2: Optimal matching (Output)
     // ranking: Players that play this round, must be sorted according to player RANKING
     // QOmega: Tree containing the tournament win probabilities for each player in all scenarii, will be updated
     // probability_matrix: Matrix containing all win probabilities between players
     // play_matrix: Matrix of possible match
+    // greedy: true if players use a greedy algorithm to choose their opponent, false if they use the comprehensive algorithm to maximize their chances of winning the tournament
     std::vector<int> X1,X2;
     if (ranking.size()==1) {
         // S'il n'y a qu'un joueur, il a déjà gagné
@@ -195,25 +212,27 @@ void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<
     // S'il y a plus de joueurs
     std::vector<int> XN(ranking);
     std::sort(XN.begin(),XN.end()); // Tri des joueurs selon leur numéro
-    qS=opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix,play_matrix);
+    qS=opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix,play_matrix,greedy);
     std::vector<double>& store_qS=(*QOmega)(XN); // Enregistrement des probabilités dans QOmega
     for (unsigned int i=0;i<XN.size();i++)
         store_qS.at(XN.at(i))=qS.at(i);
 }
 
-void algorithm_entire_competition(std::vector<double>& qS,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix) {
+void algorithm_entire_competition(std::vector<double>& qS,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,
+                                  const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix,bool greedy) {
     // qS: Tournament win probabilities for each player (Output)
     // X1,X2: Optimal pairings at each round (Output)
     // ranking: All players, must be sorted according to player RANKING (Input)
     // probability_matrix: Matrix containing all win probabilities between players (Input)
+    // greedy: true if players use a greedy algorithm to choose their opponent, false if they use the comprehensive algorithm to maximize their chances of winning the tournament
     VectorTree* QOmega=empty_Q_P_N(ranking.size()); // Arbre de probabilités de victoire dans chaque scénario
     ComparePlayers comp(ranking);
     int n=log2(ranking.size());
     assert(pow(2,n)==ranking.size());assert(n>0);assert(n<5);
     std::vector<int> S;
     for (int i=0;i<n;i++)
-        S_kN(S,QOmega,pow(2,i),QOmega,comp,probability_matrix,play_matrix); // Appel de l'algorithme en finale, demi finale, quart de fnale, etc. afin de remplir QOmega
-    opponent_choice_optimization_algorithm(qS,X1,X2,QOmega,ranking,probability_matrix,play_matrix); // Appel de l'algorithme pour leniveau souhaité
+        S_kN(S,QOmega,pow(2,i),QOmega,comp,probability_matrix,play_matrix,greedy); // Appel de l'algorithme en finale, demi finale, quart de fnale, etc. afin de remplir QOmega
+    opponent_choice_optimization_algorithm(qS,X1,X2,QOmega,ranking,probability_matrix,play_matrix,greedy); // Appel de l'algorithme pour le niveau souhaité
     QOmega->display();
 }
 
