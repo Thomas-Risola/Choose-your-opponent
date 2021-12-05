@@ -6,8 +6,8 @@ using namespace std;
 
 const int N=16;
 
-Imagine::Matrix<double> victoryMatrix(N,N);
-Imagine::Matrix<bool> playMatrix(N,N);
+std::vector<std::vector<double>> victoryMatrix(N,std::vector<double>(N));
+std::vector<std::vector<bool>> playMatrix(N,std::vector<bool>(N));
 
 int main()
 {

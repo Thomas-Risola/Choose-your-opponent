@@ -1,12 +1,10 @@
-cmake_minimum_required(VERSION 2.6)
-file(TO_CMAKE_PATH "$ENV{IMAGINEPP_ROOT}/CMake" p)
-list(APPEND CMAKE_MODULE_PATH "${p}") #For old Imagine++
-list(APPEND CMAKE_SYSTEM_FRAMEWORK_PATH /Library/Frameworks) #Mac, why not auto?
-find_package(Imagine REQUIRED)
-
-
+cmake_minimum_required(VERSION 3.15)
 project(Choose_your_opponent)
+set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Choose_your_opponent main.cpp tools.cpp DoubleTree.cpp)
 
-ImagineUseModules(Choose_your_opponent Graphics)
+add_subdirectory(extern/pybind11)
+pybind11_add_module(Choose_your_opponent_python main.cpp tools.cpp DoubleTree.cpp algo_to_python.cpp)
+
+
+add_executable(Choose_your_opponent main.cpp tools.cpp DoubleTree.cpp algo_to_python.cpp)

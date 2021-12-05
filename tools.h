@@ -1,7 +1,4 @@
 #pragma once
-#include <Imagine/Graphics.h>
-#include "Imagine/LinAlg.h"
-#include <Imagine/Graphics.h>
 #include "vectortree.h"
 
 struct ComparePlayers {
@@ -14,18 +11,18 @@ struct ComparePlayers {
 
 VectorTree* empty_Q_P_N(const unsigned int N,int c_player=0);
 
-std::vector<double> p_S(std::vector<std::vector<int>>& set_sorted_S,const std::vector<int>& X1,const std::vector<int>& X2,const Imagine::Matrix<double>& probability_matrix);
+std::vector<double> p_S(std::vector<std::vector<int>>& set_sorted_S,const std::vector<int>& X1,const std::vector<int>& X2,const std::vector<std::vector<double>>& probability_matrix);
 
-double qSj(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix);
+double qSj(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const std::vector<std::vector<double>>& probability_matrix);
 
-void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<int>& XN1,std::vector<int>& XN2,VectorTree* QOmega,const std::vector<int>& ranking,const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix,bool greedy);
+void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<int>& XN1,std::vector<int>& XN2,VectorTree* QOmega,const std::vector<int>& ranking,const std::vector<std::vector<double>>& probability_matrix,const std::vector<std::vector<bool>>& play_matrix,bool greedy);
 
-void algorithm_entire_competition(std::vector<double>& qS,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix,bool greedy=false);
+void algorithm_entire_competition(std::vector<double>& qS,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const std::vector<std::vector<double>>& probability_matrix, const std::vector<std::vector<bool>>& play_matrix,bool greedy=false);
 
-void setMatrixVictory(Imagine::Matrix<double> &M);
+void setMatrixVictory(std::vector<std::vector<double>> &M);
 
-void display(const Imagine::Matrix<double> &M);
+void display(const std::vector<std::vector<double>> &M);
 
-void display(const Imagine::Matrix<bool> &M);
+void display(const std::vector<std::vector<bool>> &M);
 
-void setPlayMatrix(Imagine::Matrix<bool> &M);
+void setPlayMatrix(std::vector<std::vector<bool>> &M);
