@@ -58,18 +58,18 @@ class Parseur:
     def __init__(self,day,month,year,fileprefix="team_list"):
         filename=fileprefix+"-"+str(day)+"-"+str(month)+"-"+str(year)+".txt"
         try:
-            self.team_list = search_and_fill_team_info(day, month, year)
+            self.team_list = Parseur.search_and_fill_team_info(day, month, year)
         except:
             try:
-                self.team_list = get_team_list_from_file(filename)
+                self.team_list = Parseur.get_team_list_from_file(filename)
             except:
                 raise RuntimeError("Could not find neither the web page nor the backup file")
         else:
-            compute_competition_ranking(self.team_list)
+            Parseur.compute_competition_ranking(self.team_list)
             self.team_list = sorted(self.team_list, key=lambda team: team.competition_rank)
-            write_team_list_to_file(filename,self.team_list)
-        self.victory_matrix = victory_matrix(self.team_list)
-        self.play_match = playable_match_matrix(self.team_list)
+            Parseur.write_team_list_to_file(filename,self.team_list)
+        self.victory_matrix = Parseur.victory_matrix(self.team_list)
+        self.play_match = Parseur.playable_match_matrix(self.team_list)
 
     # write data to file so as to be able to work offline
     @staticmethod
@@ -117,7 +117,7 @@ class Parseur:
     def set_info_from_clubelo(soup, team_list):
         ranking = soup.find("table", attrs={"class": "ranking"})
         for team in team_list:
-            set_info_from_ranking(ranking, team)
+            Parseur.set_info_from_ranking(ranking, team)
 
     # set elo and nationality for one team
     @staticmethod
@@ -145,7 +145,7 @@ class Parseur:
         matrix = np.zeros((number_of_teams, number_of_teams))
         for i in range(number_of_teams):
             for j in range(i + 1, number_of_teams):
-                matrix[i][j] = victory_probability_1vs2(team_list[i], team_list[j])
+                matrix[i][j] = Parseur.victory_probability_1vs2(team_list[i], team_list[j])
                 matrix[j][i] = 1 - matrix[i][j]
         return matrix
 
@@ -164,7 +164,7 @@ class Parseur:
             matrix[i][i] = False
             for j in range(i + 1, number_of_teams):
                 # symmetric matrix
-                matrix[i][j] = can_1_play_2(team_list[i], team_list[j])
+                matrix[i][j] = Parseur.can_1_play_2(team_list[i], team_list[j])
                 matrix[j][i] = matrix[i][j]
         return matrix
 
@@ -178,25 +178,25 @@ class Parseur:
 
         # specify the url from the date you want
         http = urllib3.PoolManager()
-        url = get_uefa_group_url(year)
+        url = Parseur.get_uefa_group_url(year)
         # get page
         response = http.request('GET', url)
         # make it usable
         soup = BeautifulSoup(response.data, "html.parser")
         team_list = [Team(str(i)) for i in range(number_of_teams)]
-        set_info_from_uefa_groups(soup, team_list)
+        Parseur.set_info_from_uefa_groups(soup, team_list)
 
-        name_converter_from_clubelo_to_uefa_group(team_list)
+        Parseur.name_converter_from_clubelo_to_uefa_group(team_list)
         # parse on clubelo site
 
         # specify the url from the date you want
-        str_date = convert_date_to_string(day, month, year)
-        url = get_clubelo_url(str_date)
+        str_date = Parseur.convert_date_to_string(day, month, year)
+        url = Parseur.get_clubelo_url(str_date)
         # get page
         response = http.request('GET', url)
         # make it usable
         soup = BeautifulSoup(response.data, "html.parser")
-        set_info_from_clubelo(soup, team_list)
+        Parseur.set_info_from_clubelo(soup, team_list)
         return team_list
 
     @staticmethod
@@ -212,23 +212,22 @@ class Parseur:
                 team_list[i].competition_rank = number_of_teams // 2 + 1
                 runner_up_list.append(team_list[i])
         # then we start comparing the points of each team to rank them
-        compare_point(group_winner_list)
-        compare_point(runner_up_list)
-        all_tie_case1 = build_tie_case(team_list)
+        Parseur.compare_point(group_winner_list)
+        Parseur.compare_point(runner_up_list)
+        all_tie_case1 = Parseur.build_tie_case(team_list)
         # if there are tie cases we compare on Goal Difference
         if len(all_tie_case1) > 0:
             for i in range(len(all_tie_case1)):
-                compare_goal_difference(all_tie_case1[i])
-        all_tie_case2 = build_tie_case(team_list)
+                Parseur.compare_goal_difference(all_tie_case1[i])
+        all_tie_case2 = Parseur.build_tie_case(team_list)
 
         # if there are tie cases we compare on Goal For
         if len(all_tie_case2) > 0:
             for j in range(len(all_tie_case2)):
-                compare_goal_for(all_tie_case2[j])
+                Parseur.compare_goal_for(all_tie_case2[j])
         # we then hope that all cases are cleared or we should add
         # the other decider rules
 
-    # do what it does
     @staticmethod
     def search_tie_case(team_list):
         number_of_teams = len(team_list)
@@ -242,7 +241,7 @@ class Parseur:
     @staticmethod
     def build_tie_case(team_list):
         number_of_teams = len(team_list)
-        rank_count = search_tie_case(team_list)
+        rank_count = Parseur.search_tie_case(team_list)
         all_tie_case = []
         for key in rank_count:
             if rank_count[key] >= 2:
@@ -302,7 +301,7 @@ class Parseur:
                 team_list[team_id].set_group(group_name.string)
                 team_list[team_id].set_name(name_list[i].get('data-short-name'))
                 team_list[team_id].set_group_rank(int(team_info_list[i * number_of_info_for_each_team_on_the_site].string))
-                set_other_info_from_group(team_info_list, team_list[team_id], number_of_info_for_each_team_on_the_site, i)
+                Parseur.set_other_info_from_group(team_info_list, team_list[team_id], number_of_info_for_each_team_on_the_site, i)
                 team_id += 1
 
     # set goal for, goal diff, point for one team
@@ -339,8 +338,7 @@ class Parseur:
             key = get_key(team.name, uefa_group_name)
             team.set_name(clubelo_name[key])
 
-    @staticmethod
-    def get_key(val, my_dict):
-        for key, value in my_dict.items():
-            if val == value:
-                return key
+def get_key(val, my_dict):
+    for key, value in my_dict.items():
+        if val == value:
+            return key
