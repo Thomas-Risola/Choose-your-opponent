@@ -1,6 +1,7 @@
 # import libraries
 from bs4 import BeautifulSoup
 import urllib3
+import json
 import numpy as np
 
 
@@ -72,34 +73,43 @@ class Parseur:
         self.play_match = Parseur.playable_match_matrix(self.team_list)
 
     # write data to file so as to be able to work offline
+    # relies on semicolons and new lines; do not use these characters in the attributes of the teams
     @staticmethod
     def write_team_list_to_file(filename,team_list):
         file=open(filename,'w',encoding="utf-8")
+        dict_list=[]
         for team in team_list:
-            file.write(team.name);file.write(';')
-            file.write(str(team.elo));file.write(';')
-            file.write(team.nationality);file.write(';')
-            file.write(team.group);file.write(';')
-            file.write(str(team.group_rank));file.write(';')
-            file.write(str(team.point));file.write(';')
-            file.write(str(team.goal_difference));file.write(';')
-            file.write(str(team.goal_for));file.write(';')
-            file.write(str(team.competition_rank));file.write(';')
-            file.write('\n')
+            dict_list.append({
+            "name": team.name,
+            "elo": team.elo,
+            "nationality": team.nationality,
+            "group": team.group,
+            "group_rank": team.group_rank,
+            "point": team.point,
+            "goal_difference": team.goal_difference,
+            "goal_for": team.goal_for,
+            "competition_rank": team.competition_rank})
+        json.dump(dict_list,file,ensure_ascii=False)
         file.close()
 
     # if fetch failed, fall back to file
+    # relies on semicolons and new lines; do not use these characters in the attributes of the teams
     @staticmethod
     def get_team_list_from_file(filename):
-        team_list=[]
         file=open(filename,'r',encoding="utf-8")
-        line=file.readline()
-        while line!='':
-            if line[-1]=='\n':
-                line=line[:-1]
-            attribs=line.split(';')
-            team_list.append(Team(attribs[0],int(attribs[1]),attribs[2],attribs[3],int(attribs[4]),int(attribs[5]),int(attribs[6]),int(attribs[7]),int(attribs[8])))
-            line=file.readline()
+        dict_list=json.load(file)
+        team_list=[]
+        for dd in dict_list:
+            team_list.append(Team(
+            dd["name"],
+            dd["elo"],
+            dd["nationality"],
+            dd["group"],
+            dd["group_rank"],
+            dd["point"],
+            dd["goal_difference"],
+            dd["goal_for"],
+            dd["competition_rank"]))
         file.close()
         return team_list
 
