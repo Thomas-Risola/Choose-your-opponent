@@ -5,6 +5,7 @@ import json
 import numpy as np
 
 
+
 # class gathering team data
 class Team:
     def __init__(self, name="a", elo=0, nationality="a", group="a", group_rank=0, point=0, goal_difference=0,
@@ -23,95 +24,92 @@ class Team:
     def str(self):
         print("name: " + self.name + "\n" + "elo: " + str(
             self.elo) + "\n" + "nationality: " + self.nationality + "\n" + "group: " + self.group + "\n" +
-            "group_rank: " + str(self.group_rank) + "\n" + "point: " + str(self.point) + "\n" + "goal_difference: "
-            + str(self.goal_difference) + "\n" + "goal_for: " + str(self.goal_for) + "\n" + "competition_rank: " + str(
+              "group_rank: " + str(self.group_rank) + "\n" + "point: " + str(self.point) + "\n" + "goal_difference: "
+              + str(self.goal_difference) + "\n" + "goal_for: " + str(
+            self.goal_for) + "\n" + "competition_rank: " + str(
             self.competition_rank))
 
-    def set_name(self, name):
-        self.name = name
 
-    def set_elo(self, elo):
-        self.elo = elo
-
-    def set_nationality(self, nationality):
-        self.nationality = nationality
-
-    def set_group(self, group):
-        self.group = group
-
-    def set_group_rank(self, group_rank):
-        self.group_rank = group_rank
-
-    def set_point(self, point):
-        self.point = point
-
-    def set_goal_difference(self, goal_difference):
-        self.goal_difference = goal_difference
-
-    def set_goal_for(self, goal_for):
-        self.goal_for = goal_for
-
-    def set_competition_rank(self, competition_rank):
-        self.competition_rank = competition_rank
-
-
-class Parseur:
-    def __init__(self,day,month,year,fileprefix="team_list"):
-        filename=fileprefix+"-"+str(day)+"-"+str(month)+"-"+str(year)+".txt"
+class Parser:
+    def __init__(self, day, month, year, fileprefix1="json_files/team_list", fileprefix2="json_files/matrix"):
+        filename1 = fileprefix1 + "-" + str(day) + "-" + str(month) + "-" + str(year) + ".txt"
+        filename2 = fileprefix2 + "-" + str(day) + "-" + str(month) + "-" + str(year) + ".txt"
         try:
-            self.team_list = Parseur.search_and_fill_team_info(day, month, year)
+            self.team_list = Parser.search_and_fill_team_info(day, month, year)
         except:
             try:
-                self.team_list = Parseur.get_team_list_from_file(filename)
+                self.team_list = Parser.get_team_list_from_file(filename1)
+                self.victory_matrix, self.play_matrix = Parser.get_matrix_from_file(filename2)
             except:
                 raise RuntimeError("Could not find neither the web page nor the backup file")
         else:
-            Parseur.compute_competition_ranking(self.team_list)
+            Parser.compute_competition_ranking(self.team_list)
             self.team_list = sorted(self.team_list, key=lambda team: team.competition_rank)
-            Parseur.write_team_list_to_file(filename,self.team_list)
-        self.victory_matrix = Parseur.victory_matrix(self.team_list)
-        self.play_match = Parseur.playable_match_matrix(self.team_list)
+            Parser.write_team_list_to_file(filename1, self.team_list)
+            self.victory_matrix = Parser.victory_matrix(self.team_list)
+            self.play_matrix = Parser.playable_match_matrix(self.team_list)
+            Parser.write_matrix_to_file(filename2, self.victory_matrix, self.play_matrix)
 
     # write data to file so as to be able to work offline
     # relies on semicolons and new lines; do not use these characters in the attributes of the teams
     @staticmethod
-    def write_team_list_to_file(filename,team_list):
-        file=open(filename,'w',encoding="utf-8")
-        dict_list=[]
+    def write_team_list_to_file(filename, team_list):
+        file = open(filename, 'w', encoding="utf-8")
+        dict_list = []
         for team in team_list:
             dict_list.append({
-            "name": team.name,
-            "elo": team.elo,
-            "nationality": team.nationality,
-            "group": team.group,
-            "group_rank": team.group_rank,
-            "point": team.point,
-            "goal_difference": team.goal_difference,
-            "goal_for": team.goal_for,
-            "competition_rank": team.competition_rank})
-        json.dump(dict_list,file,ensure_ascii=False)
+                "name": team.name,
+                "elo": team.elo,
+                "nationality": team.nationality,
+                "group": team.group,
+                "group_rank": team.group_rank,
+                "point": team.point,
+                "goal_difference": team.goal_difference,
+                "goal_for": team.goal_for,
+                "competition_rank": team.competition_rank})
+        json.dump(dict_list, file, ensure_ascii=False)
+        file.close()
+
+    # write data to file so as to be able to work on C++ algorithm
+    # relies on semicolons and new lines; do not use these characters in the attributes of the teams
+    @staticmethod
+    def write_matrix_to_file(filename, victory_matrix, play_matrix):
+        file = open(filename, 'w', encoding="utf-8")
+        v_matrix = victory_matrix.tolist()
+        p_matrix = play_matrix.tolist()
+        dict_list = [{
+            "victory_matrix": v_matrix,
+            "play_matrix": p_matrix}]
+        json.dump(dict_list, file, ensure_ascii=False)
         file.close()
 
     # if fetch failed, fall back to file
     # relies on semicolons and new lines; do not use these characters in the attributes of the teams
     @staticmethod
     def get_team_list_from_file(filename):
-        file=open(filename,'r',encoding="utf-8")
-        dict_list=json.load(file)
-        team_list=[]
+        file = open(filename, 'r', encoding="utf-8")
+        dict_list = json.load(file)
+        team_list = []
         for dd in dict_list:
             team_list.append(Team(
-            dd["name"],
-            dd["elo"],
-            dd["nationality"],
-            dd["group"],
-            dd["group_rank"],
-            dd["point"],
-            dd["goal_difference"],
-            dd["goal_for"],
-            dd["competition_rank"]))
+                dd["name"],
+                dd["elo"],
+                dd["nationality"],
+                dd["group"],
+                dd["group_rank"],
+                dd["point"],
+                dd["goal_difference"],
+                dd["goal_for"],
+                dd["competition_rank"]))
         file.close()
         return team_list
+
+    @staticmethod
+    def get_matrix_from_file(filename):
+        file = open(filename, 'r', encoding="utf-8")
+        dict_list = json.load(file)[0]
+        file.close()
+        return dict_list["victory_matrix"], dict_list["play_matrix"]
 
     # functions to generate url
     @staticmethod
@@ -127,7 +125,7 @@ class Parseur:
     def set_info_from_clubelo(soup, team_list):
         ranking = soup.find("table", attrs={"class": "ranking"})
         for team in team_list:
-            Parseur.set_info_from_ranking(ranking, team)
+            Parser.set_info_from_ranking(ranking, team)
 
     # set elo and nationality for one team
     @staticmethod
@@ -139,8 +137,8 @@ class Parseur:
         nationality = team_info.find("img").get("alt")
         # .string to get  only the info
         # then we convert into int
-        team.set_elo(int(elo.string))
-        team.set_nationality(nationality)
+        team.elo = int(elo.string)
+        team.nationality = nationality
 
     # do what you think it does with elo formulas
     @staticmethod
@@ -155,7 +153,7 @@ class Parseur:
         matrix = np.zeros((number_of_teams, number_of_teams))
         for i in range(number_of_teams):
             for j in range(i + 1, number_of_teams):
-                matrix[i][j] = Parseur.victory_probability_1vs2(team_list[i], team_list[j])
+                matrix[i][j] = Parser.victory_probability_1vs2(team_list[i], team_list[j])
                 matrix[j][i] = 1 - matrix[i][j]
         return matrix
 
@@ -174,7 +172,7 @@ class Parseur:
             matrix[i][i] = False
             for j in range(i + 1, number_of_teams):
                 # symmetric matrix
-                matrix[i][j] = Parseur.can_1_play_2(team_list[i], team_list[j])
+                matrix[i][j] = Parser.can_1_play_2(team_list[i], team_list[j])
                 matrix[j][i] = matrix[i][j]
         return matrix
 
@@ -188,25 +186,25 @@ class Parseur:
 
         # specify the url from the date you want
         http = urllib3.PoolManager()
-        url = Parseur.get_uefa_group_url(year)
+        url = Parser.get_uefa_group_url(year)
         # get page
         response = http.request('GET', url)
         # make it usable
         soup = BeautifulSoup(response.data, "html.parser")
         team_list = [Team(str(i)) for i in range(number_of_teams)]
-        Parseur.set_info_from_uefa_groups(soup, team_list)
+        Parser.set_info_from_uefa_groups(soup, team_list)
 
-        Parseur.name_converter_from_clubelo_to_uefa_group(team_list)
+        Parser.name_converter_from_clubelo_to_uefa_group(team_list)
         # parse on clubelo site
 
         # specify the url from the date you want
-        str_date = Parseur.convert_date_to_string(day, month, year)
-        url = Parseur.get_clubelo_url(str_date)
+        str_date = Parser.convert_date_to_string(day, month, year)
+        url = Parser.get_clubelo_url(str_date)
         # get page
         response = http.request('GET', url)
         # make it usable
         soup = BeautifulSoup(response.data, "html.parser")
-        Parseur.set_info_from_clubelo(soup, team_list)
+        Parser.set_info_from_clubelo(soup, team_list)
         return team_list
 
     @staticmethod
@@ -222,19 +220,19 @@ class Parseur:
                 team_list[i].competition_rank = number_of_teams // 2 + 1
                 runner_up_list.append(team_list[i])
         # then we start comparing the points of each team to rank them
-        Parseur.compare_point(group_winner_list)
-        Parseur.compare_point(runner_up_list)
-        all_tie_case1 = Parseur.build_tie_case(team_list)
+        Parser.compare_point(group_winner_list)
+        Parser.compare_point(runner_up_list)
+        all_tie_case1 = Parser.build_tie_case(team_list)
         # if there are tie cases we compare on Goal Difference
         if len(all_tie_case1) > 0:
             for i in range(len(all_tie_case1)):
-                Parseur.compare_goal_difference(all_tie_case1[i])
-        all_tie_case2 = Parseur.build_tie_case(team_list)
+                Parser.compare_goal_difference(all_tie_case1[i])
+        all_tie_case2 = Parser.build_tie_case(team_list)
 
         # if there are tie cases we compare on Goal For
         if len(all_tie_case2) > 0:
             for j in range(len(all_tie_case2)):
-                Parseur.compare_goal_for(all_tie_case2[j])
+                Parser.compare_goal_for(all_tie_case2[j])
         # we then hope that all cases are cleared or we should add
         # the other decider rules
 
@@ -251,7 +249,7 @@ class Parseur:
     @staticmethod
     def build_tie_case(team_list):
         number_of_teams = len(team_list)
-        rank_count = Parseur.search_tie_case(team_list)
+        rank_count = Parser.search_tie_case(team_list)
         all_tie_case = []
         for key in rank_count:
             if rank_count[key] >= 2:
@@ -308,47 +306,36 @@ class Parseur:
             if int(team_info_list[i * number_of_info_for_each_team_on_the_site].string) < 3:
                 group_name_info = name_list[i].parent.parent.parent
                 group_name = group_name_info.find("caption", attrs={"class": "standing-table__caption"})
-                team_list[team_id].set_group(group_name.string)
-                team_list[team_id].set_name(name_list[i].get('data-short-name'))
-                team_list[team_id].set_group_rank(int(team_info_list[i * number_of_info_for_each_team_on_the_site].string))
-                Parseur.set_other_info_from_group(team_info_list, team_list[team_id], number_of_info_for_each_team_on_the_site, i)
+                team_list[team_id].group = group_name.string
+                team_list[team_id].name = name_list[i].get('data-short-name')
+                team_list[team_id].group_rank = int(team_info_list[i * number_of_info_for_each_team_on_the_site].string)
+                Parser.set_other_info_from_group(team_info_list, team_list[team_id],
+                                                 number_of_info_for_each_team_on_the_site, i)
                 team_id += 1
 
     # set goal for, goal diff, point for one team
     @staticmethod
     def set_other_info_from_group(info_list, team, number_of_info_for_each_team_on_the_site, soup_index):
-        team.set_goal_for(int(info_list[soup_index * number_of_info_for_each_team_on_the_site + 6].string))
-        team.set_goal_difference(int(info_list[soup_index * number_of_info_for_each_team_on_the_site + 8].string))
-        team.set_point(int(info_list[soup_index * number_of_info_for_each_team_on_the_site + 9].string))
+        team.goal_for = int(info_list[soup_index * number_of_info_for_each_team_on_the_site + 6].string)
+        team.goal_difference = int(info_list[soup_index * number_of_info_for_each_team_on_the_site + 8].string)
+        team.point = int(info_list[soup_index * number_of_info_for_each_team_on_the_site + 9].string)
 
     @staticmethod
     def name_converter_from_clubelo_to_uefa_group(team_list):
-        uefa_group_name = {"1": "Bayern Munich", "2": "Manchester City", "3": "Liverpool", "4": "Chelsea",
-                        "5": "Real Madrid", "6": "Paris Saint-Germain",
-                        "7": "Manchester United", "8": "Ajax", "9": "Inter Milan", "10": "Atletico Madrid",
-                        "11": "Arsenal",
-                        "12": "West Ham", "13": "Barcelona", "14": "Sevilla", "15": "Borussia Dortmund",
-                        "16": "Juventus",
-                        "17": "FC Porto", "18": "Naples", "19": "AC Milan", "20": "Atalanta", "21": "RB Leipzig",
-                        "22": "Villarreal", "23": "Tottenham", "24": "Real Sociedad", "25": "Red Bull Salzburg",
-                        "26": "Club Brugge", "27": "Sporting Lisbon", "28": "Besiktas", "29": "Sheriff Tiraspol(Mol)",
-                        "30": "Shakhtar Donetsk",
-                        "31": "Benfica", "32": "Dynamo Kiev", "33": "BSC Young Boys Bern", "34": "Lille",
-                        "35": "Wolfsburg",
-                        "36": "Zenit St. Petersburg", "37": "Malmo FF"}
-        clubelo_name = {"1": "Bayern", "2": "Man City", "3": "Liverpool", "4": "Chelsea", "5": "Real Madrid",
-                        "6": "Paris SG", "7": "Man United", "8": "Ajax", "9": "Inter", "10": "Atlético", "11": "Arsenal",
-                        "12": "West Ham", "13": "Barcelona", "14": "Sevilla", "15": "Dortmund", "16": "Juventus",
-                        "17": "Porto", "18": "Napoli", "19": "Milan", "20": "Atalanta", "21": "RB Leipzig",
-                        "22": "Villarreal", "23": "Tottenham", "24": "Real Sociedad", "25": "Salzburg", "26": "Brugge",
-                        "27": "Sporting", "28": "Beşiktaş", "29": "Sheriff", "30": "Шахтар", "31": "Benfica",
-                        "32": "Динамо Київ", "33": "Young Boys", "34": "Lille", "35": "Wolfsburg", "36": "Зенит",
-                        "37": "Malmö"}
+        conversion_dict = {"Bayern Munich": "Bayern", "Manchester City": "Man City", "Liverpool": "Liverpool",
+                           "Chelsea": "Chelsea", "Real Madrid": "Real Madrid",
+                           "Paris Saint-Germain": "Paris SG", "Manchester United": "Man United", "Ajax": "Ajax",
+                           "Inter Milan": "Inter", "Atletico Madrid": "Atlético", "Arsenal": "Arsenal",
+                           "West Ham": "West Ham", "Barcelona": "Barcelona", "Sevilla": "Sevilla",
+                           "Borussia Dortmund": "Dortmund", "Juventus": "Juventus",
+                           "FC Porto": "Porto", "Naples": "Napoli", "AC Milan": "Milan", "Atalanta": "Atalanta",
+                           "RB Leipzig": "RB Leipzig",
+                           "Villarreal": "Villarreal", "Tottenham": "Tottenham", "Real Sociedad": "Real Sociedad",
+                           "Red Bull Salzburg": "Salzburg", "Club Brugge": "Brugge",
+                           "Sporting Lisbon": "Sporting", "Besiktas": "Beşiktaş", "Sheriff Tiraspol(Mol)": "Sheriff",
+                           "Shakhtar Donetsk": "Шахтар", "Benfica": "Benfica",
+                           "Dynamo Kiev": "Динамо Київ", "BSC Young Boys Bern": "Young Boys", "Lille": "Lille",
+                           "Wolfsburg": "Wolfsburg", "Zenit St. Petersburg": "Зенит",
+                           "Malmo FF": "Malmö"}
         for team in team_list:
-            key = get_key(team.name, uefa_group_name)
-            team.set_name(clubelo_name[key])
-
-def get_key(val, my_dict):
-    for key, value in my_dict.items():
-        if val == value:
-            return key
+            team.name = conversion_dict[team.name]
