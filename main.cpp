@@ -1,21 +1,22 @@
 #include <iostream>
 #include "tools.h"
 #include "DoubleTree.h"
+#include "json.h"
+
 
 using namespace std;
+using json = nlohmann::json;
 
-const int N=16;
-
-Imagine::Matrix<double> victoryMatrix(N,N);
-Imagine::Matrix<bool> playMatrix(N,N);
 
 int main()
 {
-    setMatrixVictory(victoryMatrix);
-    setPlayMatrix(playMatrix);
+    Imagine::Matrix<double> victoryMatrix = getVictoryMatrix(ifstream(srcPath("json_files/matrix-12-11-2021.txt")));
+    Imagine::Matrix<bool> playMatrix = getPlayMatrix(ifstream(srcPath("json_files/matrix-12-11-2021.txt")));
+    //setMatrixVictory(victoryMatrix);
+    //setPlayMatrix(playMatrix);
     //display(victoryMatrix);
     //display(playMatrix);
-    int petit_N=8;
+    int petit_N=16;
     vector<double> qS;
     vector<int> X1,X2,ranking;
     for (int i=0;i<petit_N;i++) ranking.push_back(i);

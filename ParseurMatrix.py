@@ -5,7 +5,6 @@ import json
 import numpy as np
 
 
-
 # class gathering team data
 class Team:
     def __init__(self, name="a", elo=0, nationality="a", group="a", group_rank=0, point=0, goal_difference=0,
@@ -159,7 +158,7 @@ class Parser:
 
     @staticmethod
     def can_1_play_2(team1, team2):
-        if team1.group == team2.group or team1.nationality == team2.nationality:
+        if team1.group == team2.group or team1.nationality == team2.nationality or team1.group_rank == team2.group_rank:
             return False
         else:
             return True
