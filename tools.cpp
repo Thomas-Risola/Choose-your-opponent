@@ -130,7 +130,7 @@ std::vector<double> base_case_opponent_choice_optimization_algorithm_rec(
 }
 
 bool verif_constraints(const int current_player,const int chosen_player,const std::vector<int>& XN,const Imagine::Matrix<bool>& play_matrix) {
-    return XN.size() != 8 || play_matrix(current_player,chosen_player); // si on est pas a la premiere etape du tournoi !!!LE 8 EST A CHANGER!!!
+    return XN.size() != 16 || play_matrix(current_player,chosen_player); // si on est pas a la premiere etape du tournoi !!!LE 8 EST A CHANGER!!!
     //(je propose de rajouter un argument; soit un entier, il faudra comparer XN.size() avec ce dernier, soit un bool , remplace XN.size()!=??)
 }
 

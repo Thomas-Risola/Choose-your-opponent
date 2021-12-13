@@ -33,15 +33,18 @@ class Parser:
     def __init__(self, day, month, year, fileprefix1="json_files/team_list", fileprefix2="json_files/matrix"):
         filename1 = fileprefix1 + "-" + str(day) + "-" + str(month) + "-" + str(year) + ".txt"
         filename2 = fileprefix2 + "-" + str(day) + "-" + str(month) + "-" + str(year) + ".txt"
+        print("Trying connection for around 15 seconds...")
         try:
             self.team_list = Parser.search_and_fill_team_info(day, month, year)
         except:
+            print("Failed to connect, trying backup file...")
             try:
                 self.team_list = Parser.get_team_list_from_file(filename1)
                 self.victory_matrix, self.play_matrix = Parser.get_matrix_from_file(filename2)
             except:
                 raise RuntimeError("Could not find neither the web page nor the backup file")
         else:
+            print("Site found")
             Parser.compute_competition_ranking(self.team_list)
             self.team_list = sorted(self.team_list, key=lambda team: team.competition_rank)
             Parser.write_team_list_to_file(filename1, self.team_list)
@@ -200,7 +203,7 @@ class Parser:
         str_date = Parser.convert_date_to_string(day, month, year)
         url = Parser.get_clubelo_url(str_date)
         # get page
-        response = http.request('GET', url)
+        response = http.request('GET', url, retries=3, timeout=3)
         # make it usable
         soup = BeautifulSoup(response.data, "html.parser")
         Parser.set_info_from_clubelo(soup, team_list)
@@ -335,6 +338,7 @@ class Parser:
                            "Shakhtar Donetsk": "Шахтар", "Benfica": "Benfica",
                            "Dynamo Kiev": "Динамо Київ", "BSC Young Boys Bern": "Young Boys", "Lille": "Lille",
                            "Wolfsburg": "Wolfsburg", "Zenit St. Petersburg": "Зенит",
-                           "Malmo FF": "Malmö"}
+                           "Malmo FF": "Malmö", "Galatasaray": "Galatasaray", "Tottenham Hotspur": "Tottenham", "Olympiakos FC": "Ολυμπιακός",
+                           "Crvena Zvezda": "Crvena Zvezda", "Dinamo Zagreb": "Dinamo Zagreb", "Bayer Leverkusen": "Leverkusen"}
         for team in team_list:
             team.name = conversion_dict[team.name]

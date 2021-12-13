@@ -20,7 +20,7 @@ int main()
     vector<double> qS;
     vector<int> X1,X2,ranking;
     for (int i=0;i<petit_N;i++) ranking.push_back(i);
-    algorithm_entire_competition(qS,X1,X2,ranking,victoryMatrix,playMatrix);
+    algorithm_entire_competition(qS,X1,X2,ranking,victoryMatrix,playMatrix,false);
     cout << "qS: " << qS << endl << "X1: " << X1 << endl << "X2: " << X2 << endl;
     return 0;
 }

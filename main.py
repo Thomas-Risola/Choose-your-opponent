@@ -11,6 +11,7 @@ if __name__ == '__main__':
     for i in range(len(pars.team_list)):
         pars.team_list[i].str()
         print("\n")
+
     print(pars.play_matrix)
     for i in range(len(pars.team_list)):
         print("rank of", pars.team_list[i].name, ": ", pars.team_list[i].competition_rank)
