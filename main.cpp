@@ -17,10 +17,12 @@ int main()
     //display(victoryMatrix);
     //display(playMatrix);
     int petit_N=16;
-    vector<double> qS;
+    vector<double> qS_win;
+    vector<double> qS_final;
     vector<int> X1,X2,ranking;
     for (int i=0;i<petit_N;i++) ranking.push_back(i);
-    algorithm_entire_competition(qS,X1,X2,ranking,victoryMatrix,playMatrix,false);
-    cout << "qS: " << qS << endl << "X1: " << X1 << endl << "X2: " << X2 << endl;
+    algorithm_entire_competition(qS_win,X1,X2,ranking,petit_N,victoryMatrix,playMatrix,false);
+    cout << "qS: " << qS_win << endl << "X1: " << X1 << endl << "X2: " << X2 << endl;
+    cout << "qS: " << qS_final << endl;
     return 0;
 }
