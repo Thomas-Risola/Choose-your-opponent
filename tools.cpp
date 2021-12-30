@@ -300,7 +300,7 @@ void opponent_choice_optimization_algorithm(
     std::vector<double>& store_qS_quarterfinal=(*QOmega_quarterfinal)(XN); // Enregistrement des probabilités dans QOmega
     if(ranking.size()>8 && nb_player_first_round==16)
         for(size_t j=0; j<XN.size(); j++){
-            qS_final.push_back(qSj_quarterfinal(XN.at(j),QOmega_quarterfinal, XN1, XN2, probability_matrix));
+            qS_quarterfinal.push_back(qSj_quarterfinal(XN.at(j),QOmega_quarterfinal, XN1, XN2, probability_matrix));
         }
     if(ranking.size()>8 && nb_player_first_round==16)
         for (unsigned int i=0;i<XN.size();i++)
@@ -391,7 +391,7 @@ double qSj_semifinal(const int j,const VectorTree* QOmega,const std::vector<int>
     // Computes undiscovered values of QOmega
     // Assumes all players are in X1,X2
     if(X1.size() <= 2 && X2.size() <= 2){
-        // on est en finale donc on est sur d'etre en finale (c'est totologique)
+        // on est en finale donc on est sur d'etre en demi (c'est totologique)
         return 1;
     }
     if(X1.size() == 4 && X2.size() == 4){
@@ -418,10 +418,12 @@ double qSj_semifinal(const int j,const VectorTree* QOmega,const std::vector<int>
 
 
 double qSj_quarterfinal(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix) {
+    if(X1.size() == 0 && X2.size() == 0)
+        return 1;
     // Computes undiscovered values of QOmega
     // Assumes all players are in X1,X2
     if(X1.size() <= 4 && X2.size() <= 4){
-        // on est en quarts/demi/finale donc on est sur d'etre en finale (c'est totologique)
+        // on est en quarts/demi/finale donc on est sur d'etre en quarts (c'est totologique)
         return 1;
     }
     if(X1.size() == 8 && X2.size() == 8){

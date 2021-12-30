@@ -16,7 +16,7 @@ int main()
     //setPlayMatrix(playMatrix);
     //display(victoryMatrix);
     //display(playMatrix);
-    int petit_N=8;
+    int petit_N=16;
     vector<double> qS_win;
     vector<double> qS_final;
     vector<double> qS_semifinal;
