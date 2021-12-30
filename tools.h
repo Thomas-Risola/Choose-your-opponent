@@ -20,9 +20,13 @@ double qSj_win(const int j,const VectorTree* QOmega_win,const std::vector<int>& 
 
 double qSj_final(const int j,const VectorTree* QOmega_final,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix);
 
-void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<int>& XN1,std::vector<int>& XN2,VectorTree* QOmega,const std::vector<int>& ranking,const int nb_player_first_round,const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix,bool greedy);
+double qSj_semifinal(const int j,const VectorTree* QOmega_semifinal,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix);
 
-void algorithm_entire_competition(std::vector<double>& qS,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const int nb_player_first_round,const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix,bool greedy=false);
+double qSj_quarterfinal(const int j,const VectorTree* QOmega_quarterfinal,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix);
+
+void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<double>& qS_final,std::vector<double>& qS_semifinal,std::vector<double>& qS_quarterfinal,std::vector<int>& XN1,std::vector<int>& XN2,VectorTree* QOmega_win,VectorTree* QOmega_final,VectorTree* QOmega_semifinal,VectorTree* QOmega_quarterfinal,const std::vector<int>& ranking,const int nb_player_first_round,const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix,bool greedy);
+
+void algorithm_entire_competition(std::vector<double>& qS,std::vector<double>& qS_final,std::vector<double>& qS_semifinal,std::vector<double>& qS_quarterfinal,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const int nb_player_first_round,const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix,bool greedy=false);
 
 void setMatrixVictory(Imagine::Matrix<double> &M);
 
