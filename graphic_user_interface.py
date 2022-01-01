@@ -12,12 +12,11 @@ class GUI:
         self.qs_semi = qs_semi
         self.qs_quart = qs_quart
 
-    @staticmethod
     def graphic_loop(self):
         root = tk.Tk()
         root.title("Affichage des résultats")
         # root.iconbitmap()
-        # root.geometry("400*400")
+        root.geometry("800x800")
 
         options = [
             "Probabilité d'atteindre une étape",
@@ -30,22 +29,23 @@ class GUI:
         drop = tk.OptionMenu(root, clicked, *options)
         drop.pack()
 
-        def show_option(team_list, qs_win, qs_final, qs_semi, qs_quart):
-            rank = [i for i in range(1, len(qs_win) + 1)]
-            fig = plt.figure()
+        def show_option(*args):
+            if clicked.get() == options[0]:
+                rank = [i for i in range(1, len(self.qs_win) + 1)]
+                fig = plt.figure()
 
-            plt.plot(rank, qs_win)
-            plt.plot(rank, qs_final)
-            plt.plot(rank, qs_semi)
-            plt.plot(rank, qs_quart)
+                plt.plot(rank, self.qs_win)
+                plt.plot(rank, self.qs_final)
+                plt.plot(rank, self.qs_semi)
+                plt.plot(rank, self.qs_quart)
 
-            canvas = FigureCanvasTkAgg(fig, master=root)
-            canvas.draw()
+                canvas = FigureCanvasTkAgg(fig, master=root)
+                canvas.draw()
 
-            canvas.get_tk_widget().pack()
-            toolbar = NavigationToolbar2Tk(canvas, root)
-            toolbar.update()
-            canvas.get_tk_widget().pack()
+                canvas.get_tk_widget().pack()
+                toolbar = NavigationToolbar2Tk(canvas, root)
+                toolbar.update()
+                canvas.get_tk_widget().pack()
 
         clicked.trace("w", show_option)
 
