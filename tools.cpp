@@ -55,7 +55,7 @@ void S_kN(std::vector<int>& S,VectorTree* tree,int k,VectorTree* QOmega_win,Vect
         std::vector<int> ranking=S;
         std::sort(ranking.begin(),ranking.end(),comp);
         opponent_choice_optimization_algorithm(qS,qS_final,qS_semifinal,qS_quarterfinal,X1,X2,QOmega_win,QOmega_final,QOmega_semifinal,QOmega_quarterfinal,ranking,nb_player_first_round,probability_matrix,play_matrix,greedy);
-    }}
+        }}
     else {
         // Descente dans l'arbre tout en garantissant qu'il y a k joueurs
         if (k!=0) {
@@ -223,7 +223,6 @@ std::vector<double> opponent_choice_optimization_algorithm_rec(std::vector<int>&
     // Returns: win probabilities for each player in XN
     assert(XN.size()>=2);
     assert(X1.size()==X2.size());
-    //std::cout << ranking.size() << std::endl;
     if (X1.size()==XN.size()/2-1)
         return base_case_opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,probability_matrix);
     return recursive_step_opponent_choice_optimization_algorithm_rec(XN1,XN2,X1,X2,ranking,QOmega,XN,nb_player_first_round,probability_matrix,play_matrix,greedy);
@@ -240,11 +239,11 @@ void opponent_choice_optimization_algorithm(
     // play_matrix: Matrix of possible match
     // greedy: true if players use a greedy algorithm to choose their opponent, false if they use the comprehensive algorithm to maximize their chances of winning the tournament
     std::vector<int> X1,X2;
+
     if (ranking.size()==1) {
         // S'il n'y a qu'un joueur, il a déjà gagné
         qS=std::vector<double>(1,ranking.front());
         (*QOmega_win)(ranking).at(ranking.front())=1;
-        // (*QOmega_final)(ranking).at(ranking.front())=1;
         return;}
     if(ranking.size()==2){
         (*QOmega_final)(ranking).at(ranking[0])=1;
@@ -273,7 +272,6 @@ void opponent_choice_optimization_algorithm(
     std::vector<double>& store_qS=(*QOmega_win)(XN); // Enregistrement des probabilités dans QOmega
     for (unsigned int i=0;i<XN.size();i++)
         store_qS.at(XN.at(i))=qS.at(i);
-
 
 
     // calcul de la proba d'etre en finale en fonction des choix optimaux
@@ -311,6 +309,9 @@ void opponent_choice_optimization_algorithm(
 void algorithm_entire_competition(std::vector<double>& qS,std::vector<double>& qS_final,std::vector<double>& qS_semifinal,std::vector<double>& qS_quarterfinal,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const int nb_player_first_round,
                                   const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix,bool greedy) {
     // qS: Tournament win probabilities for each player (Output)
+    // qS_final: Tournament final probabilities for each player (Output)
+    // qS_semi: Tournament semifinal probabilities for each player (Output)
+    // qS_quarter: Tournament quarterfinal probabilities for each player (Output)
     // X1,X2: Optimal pairings at each round (Output)
     // ranking: All players, must be sorted according to player RANKING (Input)
     // probability_matrix: Matrix containing all win probabilities between players (Input)
@@ -326,8 +327,8 @@ void algorithm_entire_competition(std::vector<double>& qS,std::vector<double>& q
     for (int i=0;i<n;i++)
         S_kN(S,QOmega_win,pow(2,i),QOmega_win,QOmega_final,QOmega_semifinal,QOmega_quarterfinal,comp,nb_player_first_round,probability_matrix,play_matrix,greedy); // Appel de l'algorithme en finale, demi finale, quart de fnale, etc. afin de remplir QOmega
     opponent_choice_optimization_algorithm(qS,qS_final,qS_semifinal,qS_quarterfinal,X1,X2,QOmega_win,QOmega_final,QOmega_semifinal,QOmega_quarterfinal,ranking,nb_player_first_round,probability_matrix,play_matrix,greedy); // Appel de l'algorithme pour le niveau souhaité
-    QOmega_final->display();
-    QOmega_win->display();
+    //QOmega_final->display();
+    //QOmega_win->display();
 }
 
 double qSj_win(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix) {
