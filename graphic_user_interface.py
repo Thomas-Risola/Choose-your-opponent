@@ -16,7 +16,7 @@ class GUI:
         root = tk.Tk()
         root.title("Affichage des résultats")
         # root.iconbitmap()
-        root.geometry("800x800")
+        root.geometry("800x600")
 
         options = [
             "Probabilité d'atteindre une étape",
@@ -27,12 +27,17 @@ class GUI:
         clicked.set(options[0])
 
         drop = tk.OptionMenu(root, clicked, *options)
-        drop.pack()
+        drop.grid(row=1, column=0, pady=10)
+
 
         def show_option(*args):
+            global canvas
+            fig = plt.figure()
+            canvas = FigureCanvasTkAgg(fig,root)
+            for item in canvas.get_tk_widget().find_all():
+                canvas.get_tk_widget().delete(item)
             if clicked.get() == options[0]:
                 rank = [i for i in range(1, len(self.qs_win) + 1)]
-                fig = plt.figure()
 
                 plt.plot(rank, self.qs_win)
                 plt.plot(rank, self.qs_final)
@@ -42,10 +47,22 @@ class GUI:
                 canvas = FigureCanvasTkAgg(fig, master=root)
                 canvas.draw()
 
-                canvas.get_tk_widget().pack()
+                canvas.get_tk_widget().grid(row=5, column=0)
                 toolbar = NavigationToolbar2Tk(canvas, root)
                 toolbar.update()
-                canvas.get_tk_widget().pack()
+                canvas.get_tk_widget().grid(row=5, column=0)
+            if clicked.get() == options[1]:
+                rank = [i for i in range(1, len(self.qs_win) + 1)]
+
+                plt.plot(rank, self.qs_win)
+
+                canvas = FigureCanvasTkAgg(fig, master=root)
+                canvas.draw()
+                canvas.get_tk_widget().grid(row=5, column=0)
+
+                toolbar = NavigationToolbar2Tk(canvas, root, pack_toolbar=False)
+                toolbar.update()
+                canvas.toolbar.grid(row=5, column=0)
 
         clicked.trace("w", show_option)
 

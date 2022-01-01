@@ -31,7 +31,7 @@ int main()
     for (int i=0;i<petit_N;i++) ranking.push_back(i);
     algorithm_entire_competition(qS_win,qS_final,qS_semifinal,qS_quarterfinal,X1,X2,ranking,16,victoryMatrix,playMatrix,false);
     cout << endl << "calculs finis" << endl;
-    cout << "qS_win: " << qS_win;
+    cout << "qS_win: " << qS_win << endl;
 
     //X1 = {0,1,2,3,4,5,6,7};
     //X2 = {13,14,12,9,10,15,11,8};
