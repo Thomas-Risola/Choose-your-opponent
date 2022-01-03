@@ -9,12 +9,12 @@ if __name__ == '__main__':
     day = 12
     month = 12
     # draw around 12th December each year
-    '''
+
     for year in range(2010, 2022):
         pars = pm.Parser(day, month, year)  
-    '''
-    year = 2019
-    pars = pm.Parser(day, month, year)
+
+    #year = 2019
+    #pars = pm.Parser(day, month, year)
 
 
     result = gr.Result(day, month, year)

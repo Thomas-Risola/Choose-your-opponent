@@ -132,7 +132,6 @@ class Parser:
     # set elo and nationality for one team
     @staticmethod
     def set_info_from_ranking(ranking, team):
-        print(team.name)
         team_info = ranking.find("a", string=team.name).parent.parent
         # elo is what contain the elo information
         elo = team_info.find("td", attrs={"class": "r"})
@@ -355,10 +354,12 @@ class Parser:
                            "Feyenoord": "Feyenoord", "Apoel Nicosia": "ΑΠΟΕΛ", "Ludogorets":"Лудогорец",
                            "FK Rostov": "Ростов", "Legia Warsaw": "Legia", "Leicester City": "Leicester",
                            "FC Copenhagen": "FC København", "Astana": "Астана", "BATE Borisov": "БАТЭ",
-                           "Maccabi Tel Aviv": "מכבי תל אביב", "AA Gent": "Gent", "FC Steaua Bucuresti": "Steaua",
+                           "Maccabi Tel Aviv": "מכבי תל אביב", "AA Gent ": "Gent", "FC Steaua Bucuresti": "Steaua",
                            "FK Austria Wien": "Austria Wien", "Malaga": "Málaga", "FC Nordsjaelland": " Nordsjælland",
                            "CFR Cluj-Napoca": "CFR Cluj", "Braga": "Braga", "Trabzonspor": " Trabzonspor",
                            "CS Otelul Galati": "Oțelul Galați", "FC Twente": "Twente", "Werder Bremen": "Werder",
-                           }
+                           "Hapoel Tel Aviv": "הפועל תל-אביב", "Rangers": "Rangers", "Bursaspor": "Bursaspor",
+                           "Rubin Kazan": "Рубин", "Panathinaikos": "Παναθηναϊκός", "MSK Zilina": "Zilina",
+                           "Auxerre": "Auxerre", "Partizan Belgrade": "Partizan"}
         for team in team_list:
             team.name = conversion_dict[team.name]
