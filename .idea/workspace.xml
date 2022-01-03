@@ -19,14 +19,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="fix + finition du conv dict">
+    <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="finition du conv dict">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ParseurMatrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/ParseurMatrix.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/Scenario-12-11-2021.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/abra-12-12-2022.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/matrix-12-11-2021.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/qs_vector-12-11-2021.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/team_list-12-11-2021.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -312,7 +306,14 @@
       <option name="project" value="LOCAL" />
       <updated>1641230992797</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="finition du conv dict">
+      <created>1641232334240</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1641232334240</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -342,7 +343,8 @@
     <MESSAGE value="premier test graphic" />
     <MESSAGE value="switch entre metrique mais bug" />
     <MESSAGE value="fix + finition du conv dict" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix + finition du conv dict" />
+    <MESSAGE value="finition du conv dict" />
+    <option name="LAST_COMMIT_MESSAGE" value="finition du conv dict" />
   </component>
   <component name="WindowStateProjectService">
     <state x="134" y="31" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1641050158089">
@@ -357,22 +359,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1639575223531" />
-    <state width="1345" height="190" key="GridCell.Tab.0.bottom" timestamp="1641232016605">
+    <state width="1345" height="190" key="GridCell.Tab.0.bottom" timestamp="1641232184363">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="190" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1641232016605" />
-    <state width="1345" height="190" key="GridCell.Tab.0.center" timestamp="1641232016604">
+    <state width="1345" height="190" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1641232184363" />
+    <state width="1345" height="190" key="GridCell.Tab.0.center" timestamp="1641232184363">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="190" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1641232016604" />
-    <state width="1345" height="190" key="GridCell.Tab.0.left" timestamp="1641232016604">
+    <state width="1345" height="190" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1641232184363" />
+    <state width="1345" height="190" key="GridCell.Tab.0.left" timestamp="1641232184363">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="190" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1641232016604" />
-    <state width="1345" height="190" key="GridCell.Tab.0.right" timestamp="1641232016604">
+    <state width="1345" height="190" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1641232184363" />
+    <state width="1345" height="190" key="GridCell.Tab.0.right" timestamp="1641232184363">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="190" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1641232016604" />
+    <state width="1345" height="190" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1641232184363" />
     <state x="283" y="251" key="MultipleFileMergeDialog" timestamp="1634567362117">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -389,10 +391,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="498" height="446" key="SwitcherDM/0.0.1366.728@0.0.1366.728" timestamp="1639248032299" />
-    <state x="272" y="109" key="Vcs.Push.Dialog.v2" timestamp="1641077449516">
+    <state x="272" y="109" key="Vcs.Push.Dialog.v2" timestamp="1641232336439">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="272" y="109" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1641077449516" />
+    <state x="272" y="109" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1641232336439" />
     <state x="159" y="281" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1641084146817">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
