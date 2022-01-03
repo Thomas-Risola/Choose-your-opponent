@@ -10,7 +10,7 @@ struct ComparePlayers {
     ComparePlayers(const std::vector<int>& ranking): inv_ranking(ranking.size()) {
         for (unsigned int i=0;i<ranking.size();i++)
             //structure modifiee ici: ne change pas les resultats (mais je notifie au cas ou)
-            inv_ranking.at(i)=ranking.at(i);}
+            inv_ranking.at(ranking.at(i))=i;}
     bool operator()(int i,int j) {return (inv_ranking.at(i)<inv_ranking.at(j));}
 };
 

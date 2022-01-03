@@ -19,9 +19,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="premier test graphic">
+    <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="graphic + beau">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt.user" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ParseurMatrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/ParseurMatrix.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/graphic_user_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/graphic_user_interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools.h" beforeDir="false" afterPath="$PROJECT_DIR$/tools.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -343,22 +347,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1639575223531" />
-    <state width="1345" height="190" key="GridCell.Tab.0.bottom" timestamp="1641212749577">
+    <state width="1345" height="190" key="GridCell.Tab.0.bottom" timestamp="1641228371053">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="190" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1641212749577" />
-    <state width="1345" height="190" key="GridCell.Tab.0.center" timestamp="1641212749577">
+    <state width="1345" height="190" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1641228371053" />
+    <state width="1345" height="190" key="GridCell.Tab.0.center" timestamp="1641228371053">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="190" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1641212749577" />
-    <state width="1345" height="190" key="GridCell.Tab.0.left" timestamp="1641212749577">
+    <state width="1345" height="190" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1641228371053" />
+    <state width="1345" height="190" key="GridCell.Tab.0.left" timestamp="1641228371053">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="190" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1641212749577" />
-    <state width="1345" height="190" key="GridCell.Tab.0.right" timestamp="1641212749577">
+    <state width="1345" height="190" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1641228371053" />
+    <state width="1345" height="190" key="GridCell.Tab.0.right" timestamp="1641228371053">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="190" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1641212749577" />
+    <state width="1345" height="190" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1641228371053" />
     <state x="283" y="251" key="MultipleFileMergeDialog" timestamp="1634567362117">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

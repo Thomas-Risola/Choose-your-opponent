@@ -132,6 +132,7 @@ class Parser:
     # set elo and nationality for one team
     @staticmethod
     def set_info_from_ranking(ranking, team):
+        print(team.name)
         team_info = ranking.find("a", string=team.name).parent.parent
         # elo is what contain the elo information
         elo = team_info.find("td", attrs={"class": "r"})
@@ -197,6 +198,7 @@ class Parser:
         Parser.set_info_from_uefa_groups(soup, team_list)
 
         Parser.name_converter_from_clubelo_to_uefa_group(team_list)
+
         # parse on clubelo site
 
         # specify the url from the date you want
@@ -330,7 +332,7 @@ class Parser:
                            "Inter Milan": "Inter", "Atletico Madrid": "Atlético", "Arsenal": "Arsenal",
                            "West Ham": "West Ham", "Barcelona": "Barcelona", "Sevilla": "Sevilla",
                            "Borussia Dortmund": "Dortmund", "Juventus": "Juventus",
-                           "FC Porto": "Porto", "Naples": "Napoli", "AC Milan": "Milan", "Atalanta": "Atalanta",
+                           "FC Porto": "Porto", "Napoli": "Napoli", "AC Milan": "Milan", "Atalanta": "Atalanta",
                            "RB Leipzig": "RB Leipzig",
                            "Villarreal": "Villarreal", "Tottenham": "Tottenham", "Real Sociedad": "Real Sociedad",
                            "Red Bull Salzburg": "Salzburg", "Club Brugge": "Brugge",
@@ -338,7 +340,25 @@ class Parser:
                            "Shakhtar Donetsk": "Шахтар", "Benfica": "Benfica",
                            "Dynamo Kiev": "Динамо Київ", "BSC Young Boys Bern": "Young Boys", "Lille": "Lille",
                            "Wolfsburg": "Wolfsburg", "Zenit St. Petersburg": "Зенит",
-                           "Malmo FF": "Malmö", "Galatasaray": "Galatasaray", "Tottenham Hotspur": "Tottenham", "Olympiakos FC": "Ολυμπιακός",
-                           "Crvena Zvezda": "Crvena Zvezda", "Dinamo Zagreb": "Dinamo Zagreb", "Bayer Leverkusen": "Leverkusen"}
+                           "Malmo FF": "Malmö", "Galatasaray": "Galatasaray", "Tottenham Hotspur": "Tottenham",
+                           "Olympiakos FC": "Ολυμπιακός",
+                           "Crvena Zvezda": "Crvena Zvezda", "Dinamo Zagreb": "Dinamo Zagreb",
+                           "Bayer Leverkusen": "Leverkusen", "Lokomotiv Moscow": "Локомотив Москва",
+                           "M'gladbach": "Gladbach", "Marseille": "Marseille", "FC Midtjylland": "Midtjylland",
+                           "Krasnodar": "Краснодар", "Rennes": "Rennes", "Lazio": "Lazio",
+                           "Ferencvaros": "Ferencváros", "Istanbul Buyuksehir": "Başakşehir", "Genk": "Genk",
+                           "Slavia Prague": "Slavia Praha", "Valencia": "Valencia", "Lyon": "Lyon", "Monaco": "Monaco",
+                           "PSV Eindhoven": "PSV", "Schalke": "Schalke", "AEK Athens": "AEK",
+                           "Hoffenheim": "Hoffenheim", "Roma": "Roma", "FC Viktoria Plzen": "Viktoria Plzeň",
+                           "CSKA Moscow": "ЦСКА", "Basel": "Basel", "Celtic": "Celtic", "Anderlecht": "Anderlecht",
+                           "Qarabag FK": "Qarabağ", "Spartak Moscow": "Спартак Москва", "Maribor": "Maribor",
+                           "Feyenoord": "Feyenoord", "Apoel Nicosia": "ΑΠΟΕΛ", "Ludogorets":"Лудогорец",
+                           "FK Rostov": "Ростов", "Legia Warsaw": "Legia", "Leicester City": "Leicester",
+                           "FC Copenhagen": "FC København", "Astana": "Астана", "BATE Borisov": "БАТЭ",
+                           "Maccabi Tel Aviv": "מכבי תל אביב", "AA Gent": "Gent", "FC Steaua Bucuresti": "Steaua",
+                           "FK Austria Wien": "Austria Wien", "Malaga": "Málaga", "FC Nordsjaelland": " Nordsjælland",
+                           "CFR Cluj-Napoca": "CFR Cluj", "Braga": "Braga", "Trabzonspor": " Trabzonspor",
+                           "CS Otelul Galati": "Oțelul Galați", "FC Twente": "Twente", "Werder Bremen": "Werder",
+                           }
         for team in team_list:
             team.name = conversion_dict[team.name]
