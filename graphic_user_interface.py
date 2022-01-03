@@ -16,7 +16,7 @@ class GUI:
         root = tk.Tk()
         root.title("Affichage des résultats")
         # root.iconbitmap()
-        root.geometry("800x600")
+        root.geometry("1300x600")
 
         options = [
             "Probabilité d'atteindre une étape",
@@ -27,42 +27,88 @@ class GUI:
         clicked.set(options[0])
 
         drop = tk.OptionMenu(root, clicked, *options)
-        drop.grid(row=1, column=0, pady=10)
+        drop.grid(row=0, column=0)
 
 
         def show_option(*args):
             global canvas
-            fig = plt.figure()
-            canvas = FigureCanvasTkAgg(fig,root)
+            fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(11, 5))
+            fig.suptitle('Comparaison des formats')
+            canvas = FigureCanvasTkAgg(fig, root)
             for item in canvas.get_tk_widget().find_all():
                 canvas.get_tk_widget().delete(item)
             if clicked.get() == options[0]:
                 rank = [i for i in range(1, len(self.qs_win) + 1)]
 
-                plt.plot(rank, self.qs_win)
-                plt.plot(rank, self.qs_final)
-                plt.plot(rank, self.qs_semi)
-                plt.plot(rank, self.qs_quart)
+                ax1.scatter(rank, self.qs_win, label="victoire")
+                ax1.scatter(rank, self.qs_final, label="finale")
+                ax1.scatter(rank, self.qs_semi, label="demi-finale")
+                ax1.scatter(rank, self.qs_quart, label="quart de finale")
+
+                ax1.set_xlim(0, 17)
+                ax1.set_ylim(0, 1)
+                ax1.set_xlabel("rang faible")
+                ax1.set_ylabel("probabilité")
+
+                ax1.set_title("format: Choose your opponent")
+                ax1.legend()
+
+                ax2.scatter(rank, self.qs_win, label="victoire")
+                ax2.scatter(rank, self.qs_final, label="finale")
+                ax2.scatter(rank, self.qs_semi, label="demi-finale")
+                ax2.scatter(rank, self.qs_quart, label="quart de finale")
+
+                ax2.set_xlim(0, 17)
+                ax2.set_ylim(0, 1)
+                ax2.set_xlabel("rang faible")
+                ax2.set_ylabel("probabilité")
+
+                ax2.set_title("format: UEFA officiel")
+                ax2.legend()
 
                 canvas = FigureCanvasTkAgg(fig, master=root)
                 canvas.draw()
 
-                canvas.get_tk_widget().grid(row=5, column=0)
-                toolbar = NavigationToolbar2Tk(canvas, root)
+                canvas.get_tk_widget().grid(row=25, column=0)
+
+                frame = tk.Frame(root)
+                frame.grid(row=0, column=1)
+                toolbar = NavigationToolbar2Tk(canvas, frame)
                 toolbar.update()
                 canvas.get_tk_widget().grid(row=5, column=0)
             if clicked.get() == options[1]:
                 rank = [i for i in range(1, len(self.qs_win) + 1)]
 
-                plt.plot(rank, self.qs_win)
+                ax1.scatter(rank, self.qs_win, label="victoire")
+
+                ax1.set_xlim(0, 17)
+                ax1.set_ylim(0, 1)
+                ax1.set_xlabel("rang faible")
+                ax1.set_ylabel("probabilité")
+
+                ax1.set_title("format: Choose your opponent")
+                ax1.legend()
+
+                ax2.scatter(rank, self.qs_win, label="victoire")
+
+                ax2.set_xlim(0, 17)
+                ax2.set_ylim(0, 1)
+                ax2.set_xlabel("rang faible")
+                ax2.set_ylabel("probabilité")
+
+                ax2.set_title("format: UEFA officiel")
+                ax2.legend()
 
                 canvas = FigureCanvasTkAgg(fig, master=root)
                 canvas.draw()
-                canvas.get_tk_widget().grid(row=5, column=0)
 
-                toolbar = NavigationToolbar2Tk(canvas, root, pack_toolbar=False)
+                canvas.get_tk_widget().grid(row=25, column=0)
+
+                frame = tk.Frame(root)
+                frame.grid(row=0, column=1)
+                toolbar = NavigationToolbar2Tk(canvas, frame)
                 toolbar.update()
-                canvas.toolbar.grid(row=5, column=0)
+                canvas.get_tk_widget().grid(row=5, column=0)
 
         clicked.trace("w", show_option)
 
