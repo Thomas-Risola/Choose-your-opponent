@@ -30,14 +30,21 @@ class Team:
 
 
 class Parser:
-    def __init__(self, day, month, year, fileprefix1="json_files/team_list", fileprefix2="json_files/matrix"):
+    def __init__(self, day, month, year, fileprefix1="json_files/team_list", fileprefix2="json_files/matrix",\
+                 loaded=False):
         filename1 = fileprefix1 + "-" + str(day) + "-" + str(month) + "-" + str(year) + ".txt"
         filename2 = fileprefix2 + "-" + str(day) + "-" + str(month) + "-" + str(year) + ".txt"
-        print("Trying connection for around 15 seconds...")
         try:
-            self.team_list = Parser.search_and_fill_team_info(day, month, year)
+            if not loaded:
+                print("Trying connection for around 15 seconds...")
+                self.team_list = Parser.search_and_fill_team_info(day, month, year)
+            else:
+                raise Exception("Already loaded, no need to wait...")
         except:
-            print("Failed to connect, trying backup file...")
+            if not loaded:
+                print("Failed to connect, trying backup file...")
+            else:
+                print("Loading files...")
             try:
                 self.team_list = Parser.get_team_list_from_file(filename1)
                 self.victory_matrix, self.play_matrix = Parser.get_matrix_from_file(filename2)

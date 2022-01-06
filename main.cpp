@@ -10,9 +10,7 @@ using json = nlohmann::json;
 
 int main()
 {
-    int year = 2021;
-    // a coder?
-    // cin >> year;
+    int year = 2020;
     string fileName;
     getFileName(year,fileName);
     string matrixName = getMatrixFileName(fileName);

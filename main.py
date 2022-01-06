@@ -10,15 +10,14 @@ if __name__ == '__main__':
     month = 12
     # draw around 12th December each year
 
-    # problem en 2019
+    team_list_year = dict()
+    # problem en 2019, donc j'ai triché
     for year in range(2010, 2022):
-        if year == 2019:
-            pars = pm.Parser(10, 6, year)
-            continue
-        pars = pm.Parser(day, month, year)  
+        pars = pm.Parser(day, month, year, loaded=True)
+        team_list_year[year] = pars.team_list
 
 
-    result = gr.Result(day, month, year)
-    graphic = gui.GUI(pars.team_list, result.qs_win, result.qs_final, result.qs_semi, result.qs_quart)
+    result = gr.Result(day, month)
+    graphic = gui.GUI(team_list_year, result.qs_year)
 
     graphic.graphic_loop()
