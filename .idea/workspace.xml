@@ -19,15 +19,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="finition du conv dict">
+    <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="fichiers">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt.user" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ParseurMatrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/ParseurMatrix.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/get_result.py" beforeDir="false" afterPath="$PROJECT_DIR$/get_result.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphic_user_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/graphic_user_interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/json.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +56,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.tirage_8e_8dec">
     <configuration name="ParseurMatrix" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="Choose-your-opponent" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -167,7 +162,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="setup" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="tirage_8e_8dec" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Choose-your-opponent" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -175,11 +170,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/extern/pybind11" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/extern/pybind11/setup.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tirage_8e_8dec.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -190,11 +185,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.tirage_8e_8dec" />
         <item itemvalue="Python.main" />
         <item itemvalue="Python.graphic_user_interface (1)" />
         <item itemvalue="Python.graphic_user_interface" />
         <item itemvalue="Python.gui" />
-        <item itemvalue="Python.setup" />
       </list>
     </recent_temporary>
   </component>
@@ -326,7 +321,21 @@
       <option name="project" value="LOCAL" />
       <updated>1641232787681</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="année+table+algo_comparaison">
+      <created>1641488007846</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1641488007846</updated>
+    </task>
+    <task id="LOCAL-00019" summary="fichiers">
+      <created>1641501824113</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1641501824113</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -357,7 +366,9 @@
     <MESSAGE value="switch entre metrique mais bug" />
     <MESSAGE value="fix + finition du conv dict" />
     <MESSAGE value="finition du conv dict" />
-    <option name="LAST_COMMIT_MESSAGE" value="finition du conv dict" />
+    <MESSAGE value="année+table+algo_comparaison" />
+    <MESSAGE value="fichiers" />
+    <option name="LAST_COMMIT_MESSAGE" value="fichiers" />
   </component>
   <component name="WindowStateProjectService">
     <state x="134" y="31" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1641050158089">
@@ -372,22 +383,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1641304295544" />
-    <state width="1345" height="196" key="GridCell.Tab.0.bottom" timestamp="1641486549044">
+    <state width="1345" height="216" key="GridCell.Tab.0.bottom" timestamp="1641554888074">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="196" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1641486549044" />
-    <state width="1345" height="196" key="GridCell.Tab.0.center" timestamp="1641486549044">
+    <state width="1345" height="216" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1641554888074" />
+    <state width="1345" height="216" key="GridCell.Tab.0.center" timestamp="1641554888074">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="196" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1641486549044" />
-    <state width="1345" height="196" key="GridCell.Tab.0.left" timestamp="1641486549044">
+    <state width="1345" height="216" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1641554888074" />
+    <state width="1345" height="216" key="GridCell.Tab.0.left" timestamp="1641554888074">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="196" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1641486549044" />
-    <state width="1345" height="196" key="GridCell.Tab.0.right" timestamp="1641486549044">
+    <state width="1345" height="216" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1641554888074" />
+    <state width="1345" height="216" key="GridCell.Tab.0.right" timestamp="1641554888074">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="196" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1641486549044" />
+    <state width="1345" height="216" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1641554888074" />
     <state x="283" y="251" key="MultipleFileMergeDialog" timestamp="1634567362117">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -404,10 +415,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="498" height="446" key="SwitcherDM/0.0.1366.728@0.0.1366.728" timestamp="1639248032299" />
-    <state x="272" y="109" key="Vcs.Push.Dialog.v2" timestamp="1641232790215">
+    <state x="272" y="109" key="Vcs.Push.Dialog.v2" timestamp="1641501826482">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="272" y="109" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1641232790215" />
+    <state x="272" y="109" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1641501826482" />
     <state x="159" y="281" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1641084146817">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -416,5 +427,20 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1641482471469" />
+    <state x="405" y="276" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1641547244570">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="405" y="276" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1366.728@0.0.1366.728" timestamp="1641547244570" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tirage_8e_8dec.py</url>
+          <line>5</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
