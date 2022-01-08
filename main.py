@@ -15,8 +15,6 @@ if __name__ == '__main__':
     for year in range(2010, 2022):
         pars = pm.Parser(day, month, year, loaded=True)
         team_list_year[year] = pars.team_list
-
-
     result = gr.Result(day, month)
     graphic = gui.GUI(team_list_year, result.qs_year)
 

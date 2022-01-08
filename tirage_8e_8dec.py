@@ -7,6 +7,7 @@ from random import *
 import numpy as np
 from time import *
 import json
+import ParseurMatrix as pm
 import matplotlib.pyplot as plt
 from decimal import *
 
@@ -132,13 +133,62 @@ def affichage_proba_matchup(N_tirages, W, S):
     for k in range(N_tirages):
         matchup = tirage(W, S)
         key = ""
+        real_key = ""
         for i in range(len(matchup)):
             key += matchup[i][0][2]
             key += matchup[i][1][2]
+        for i in range(len(key)//2):
+            if key[2*i] == "A":
+                real_key += key[2*i]
+                real_key += key[2*i+1]
+                break
+        for i in range(len(key)//2):
+            if key[2*i] == "B":
+                real_key += key[2 * i]
+                real_key += key[2 * i + 1]
+                break
+        for i in range(len(key)//2):
+            if key[2*i] == "C":
+                real_key += key[2 * i]
+                real_key += key[2 * i + 1]
+                break
+        for i in range(len(key)//2):
+            if key[2*i] == "D":
+                real_key += key[2 * i]
+                real_key += key[2 * i + 1]
+                break
+        for i in range(len(key)//2):
+            if key[2*i] == "E":
+                real_key += key[2 * i]
+                real_key += key[2 * i + 1]
+                break
+        for i in range(len(key)//2):
+            if key[2*i] == "F":
+                real_key += key[2 * i]
+                real_key += key[2 * i + 1]
+                break
+        for i in range(len(key)//2):
+            if key[2*i] == "G":
+                real_key += key[2 * i]
+                real_key += key[2 * i + 1]
+                break
+        for i in range(len(key)//2):
+            if key[2*i] == "H":
+                real_key += key[2 * i]
+                real_key += key[2 * i + 1]
+                break
         try:
-            all_matchup[key] += 1/N_tirages
+            all_matchup[real_key] += 1/N_tirages
         except:
-            all_matchup[key] = 1/N_tirages
+            all_matchup[real_key] = 1/N_tirages
+        if(k % (N_tirages/100) == 0):
+            print(k/10000, "%")
+
+    for key, value in all_matchup.items():
+        # 6 car on tire 1 000 000
+        all_matchup[key] = round(value, 6)
+
+
 
     t_2 = time()
     print('le temps d execution :', t_2 - t_1)
@@ -315,46 +365,84 @@ S = [['ATL','ES','A'],['MGlad','DE','B'],['POR','PT','C'],['ATA','IT','D'],['SEV
 
 """
 
-#Ligue des champions 2021-22
-W = [['ManC','EN','A'],['LIV', 'EN', 'B'],['AJX','NE','C'],['Real','ES','D'],['BAY','DE','E'],['ManU','EN','F'],['LIL','FR','G'],['CHE','EN','H']]
-S = [['PSG','FR','A'],['ATL','ES','B'],['SPO','PT','C'],['INT','IT','D'],['BCN','ES','E'],['VIL','ES','F'],['SAL','AU','G'],['JUV','IT','H']]
 
-def format(team_list):
-    W = []
-    S = []
-    group_name = np.ndarray()
-    for i in range(team_list):
-        group_name.append(team_list.group)
-    label = dict()
-    label[np.unique(group_name)]
-    for counter, (key, value) in enumerate(label):
-        char = int("A") + counter
-        label[key] = str(char)
-    for i in range(team_list):
-        team = []
-        team.append(team_list.name)
-        team.append(team_list.nationality)
-        team.append(label[team_list.group])
-        if(team_list.group_rank == 1):
-            W.append(team)
-        else:
-            S.append(team)
-    return W, S
+#Ligue des champions 2021-22
+W = [['ManC','EN','A'],['LIV', 'EN', 'B'],['AJX','NE','C'],['Real','ES','D'],['BAY','DE','E'],['ManU','EN','F'],['LIL','FR','G'],['JUV','IT','H']]
+S = [['PSG','FR','A'],['ATL','ES','B'],['SPO','PT','C'],['INT','IT','D'],['BEN','PT','E'],['VIL','ES','F'],['SAL','AU','G'],['CHE','EN','H']]
 
 N_tirages = 1000000
-#all_matchup = affichage_proba_matchup(N_tirages, W, S)
-#print(all_matchup)
+all_matchup = affichage_proba_matchup(N_tirages, W, S)
 
-all_matchup, proba_matchup = affichage_proba_matchup_exacte(W, S)
+print(all_matchup)
+print(len(all_matchup))
 
-def save_matchup(filename, all_matchup, proba_matchup):
-    file = open(filename, 'w', encoding="utf-8")
-    dict_list = ({
+#all_matchup, proba_matchup = affichage_proba_matchup_exacte(W, S)
+
+#save_matchup("test", all_matchup, proba_matchup)
+
+class Round_of_16:
+    def __init__(self, day, month, year, fileprefix1="json_files/qs_vector", fileprefix2="json_files/team_list"):
+        filename1 = fileprefix1 + "-" + str(day) + "-" + str(month) + "-" + str(year) + ".txt"
+        filename2 = fileprefix2 + "-" + str(day) + "-" + str(month) + "-" + str(year) + ".txt"
+        team_list = Round_of_16.get_team_list_from_file(filename1)
+        self.W, self.S = Round_of_16.format(team_list)
+        N_tirages = 1000000
+        all_matchup = affichage_proba_matchup(N_tirages, self.W, self.S)
+
+
+
+
+    @staticmethod
+    def get_team_list_from_file(filename):
+        file = open(filename, 'r', encoding="utf-8")
+        dict_list = json.load(file)
+        team_list = []
+        for dd in dict_list:
+            team_list.append(pm.Team(
+                dd["name"],
+                dd["elo"],
+                dd["nationality"],
+                dd["group"],
+                dd["group_rank"],
+                dd["point"],
+                dd["goal_difference"],
+                dd["goal_for"],
+                dd["competition_rank"]))
+        file.close()
+        return team_list
+
+    @staticmethod
+    def save_matchup(filename, all_matchup, proba_matchup):
+        file = open(filename, 'w', encoding="utf-8")
+        dict_list = ({
             "all_matchup": all_matchup,
             "probability": proba_matchup,
-    })
-    json.dump(dict_list, file, ensure_ascii=False)
-    file.close()
+        })
+        json.dump(dict_list, file, ensure_ascii=False)
+        file.close()
+
+    @staticmethod
+    def format(team_list):
+        W = []
+        S = []
+        for team in team_list:
+            team_new_format = []
+            team_new_format.append(team.name)
+            team_new_format.append(team.nationality)
+            team_new_format.append(team.group[-11])
+            if (team_list.group_rank == 1):
+                W.append(team_new_format)
+            else:
+                S.append(team_new_format)
+        return W, S
+
+    @staticmethod
+    def convert_to_feed_algo(all_matchup, team_list):
+        for matchup, value in all_matchup.items():
+            scenario = dict()
+            scenario["X1"] =
+            scenario["X2"] =
+
 
 """"
 

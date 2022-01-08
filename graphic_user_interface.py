@@ -42,7 +42,7 @@ class GUI:
 
         metric_options = [
             "Probabilité d'atteindre une étape",
-            "Métrique 2"
+            "probabilité de victoire"
         ]
 
         year_options = [
@@ -120,7 +120,7 @@ class GUI:
                 proba_window.destroy()  # Détruit la fenêtre secondaire
                 root.deiconify()  # Remet en avant-plan
 
-            root.withdraw()
+
             global proba_window
             proba_window = tk.Toplevel(root)
             proba_window.title("Affichage des métriques")
@@ -234,10 +234,20 @@ class GUI:
                     toolbar.update()
                     canvas.get_tk_widget().grid(row=5, column=0)
 
+                    ranking_table = SimpleTable(proba_window, rows=17, columns=2)
+
+                    team_list = self.team_list_year[int(year_clicked.get())]
+                    ranking_table.set(0, 0, "rang faible")
+                    ranking_table.set(0, 1, "équipe")
+                    for i in range(len(team_list)):
+                        ranking_table.set(i + 1, 0, team_list[i].competition_rank)
+                        ranking_table.set(i + 1, 1, team_list[i].name)
+                    ranking_table.grid(row=5, column=1)
+
             metric_clicked.trace("w", show_option)
 
         proba_window_button = tk.Button(root,
-                                        text="Create new window",
+                                        text="Ouvrir métrique",
                                         command=createNewWindow)
 
         proba_window_button.grid(row=0, column=100)

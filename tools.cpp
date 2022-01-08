@@ -450,6 +450,43 @@ double qSj_quarterfinal(const int j,const VectorTree* QOmega,const std::vector<i
 }
 
 
+#does it work??
+double qSj_best_final(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix) {
+    if(X1.size() == 0 && X2.size() == 0)
+        return 1;
+    // Computes undiscovered values of QOmega
+    // Assumes all players are in X1,X2
+    if(X1.size() == 1 && X2.size() == 1){
+        // on est en finale donc on est sur d'etre en finale (c'est totologique)
+        if(X1.at(0) == 0 && X2.at(0) == 1)
+            return 1;
+        else
+            return 0;
+    }
+    if(X1.size() == 2 && X2.size() == 2){
+        // on est en demi finale
+        double sum =0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++){
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+        }
+        return sum;
+    }
+    else{
+        double sum = 0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++)
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+    return sum;
+    }
+}
+
+
+
 
 void setDiagonalVictory(Imagine::Matrix<double> &M){
     for(int i=0; i<M.nrow(); i++){

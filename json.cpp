@@ -64,7 +64,7 @@ void writeScenario(std::vector<int> X1,std::vector<int> X2, std::string fileName
     };
     std::vector<json> list_scenario = {scenario};
     std::vector<json> list_scenario_next_round;
-    js = {"round_of_16",scenario};
+    js = {"round_of_16",list_scenario};
     for(int i=0; i<3; i++){
         for(size_t j=0; j<list_scenario.size(); j++){
             std::vector<std::vector<int>> set_sorted_S;
@@ -169,7 +169,7 @@ void readWriteOfficialScenario(std::ifstream inFileName, std::string outFileName
     };
     std::vector<json> list_scenario = {scenario};
     std::vector<json> list_scenario_next_round;
-    js = {"round_of_16",scenario};
+    js = {"round_of_16",list_scenario};
     for(int i=0; i<3; i++){
         for(size_t j=0; j<list_scenario.size(); j++){
             std::vector<std::vector<int>> set_sorted_S;
