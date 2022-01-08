@@ -5,7 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 
 
 class SimpleTable(tk.Frame):
-    def __init__(self, parent, rows=10, columns=2):
+    def __init__(self, parent, rows=10, columns=2, with_button=False):
         # use black background so it "peeks through" to
         # form grid lines
         tk.Frame.__init__(self, parent, background="black")
@@ -13,9 +13,14 @@ class SimpleTable(tk.Frame):
         for row in range(rows):
             current_row = []
             for column in range(columns):
-                label = tk.Label(self, text="%s/%s" % (row, column),
+                if not with_button:
+                    label = tk.Label(self, text="%s/%s" % (row, column),
                                  borderwidth=0, width=10)
-                label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
+                    label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
+                else:
+                    label = tk.Button(self, text="%s/%s" % (row, column),
+                                     borderwidth=0, width=10)
+                    label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
                 current_row.append(label)
             self._widgets.append(current_row)
 
@@ -26,6 +31,8 @@ class SimpleTable(tk.Frame):
     def set(self, row, column, value):
         widget = self._widgets[row][column]
         widget.configure(text=value)
+
+
 
 class GUI:
     def __init__(self, team_list_year, qs_year):
@@ -38,7 +45,7 @@ class GUI:
         root = tk.Tk()
         root.title("Affichage des résultats")
         # root.iconbitmap()
-        root.geometry("1300x600")
+        root.geometry("1300x700")
 
         metric_options = [
             "Probabilité d'atteindre une étape",
@@ -70,7 +77,7 @@ class GUI:
         drop = tk.OptionMenu(root, year_clicked, *year_options)
         drop.grid(row=0, column=0)
 
-        games_8th = SimpleTable(root, rows=25, columns=1)
+        games_8th = SimpleTable(root, rows=25, columns=1, with_button=True)
         if True: # À remplacer dès que l'on obtient le scénario
             team_list = self.team_list_year[int(year_clicked.get())]
             X1=team_list[:8]
@@ -82,7 +89,7 @@ class GUI:
             games_8th.set(3*i+1, 0, "")
         games_8th.grid(row=5, column=1)
 
-        games_4th = SimpleTable(root, rows=13, columns=1)
+        games_4th = SimpleTable(root, rows=13, columns=1, with_button=True)
         if True: # À remplacer dès que l'on obtient le scénario
             X2=X1[4:]
             X1=X1[:4]
@@ -93,7 +100,7 @@ class GUI:
             games_4th.set(3*i+1, 0, "")
         games_4th.grid(row=5, column=2)
 
-        games_2th = SimpleTable(root, rows=7, columns=1)
+        games_2th = SimpleTable(root, rows=7, columns=1, with_button=True)
         if True: # À remplacer dès que l'on obtient le scénario
             X2=X1[2:]
             X1=X1[:2]
@@ -104,7 +111,7 @@ class GUI:
             games_2th.set(3*i+1, 0, "")
         games_2th.grid(row=5, column=3)
 
-        games_1th = SimpleTable(root, rows=4, columns=1)
+        games_1th = SimpleTable(root, rows=4, columns=1, with_button=True)
         if True: # À remplacer dès que l'on obtient le scénario
             X2=X1[1:]
             X1=X1[:1]
