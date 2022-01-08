@@ -440,8 +440,8 @@ class Round_of_16:
     def convert_to_feed_algo(all_matchup, team_list):
         for matchup, value in all_matchup.items():
             scenario = dict()
-            scenario["X1"] =
-            scenario["X2"] =
+            scenario["X1"] = 1
+            scenario["X2"] = 1
 
 
 """"

@@ -198,11 +198,11 @@
     </configuration>
     <list>
       <item itemvalue="Python.ParseurMatrix" />
-      <item itemvalue="Python.graphic_user_interface (1)" />
       <item itemvalue="Python.graphic_user_interface" />
+      <item itemvalue="Python.graphic_user_interface (1)" />
       <item itemvalue="Python.gui" />
-      <item itemvalue="Python.main" />
       <item itemvalue="Python.tirage_8e_8dec" />
+      <item itemvalue="Python.main" />
     </list>
     <recent_temporary>
       <list>
