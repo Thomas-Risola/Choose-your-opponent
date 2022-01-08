@@ -70,6 +70,51 @@ class GUI:
         drop = tk.OptionMenu(root, year_clicked, *year_options)
         drop.grid(row=0, column=0)
 
+        games_8th = SimpleTable(root, rows=25, columns=1)
+        if True: # À remplacer dès que l'on obtient le scénario
+            team_list = self.team_list_year[int(year_clicked.get())]
+            X1=team_list[:8]
+            X2=team_list[8:]
+        games_8th.set(0, 0, "8èmes")
+        for i in range(len(X1)):
+            games_8th.set(3*i+2, 0, X1[i].name)
+            games_8th.set(3*i+3, 0, X2[i].name)
+            games_8th.set(3*i+1, 0, "")
+        games_8th.grid(row=5, column=1)
+
+        games_4th = SimpleTable(root, rows=13, columns=1)
+        if True: # À remplacer dès que l'on obtient le scénario
+            X2=X1[4:]
+            X1=X1[:4]
+        games_4th.set(0, 0, "Quarts")
+        for i in range(len(X1)):
+            games_4th.set(3*i+2, 0, X1[i].name)
+            games_4th.set(3*i+3, 0, X2[i].name)
+            games_4th.set(3*i+1, 0, "")
+        games_4th.grid(row=5, column=2)
+
+        games_2th = SimpleTable(root, rows=7, columns=1)
+        if True: # À remplacer dès que l'on obtient le scénario
+            X2=X1[2:]
+            X1=X1[:2]
+        games_2th.set(0, 0, "Demis")
+        for i in range(len(X1)):
+            games_2th.set(3*i+2, 0, X1[i].name)
+            games_2th.set(3*i+3, 0, X2[i].name)
+            games_2th.set(3*i+1, 0, "")
+        games_2th.grid(row=5, column=3)
+
+        games_1th = SimpleTable(root, rows=4, columns=1)
+        if True: # À remplacer dès que l'on obtient le scénario
+            X2=X1[1:]
+            X1=X1[:1]
+        games_1th.set(0, 0, "Finale")
+        for i in range(len(X1)):
+            games_1th.set(3*i+2, 0, X1[i].name)
+            games_1th.set(3*i+3, 0, X2[i].name)
+            games_1th.set(3*i+1, 0, "")
+        games_1th.grid(row=5, column=4)
+
         def createNewWindow():
             def leave():
                 proba_window.destroy()  # Détruit la fenêtre secondaire
