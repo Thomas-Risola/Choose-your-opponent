@@ -19,8 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="tirage 8eme officiel">
+    <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="button on tree">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphic_user_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/graphic_user_interface.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -364,7 +365,14 @@
       <option name="project" value="LOCAL" />
       <updated>1641672563069</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="button on tree">
+      <created>1641673328979</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1641673328979</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -399,7 +407,8 @@
     <MESSAGE value="fichiers" />
     <MESSAGE value="tirage 8eme officiel + petit fix" />
     <MESSAGE value="tirage 8eme officiel" />
-    <option name="LAST_COMMIT_MESSAGE" value="tirage 8eme officiel" />
+    <MESSAGE value="button on tree" />
+    <option name="LAST_COMMIT_MESSAGE" value="button on tree" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
