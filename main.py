@@ -1,6 +1,7 @@
 import ParseurMatrix as pm
 import get_result as gr
 import graphic_user_interface as gui
+import tirage_8e_8dec as tir
 
 if __name__ == '__main__':
 
@@ -16,6 +17,10 @@ if __name__ == '__main__':
         pars = pm.Parser(day, month, year, loaded=True)
         team_list_year[year] = pars.team_list
     result = gr.Result(day, month)
+
+    year = 2021
+    tir.Round_of_16(day, month, year)
+
     graphic = gui.GUI(team_list_year, result.qs_year)
 
     graphic.graphic_loop()
