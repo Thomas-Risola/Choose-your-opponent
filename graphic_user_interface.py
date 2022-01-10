@@ -9,7 +9,7 @@ number_of_open_window = 0
 
 
 class SimpleTable(tk.Frame):
-    def __init__(self, parent, rows=10, columns=2, with_button=False):
+    def __init__(self, parent, rows=10, columns=2, with_button=False, round=16):
         # use black background so it "peeks through" to
         # form grid lines
         tk.Frame.__init__(self, parent, background="black")
@@ -23,7 +23,7 @@ class SimpleTable(tk.Frame):
                     label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
                 else:
                     label = tk.Button(self, text="%s/%s" % (row, column),
-                                      borderwidth=0, width=10)
+                                      borderwidth=0, width=10) #command=def_function
                     label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
                 current_row.append(label)
             self._widgets.append(current_row)
@@ -34,6 +34,8 @@ class SimpleTable(tk.Frame):
     def set(self, row, column, value):
         widget = self._widgets[row][column]
         widget.configure(text=value)
+        if value in ["8èmes", "Quarts", "Demis", "Finale"]:
+            widget.configure(state="disabled")
 
 
 class NewWindow:

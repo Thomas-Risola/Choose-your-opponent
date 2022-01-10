@@ -159,6 +159,7 @@ void readWriteOfficialScenario(std::ifstream inFileName, std::string outFileName
 
     json js;
     json scenario;
+    std::vector<std::string> round_before_draw = {"quart_before_draw","semi_before_draw","final_before_draw","winner_before_draw"};
     std::vector<std::string> round = {"quart","semi","final","winner"};
     std::vector<std::vector<int>> set_sorted_S = {{},{}};
     scenario ={
@@ -171,6 +172,7 @@ void readWriteOfficialScenario(std::ifstream inFileName, std::string outFileName
     std::vector<json> list_scenario_next_round;
     js = {"round_of_16",list_scenario};
     for(int i=0; i<3; i++){
+        // scenario possible
         for(size_t j=0; j<list_scenario.size(); j++){
             std::vector<std::vector<int>> set_sorted_S;
             std::vector<int> XN1 = list_scenario[j]["X1"];
@@ -197,11 +199,13 @@ void readWriteOfficialScenario(std::ifstream inFileName, std::string outFileName
                 list_scenario_next_round.push_back(scenario);
 
             }
-
-
         }
         list_scenario = list_scenario_next_round;
-        js = {round[i],list_scenario};
+        js = {round_before_draw[i],list_scenario};
+        // tirage au sort du next round
+        for(size_t j=0; j<list_scenario.size(); j++){
+            draw_round()
+        }
     }
 
 
@@ -213,3 +217,5 @@ void readWriteOfficialScenario(std::ifstream inFileName, std::string outFileName
         f << js;
     }
 }
+
+

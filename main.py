@@ -19,7 +19,7 @@ if __name__ == '__main__':
     result = gr.Result(day, month)
 
     year = 2021
-    tir.Round_of_16(day, month, year)
+    #tir.Round_of_16(day, month, year)
 
     graphic = gui.GUI(team_list_year, result.qs_year)
 

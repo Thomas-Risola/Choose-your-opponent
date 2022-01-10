@@ -3,7 +3,7 @@ import json
 
 
 class Result:
-    def __init__(self, day, month, fileprefix1="json_files/qs_vector", fileprefix2="json_files/matrix"):
+    def __init__(self, day, month, fileprefix1="json_files/qs_vector", fileprefix2="json_files/scenario-"):
         self.qs_year = dict()
         self.scenario_year = dict()
         for year in range(2010, 2022):
