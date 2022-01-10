@@ -25,9 +25,10 @@ int main()
         vector<double> qS_final;
         vector<double> qS_semifinal;
         vector<double> qS_quarterfinal;
+        std::vector<std::vector<int>> Liste_X1,Liste_X2;
         vector<int> X1,X2,ranking;
         for (int i=0;i<petit_N;i++) ranking.push_back(i);
-        algorithm_entire_competition(qS_win,qS_final,qS_semifinal,qS_quarterfinal,X1,X2,ranking,16,victoryMatrix,playMatrix,false);
+        algorithm_entire_competition(qS_win,qS_final,qS_semifinal,qS_quarterfinal,Liste_X1,Liste_X2,X1,X2,ranking,16,victoryMatrix,playMatrix,false);
         cout << endl << "calculs finis" << endl;
         cout << "qS_win: " << qS_win << endl;
 
