@@ -178,22 +178,11 @@ void readWriteOfficialScenario(std::ifstream inFileName, std::string outFileName
             std::vector<int> XN1 = list_scenario[j]["X1"];
             std::vector<int> XN2 = list_scenario[j]["X2"];
             std::vector<double> pS = p_S(set_sorted_S,XN1,XN2,probability_matrix);
-            std::vector<double> qS;
-            std::vector<double> dummy1;
-            std::vector<double> dummy2;
-            std::vector<double> dummy3;
 
             for(size_t k=0; k<pS.size(); k++){
-                std::vector<int> XNN1;
-                std::vector<int> XNN2;
-                for(size_t l=0; l<set_sorted_S[k].size()/2; l++){
-                    XNN1.push_back(set_sorted_S[k][2*l]);
-                    XNN2.push_back(set_sorted_S[k][2*l+1]);
-                }
                 scenario ={
                     {"proba",pS[k]},
-                    {"X1",XNN1},
-                    {"X2",XNN2},
+                    {"winners",set_sorted_S},
                     {"parent",j}
                 };
                 list_scenario_next_round.push_back(scenario);
@@ -204,7 +193,17 @@ void readWriteOfficialScenario(std::ifstream inFileName, std::string outFileName
         js = {round_before_draw[i],list_scenario};
         // tirage au sort du next round
         for(size_t j=0; j<list_scenario.size(); j++){
-            draw_round()
+            std::vector<int> XN = list_scenario[j]["winners"];
+            std::vector<std::vector<int>> X1X2;
+            X1X2 = draw_round(XN);
+            scenario ={
+                {"proba",1/105},
+                {"X1",X1X2},
+                {"X2",X1X2},
+                {"parent",j}
+            };
+            list_scenario_next_round.push_back(scenario);
+
         }
     }
 

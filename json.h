@@ -7,6 +7,7 @@
 #include <Imagine/Graphics.h>
 #include "json-develop/single_include/nlohmann/json.hpp"
 #include "tools.h"
+#include "official.h"
 
 
 Imagine::Matrix<double> getVictoryMatrix(std::ifstream file);
