@@ -51,48 +51,25 @@ void writeQS(std::vector<double> qS_win,std::vector<double> qS_final,std::vector
     }
 }
 
-void writeScenario(std::vector<int> X1,std::vector<int> X2, std::string fileName, const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix){
+void writeScenario(std::vector<std::vector<int>> Liste_X1,std::vector<std::vector<int>> Liste_X2, std::string fileName, const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix){
     json js;
     json scenario;
     std::vector<std::string> round = {"quart","semi","final","winner"};
-    std::vector<std::vector<int>> set_sorted_S = {X1,X2};
-    scenario ={
+    scenario = {
         {"proba",1},
-        {"X1",X1},
-        {"X2",X2},
+        {"X1",Liste_X1.back()},
+        {"X2",Liste_X2.back()},
         {"parent",0}
     };
     std::vector<json> list_scenario = {scenario};
-    std::vector<json> list_scenario_next_round;
     js = {"round_of_16",list_scenario};
-    for(int i=0; i<3; i++){
-        for(size_t j=0; j<list_scenario.size(); j++){
-            std::vector<std::vector<int>> set_sorted_S;
-            std::vector<int> XN1 = list_scenario[j]["X1"];
-            std::vector<int> XN2 = list_scenario[j]["X2"];
-            std::vector<double> pS = p_S(set_sorted_S,XN1,XN2,probability_matrix);
-            std::vector<double> qS;
-            std::vector<double> dummy1;
-            std::vector<double> dummy2;
-            std::vector<double> dummy3;
-
-            for(size_t k=0; k<pS.size(); k++){
-
-                //algorithm_entire_competition(qS,dummy1,dummy2,dummy3,XN1,XN2,set_sorted_S[k],16,probability_matrix,play_matrix);
-                scenario ={
-                    {"proba",pS[k]},
-                    {"X1",XN1},
-                    {"X2",XN2},
-                    {"parent",j}
-                };
-                list_scenario_next_round.push_back(scenario);
-
-            }
-
-
-        }
-        list_scenario = list_scenario_next_round;
-        js = {round[i],list_scenario};
+    for (int i=Liste_X1.size()-2;i>=0;i--) {
+        scenario = {
+            {"proba",1},
+            {"X1",Liste_X1.at(i)},
+            {"X2",Liste_X2.at(i)},
+            {"parent",0}
+        };
     }
 
 
