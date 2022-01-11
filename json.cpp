@@ -63,15 +63,25 @@ void writeScenario(std::vector<std::vector<int>> Liste_X1,std::vector<std::vecto
     };
     std::vector<json> list_scenario = {scenario};
     js = {"round_of_16",list_scenario};
+    list_scenario.clear();
     std::vector<json> list_js={js};
+    int old_sz=Liste_X1.back().size();
     for (int i=Liste_X1.size()-2;i>=0;i--) {
+        int curr_sz=Liste_X1.at(i).size();
         scenario = {
             {"proba",1},
             {"X1",Liste_X1.at(i)},
             {"X2",Liste_X2.at(i)},
-            {"parent",0}
+            {"parent",0} // pour parent, il faut reconstituer
         };
-        // KEZAKO
+        list_scenario.push_back(scenario);
+        if (old_sz!=curr_sz) {
+            old_sz=curr_sz;
+            int ii=2-log2(curr_sz); // PB pour "winner"
+            js = {round[ii],list_scenario};
+            list_js.push_back(js);
+            list_scenario.clear();
+        }
     }
 
 
@@ -80,7 +90,7 @@ void writeScenario(std::vector<std::vector<int>> Liste_X1,std::vector<std::vecto
         std::string prefix = srcPath("json_files/scenario-");
         std::string qSFileName = prefix + fileName;
         std::ofstream f(qSFileName);
-        f << js;
+        f << list_js;
     }
 }
 
