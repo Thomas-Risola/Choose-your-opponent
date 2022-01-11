@@ -63,6 +63,7 @@ void writeScenario(std::vector<std::vector<int>> Liste_X1,std::vector<std::vecto
     };
     std::vector<json> list_scenario = {scenario};
     js = {"round_of_16",list_scenario};
+    std::vector<json> list_js={js};
     for (int i=Liste_X1.size()-2;i>=0;i--) {
         scenario = {
             {"proba",1},
@@ -70,6 +71,7 @@ void writeScenario(std::vector<std::vector<int>> Liste_X1,std::vector<std::vecto
             {"X2",Liste_X2.at(i)},
             {"parent",0}
         };
+        // KEZAKO
     }
 
 
