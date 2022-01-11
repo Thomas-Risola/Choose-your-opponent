@@ -22,3 +22,7 @@ int getFileName(int year, std::string &fileName);
 
 std::string getMatrixFileName(std::string fileName);
 
+std::string getOfficial16FileName(std::string fileName);
+
+void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileName, const Imagine::Matrix<double>& probability_matrix);
+

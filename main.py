@@ -18,9 +18,11 @@ if __name__ == '__main__':
         team_list_year[year] = pars.team_list
     result = gr.Result(day, month)
 
-    year = 2021
-    #tir.Round_of_16(day, month, year)
-
+    '''
+    for year in range(2010, 2022):
+        tir.Round_of_16(day, month, year)
+    '''
+    
     graphic = gui.GUI(team_list_year, result.qs_year)
 
     graphic.graphic_loop()
