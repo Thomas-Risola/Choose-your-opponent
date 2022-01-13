@@ -62,12 +62,19 @@ void writeScenario(std::vector<std::vector<int>> Liste_X1,std::vector<std::vecto
         {"parent",0}
     };
     std::vector<json> list_scenario = {scenario};
-    js = {"round_of_16",list_scenario};
-    list_scenario.clear();
+    js = {"round_of_16",list_scenario}; // Hyp tournoi complet
+    int old_sz=8;                       // Hyp tournoi complet
     std::vector<json> list_js={js};
-    int old_sz=Liste_X1.back().size();
+    old_sz=4;                           // Hyp tournoi complet
     for (int i=Liste_X1.size()-2;i>=0;i--) {
         int curr_sz=Liste_X1.at(i).size();
+        if (old_sz!=curr_sz) {
+            int ii=((old_sz==4)?(0):((old_sz==2)?(1):(2))); // PB pour "winner"
+            old_sz=curr_sz;
+            js = {round[ii],list_scenario};
+            list_js.push_back(js);
+            list_scenario.clear();
+        }
         scenario = {
             {"proba",1},
             {"X1",Liste_X1.at(i)},
@@ -75,13 +82,6 @@ void writeScenario(std::vector<std::vector<int>> Liste_X1,std::vector<std::vecto
             {"parent",0} // pour parent, il faut reconstituer
         };
         list_scenario.push_back(scenario);
-        if (old_sz!=curr_sz) {
-            old_sz=curr_sz;
-            int ii=2-log2(curr_sz); // PB pour "winner"
-            js = {round[ii],list_scenario};
-            list_js.push_back(js);
-            list_scenario.clear();
-        }
     }
 
 
@@ -90,7 +90,8 @@ void writeScenario(std::vector<std::vector<int>> Liste_X1,std::vector<std::vecto
         std::string prefix = srcPath("json_files/scenario-");
         std::string qSFileName = prefix + fileName;
         std::ofstream f(qSFileName);
-        f << list_js;
+        json list_js_output = {list_js};
+        f << list_js_output;
     }
 }
 
