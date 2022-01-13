@@ -65,6 +65,7 @@ void writeScenario(std::vector<std::vector<int>> Liste_X1,std::vector<std::vecto
     js = {"round_of_16",list_scenario}; // Hyp tournoi complet
     int old_sz=8;                       // Hyp tournoi complet
     std::vector<json> list_js={js};
+    list_scenario.clear();
     old_sz=4;                           // Hyp tournoi complet
     for (int i=Liste_X1.size()-2;i>=0;i--) {
         int curr_sz=Liste_X1.at(i).size();
