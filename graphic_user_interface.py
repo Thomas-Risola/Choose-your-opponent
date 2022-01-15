@@ -195,7 +195,7 @@ class GUI:
         # dictionnaire : cle: annee; contenu: [qs_win,qs_final,qs_semi,qs_quart]
         self.qs_year = qs_year
         # dictionnaire : cle: annee; contenu: [final,semi,quart,final]
-        self.qs_year = qs_year
+        self.scenario_year = scenario_year
 
     def graphic_loop(self):
         root = tk.Tk()
