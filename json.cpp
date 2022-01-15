@@ -254,9 +254,20 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
     std::vector<double> qS_final(16,0);
     std::vector<double> qS_win(16,0);
 
+    double best_final_elo = 0;
+    double best_final_weak_ranking = 0;
+
+    double best_semi_elo = 0;
+    double best_semi_weak_ranking = 0;
+
+    double best_quart_elo = 0;
+    double best_quart_weak_ranking = 0;
+
+
 
     // huitième tiré
-    for(size_t j=0; j<10; j++){
+    std::cout << list_scenario_huitieme.size() << std::endl;
+    for(size_t j=0; j<list_scenario_huitieme.size(); j++){
         std::cout << j << std::endl;
         std::vector<std::vector<int>> set_sorted_S_huitieme;
         std::vector<int> XN1_huitieme = list_scenario_huitieme[j]["X1"];
@@ -307,13 +318,17 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
                             double proba_winner_final = proba_semi;
                             proba_winner_final *= pS[n];
                             for(size_t i=0; i<16; i++)
-                                if(std::find(set_sorted_S_semi[n].begin(), set_sorted_S_semi[n].end(), i) != set_sorted_S_semi[n].end()){
+                                if(set_sorted_S_semi[n][0] == i || set_sorted_S_semi[n][1] == i){
                                     qS_final[i] += proba_winner_final;
                                     if(set_sorted_S_semi[n][0] != i)
                                         qS_win[i] += proba_winner_final*probability_matrix(i,set_sorted_S_semi[n][0]);
                                     else
-                                        qS_win[i] += proba_winner_final*probability_matrix(i,set_sorted_S_semi[n][1]);
+                                        qS_win[i] += proba_winner_final*probability_matrix(set_sorted_S_semi[n][1],i);
                                 }
+                            if(set_sorted_S_semi[n][0] == 0 || set_sorted_S_semi[n][1] == 1)
+                                best_final_weak_ranking += proba_winner_final;
+                            //if(set_sorted_S_semi[n][0] == std::min(elo_ranking[0], elo_ranking[1]) || set_sorted_S_semi[n][1] == std::max(elo_ranking[0], elo_ranking[1]))
+                            //    best_final_elo += proba_winner_final;
                         }
                     }
                 }
@@ -324,16 +339,32 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
 
 
     js = {
-            {"qs_win",qS_win},
-            {"qs_final",qS_final},
+        {"qs_win",qS_win},
+        {"qs_final",qS_final},
         {"qs_semi",qS_semi},
         {"qs_quart",qS_quart},
     };
 
-    std::string prefix = srcPath("json_files/official_qs_vector-");
-    std::string qSFileName = prefix + outFileName;
-    std::ofstream f(qSFileName);
-    f << js;
+
+    json js2 = {
+        {"best_final_weak", best_final_weak_ranking},
+        {"best_final_elo", best_final_elo},
+        {"best_semi_weak", best_semi_weak_ranking},
+        {"best_semi_elo", best_semi_elo},
+        {"best_quart_weak", best_quart_weak_ranking},
+        {"best_quart_elo", best_quart_elo},
+
+    };
+
+    std::string prefix1 = srcPath("json_files/official_qs_vector-");
+    std::string qSFileName1 = prefix1 + outFileName;
+    std::ofstream f1(qSFileName1);
+    f1 << js;
+
+    std::string prefix2 = srcPath("json_files/official_best_scenario-");
+    std::string qSFileName2 = prefix2 + outFileName;
+    std::ofstream f2(qSFileName2);
+    f2 << js2;
 
 }
 

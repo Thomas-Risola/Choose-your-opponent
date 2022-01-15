@@ -11,7 +11,7 @@ using json = nlohmann::json;
 int main()
 {
 
-    for(int year=2010; year<2020; year++){
+    for(int year=2021; year<2022; year++){
         string fileName;
         getFileName(year,fileName);
         string matrixName = getMatrixFileName(fileName);
@@ -27,12 +27,14 @@ int main()
         vector<double> qS_final;
         vector<double> qS_semifinal;
         vector<double> qS_quarterfinal;
+        std::vector<std::vector<double>> qS_liste(6);
         std::vector<std::vector<int>> Liste_X1,Liste_X2;
         vector<int> X1,X2,ranking;
         for (int i=0;i<petit_N;i++) ranking.push_back(i);
-        // algorithm_entire_competition(qS_win,qS_final,qS_semifinal,qS_quarterfinal,Liste_X1,Liste_X2,X1,X2,ranking,16,victoryMatrix,playMatrix,false);
+        algorithm_entire_competition(qS_win,qS_final,qS_semifinal,qS_quarterfinal,qS_liste,Liste_X1,Liste_X2,X1,X2,ranking,16,victoryMatrix,playMatrix,false);
         // cout << endl << "calculs finis" << endl;
         // cout << "qS_win: " << qS_win << endl;
+        cout << qS_liste[0] << endl;
 
         //X1 = {0,1,2,3,4,5,6,7};
         //X2 = {13,14,12,9,10,15,11,8};

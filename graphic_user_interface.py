@@ -189,10 +189,12 @@ class NewWindow:
 
 
 class GUI:
-    def __init__(self, team_list_year, qs_year):
+    def __init__(self, team_list_year, qs_year, scenario_year):
         # dictionnaire : cle: annee; contenu: team_list
         self.team_list_year = team_list_year
         # dictionnaire : cle: annee; contenu: [qs_win,qs_final,qs_semi,qs_quart]
+        self.qs_year = qs_year
+        # dictionnaire : cle: annee; contenu: [final,semi,quart,final]
         self.qs_year = qs_year
 
     def graphic_loop(self):

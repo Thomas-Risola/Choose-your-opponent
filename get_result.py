@@ -11,7 +11,7 @@ class Result:
                 filename1 = fileprefix1 + "-" + str(day) + "-" + str(month) + "-" + str(year) + ".txt"
                 filename2 = fileprefix2 + "-" + str(day) + "-" + str(month) + "-" + str(year) + ".txt"
                 self.qs_year[year] = self.get_qs(filename1)
-                # self.scenario_year[year] = self.get_scenario(filename2)
+                self.scenario_year[year] = self.get_scenario(filename2)
             except:
                 continue
 
@@ -30,6 +30,13 @@ class Result:
     def get_scenario(filename):
         file = open(filename, 'r', encoding="utf-8")
         dict_list = json.load(file)
+        dict_list = json.load(file)
+        round_of_16 = dict_list["round_of_16"]
+        quart = dict_list["quart"]
+        semi = dict_list["semi"]
+        final = dict_list["final"]
+        file.close()
+        return [final, semi, quart, round_of_16]
 
         file.close()
         return []
