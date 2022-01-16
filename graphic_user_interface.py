@@ -27,7 +27,7 @@ class SimpleTable(tk.Frame):
         for row in range(rows):
             current_row = []
             for column in range(columns):
-                if not with_button or nb_team_round < 4:
+                if not with_button or nb_team_round < 2:
                     label = tk.Label(self, text="%s/%s" % (row, column),
                                      borderwidth=0, width=10)
                     label.grid(row=row, column=column, sticky="nsew", padx=1, pady=1)
@@ -198,63 +198,37 @@ class SimpleTable(tk.Frame):
             if value1 in ["8èmes", "Quarts", "Demies", "Finale"]:
                 widget.configure(state="disabled", bg='blue', fg='white')
         else:
-            if self.nb_team_round != 2:
-                if victory_matrix[team_1][team_2] >= 0.5:
-                    up = True
-                    best_team = team_1
-                    bad_team = team_2
-                    widget = self._widgets[row][column]
-                    widget.configure(text=value1, command=partial(best_team_command, winning_teams, self.scenario_list,
-                                                                  self.nb_team_round, best_team, bad_team, up),
-                                     bg='green',
-                                     fg='black',
-                                     state=tk.DISABLED)
-                    widget = self._widgets[row + 1][column]
-                    widget.configure(text=value2, command=partial(bad_team_command, winning_teams, self.scenario_list,
-                                                                  self.nb_team_round, best_team, bad_team, up),
-                                     bg='red',
-                                     fg='black',
-                                     state=tk.NORMAL)
-                else:
-                    up = False
-                    best_team = team_2
-                    bad_team = team_1
-                    widget = self._widgets[row + 1][column]
-                    widget.configure(text=value2, command=partial(best_team_command, winning_teams, self.scenario_list,
-                                                                  self.nb_team_round, best_team, bad_team, up),
-                                     bg='green',
-                                     fg='black',
-                                     state=tk.DISABLED)
-                    widget = self._widgets[row][column]
-                    widget.configure(text=value1, command=partial(bad_team_command, winning_teams, self.scenario_list,
-                                                                  self.nb_team_round, best_team, bad_team, up),
-                                     bg='red',
-                                     fg='black', state=tk.NORMAL)
+            if victory_matrix[team_1][team_2] >= 0.5:
+                up = True
+                best_team = team_1
+                bad_team = team_2
+                widget = self._widgets[row][column]
+                widget.configure(text=value1, command=partial(best_team_command, winning_teams, self.scenario_list,
+                                                              self.nb_team_round, best_team, bad_team, up),
+                                 bg='green',
+                                 fg='black',
+                                 state=tk.DISABLED)
+                widget = self._widgets[row + 1][column]
+                widget.configure(text=value2, command=partial(bad_team_command, winning_teams, self.scenario_list,
+                                                              self.nb_team_round, best_team, bad_team, up),
+                                 bg='red',
+                                 fg='black',
+                                 state=tk.NORMAL)
             else:
-                if victory_matrix[team_1][team_2] >= 0.5:
-                    up = True
-
-                    widget = self._widgets[row][column]
-                    widget.configure(text=value1,
-                                     bg='green',
-                                     fg='black',
-                                     state=tk.DISABLED)
-                    widget = self._widgets[row + 1][column]
-                    widget.configure(text=value2, bg='red',
-                                     fg='black',
-                                     state=tk.NORMAL)
-                else:
-                    up = False
-
-                    widget = self._widgets[row + 1][column]
-                    widget.configure(text=value1,
-                                     bg='green',
-                                     fg='black',
-                                     state=tk.DISABLED)
-                    widget = self._widgets[row][column]
-                    widget.configure(text=value2, bg='red',
-                                     fg='black',
-                                     state=tk.NORMAL)
+                up = False
+                best_team = team_2
+                bad_team = team_1
+                widget = self._widgets[row + 1][column]
+                widget.configure(text=value2, command=partial(best_team_command, winning_teams, self.scenario_list,
+                                                              self.nb_team_round, best_team, bad_team, up),
+                                 bg='green',
+                                 fg='black',
+                                 state=tk.DISABLED)
+                widget = self._widgets[row][column]
+                widget.configure(text=value1, command=partial(bad_team_command, winning_teams, self.scenario_list,
+                                                              self.nb_team_round, best_team, bad_team, up),
+                                 bg='red',
+                                 fg='black', state=tk.NORMAL)
 
 
 class NewWindow:
