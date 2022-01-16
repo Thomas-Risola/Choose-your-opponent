@@ -91,7 +91,7 @@ class SimpleTable(tk.Frame):
             games_final = SimpleTable(self.parent, rows=4, columns=1, with_button=True, nb_team_round=2,
                                      scenario_list=self.scenario_list, team_list=self.team_list,
                                      year=self.year)
-            games_final.set(0, 0, "Demies")
+            games_final.set(0, 0, "Finale")
 
             X1, X2 = search_and_fill_scenario(winning_teams, scenario_list)
 
