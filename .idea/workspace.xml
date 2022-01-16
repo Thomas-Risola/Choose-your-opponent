@@ -19,28 +19,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="scenario sur python">
+    <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="fini">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/get_result.py" beforeDir="false" afterPath="$PROJECT_DIR$/get_result.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/graphic_user_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/graphic_user_interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/json.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json.h" beforeDir="false" afterPath="$PROJECT_DIR$/json.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/scenario-12-12-2010.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/scenario-12-12-2010.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/scenario-12-12-2011.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/scenario-12-12-2011.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/scenario-12-12-2012.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/scenario-12-12-2012.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/scenario-12-12-2013.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/scenario-12-12-2013.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/scenario-12-12-2014.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/scenario-12-12-2014.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/scenario-12-12-2015.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/scenario-12-12-2015.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/scenario-12-12-2016.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/scenario-12-12-2016.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/scenario-12-12-2017.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/scenario-12-12-2017.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/scenario-12-12-2018.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/scenario-12-12-2018.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/scenario-12-12-2019.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/scenario-12-12-2019.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/scenario-12-12-2020.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/scenario-12-12-2020.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/scenario-12-12-2021.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/scenario-12-12-2021.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tools.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools.h" beforeDir="false" afterPath="$PROJECT_DIR$/tools.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +61,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -433,7 +418,28 @@
       <option name="project" value="LOCAL" />
       <updated>1642268400536</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="fonctionne sauf les petits problemes">
+      <created>1642298764206</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1642298764206</updated>
+    </task>
+    <task id="LOCAL-00030" summary="fonctionne sauf les petits problemes">
+      <created>1642298906749</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1642298906749</updated>
+    </task>
+    <task id="LOCAL-00031" summary="fini">
+      <created>1642332976343</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1642332976343</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -449,8 +455,7 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="int a = 2" />
-    <MESSAGE value="b = 1" />
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="c = 3" />
     <MESSAGE value="Creation de la matrice via le site clubelo" />
     <MESSAGE value="? idk why it doesnt work + je change le 0 en 1" />
@@ -474,6 +479,8 @@
     <MESSAGE value="fichiers round_of_16" />
     <MESSAGE value="scenario sur python + ajout metrique" />
     <MESSAGE value="scenario sur python" />
-    <option name="LAST_COMMIT_MESSAGE" value="scenario sur python" />
+    <MESSAGE value="fonctionne sauf les petits problemes" />
+    <MESSAGE value="fini" />
+    <option name="LAST_COMMIT_MESSAGE" value="fini" />
   </component>
 </project>

@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import numpy as np
 
+import ParseurMatrix as pm
+
 global number_of_open_window
 number_of_open_window = 0
 
@@ -63,6 +65,7 @@ class SimpleTable(tk.Frame):
                               self.team_list[X2[i]].competition_rank - 1, victory_matrix, new_winning_teams)
 
             games_4th.grid(row=5, column=2)
+            return X1, X2
 
         def create_semi(winning_teams, scenario_list):
             games_semi = SimpleTable(self.parent, rows=7, columns=1, with_button=True, nb_team_round=4,
@@ -86,11 +89,12 @@ class SimpleTable(tk.Frame):
                                self.team_list[X2[i]].competition_rank - 1, victory_matrix, new_winning_teams)
 
             games_semi.grid(row=5, column=3)
+            return X1, X2
 
         def create_final(winning_teams, scenario_list):
             games_final = SimpleTable(self.parent, rows=4, columns=1, with_button=True, nb_team_round=2,
-                                     scenario_list=self.scenario_list, team_list=self.team_list,
-                                     year=self.year)
+                                      scenario_list=self.scenario_list, team_list=self.team_list,
+                                      year=self.year)
             games_final.set(0, 0, "Finale")
 
             X1, X2 = search_and_fill_scenario(winning_teams, scenario_list)
@@ -105,8 +109,8 @@ class SimpleTable(tk.Frame):
             for i in range(len(X1)):
                 games_final.set(3 * i + 1, 0, "")
                 games_final.set(3 * i + 2, 0, self.team_list[X1[i]].name, self.team_list[X2[i]].name,
-                               self.team_list[X1[i]].competition_rank - 1,
-                               self.team_list[X2[i]].competition_rank - 1, victory_matrix, new_winning_teams)
+                                self.team_list[X1[i]].competition_rank - 1,
+                                self.team_list[X2[i]].competition_rank - 1, victory_matrix, new_winning_teams)
 
             games_final.grid(row=5, column=4)
 
@@ -137,9 +141,30 @@ class SimpleTable(tk.Frame):
             winning_teams[bad_team_index] = best_team
 
             if nb_team_round == 16:
-                create_4th(winning_teams, scenario_list)
+                X1, X2 = create_4th(winning_teams, scenario_list)
+                winning_teams = []
+                for i in range(len(X1)):
+                    if victory_matrix[X1[i]][X2[i]] >= 0.5:
+                        winning_teams.append(X1[i])
+                    else:
+                        winning_teams.append(X2[i])
+                X1, X2 = create_semi(winning_teams, scenario_list)
+                winning_teams = []
+                for i in range(len(X1)):
+                    if victory_matrix[X1[i]][X2[i]] >= 0.5:
+                        winning_teams.append(X1[i])
+                    else:
+                        winning_teams.append(X2[i])
+                create_final(winning_teams, scenario_list)
             elif nb_team_round == 8:
-                create_semi(winning_teams, scenario_list)
+                X1, X2 = create_semi(winning_teams, scenario_list)
+                winning_teams = []
+                for i in range(len(X1)):
+                    if victory_matrix[X1[i]][X2[i]] >= 0.5:
+                        winning_teams.append(X1[i])
+                    else:
+                        winning_teams.append(X2[i])
+                create_final(winning_teams, scenario_list)
             elif nb_team_round == 4:
                 create_final(winning_teams, scenario_list)
 
@@ -166,12 +191,35 @@ class SimpleTable(tk.Frame):
                     bg='green',
                     fg='black',
                     state=tk.DISABLED)
+
             best_team_index = winning_teams.index(best_team)
             winning_teams[best_team_index] = bad_team
+
             if nb_team_round == 16:
-                create_4th(winning_teams, scenario_list)
+                X1, X2 = create_4th(winning_teams, scenario_list)
+                winning_teams = []
+                for i in range(len(X1)):
+                    if victory_matrix[X1[i]][X2[i]] >= 0.5:
+                        winning_teams.append(X1[i])
+                    else:
+                        winning_teams.append(X2[i])
+                X1, X2 = create_semi(winning_teams, scenario_list)
+                winning_teams = []
+                for i in range(len(X1)):
+                    if victory_matrix[X1[i]][X2[i]] >= 0.5:
+                        winning_teams.append(X1[i])
+                    else:
+                        winning_teams.append(X2[i])
+                create_final(winning_teams, scenario_list)
             elif nb_team_round == 8:
-                create_semi(winning_teams, scenario_list)
+                X1,X2 = create_semi(winning_teams, scenario_list)
+                winning_teams = []
+                for i in range(len(X1)):
+                    if victory_matrix[X1[i]][X2[i]] >= 0.5:
+                        winning_teams.append(X1[i])
+                    else:
+                        winning_teams.append(X2[i])
+                create_final(winning_teams, scenario_list)
             elif nb_team_round == 4:
                 create_final(winning_teams, scenario_list)
 
@@ -232,7 +280,8 @@ class SimpleTable(tk.Frame):
 
 
 class NewWindow:
-    def __init__(self, parent, year_clicked, team_list_year, qs_year):
+    def __init__(self, parent, year_clicked, team_list_year, qs_year, official_qs_year,
+                 best_scenario_year, official_best_scenario_year):
 
         proba_window = tk.Toplevel(parent)
         proba_window.title("Affichage des métriques")
@@ -241,8 +290,10 @@ class NewWindow:
         self.proba_window = proba_window
 
         metric_options = [
-            "Probabilité d'atteindre une étape",
-            "probabilité de victoire"
+            "Probabilité d'atteindre une étape (rang faible)",
+            "probabilité de victoire (rang faible)",
+            "Probabilité d'atteindre une étape (rang elo)",
+            "probabilité de victoire (rang elo)",
         ]
 
         metric_clicked = tk.StringVar()
@@ -280,15 +331,20 @@ class NewWindow:
             canvas = FigureCanvasTkAgg(fig, proba_window)
             for item in canvas.get_tk_widget().find_all():
                 canvas.get_tk_widget().delete(item)
+
+            qs_win, qs_final, qs_semi, qs_quart = qs_year[year_clicked]
+            official_qs_win, official_qs_final, official_qs_semi, official_qs_quart = official_qs_year[year_clicked]
+
+            team_list = team_list_year[year_clicked]
+
             if metric_clicked.get() == metric_options[0]:
-                qs_win, qs_final, qs_semi, qs_quart = qs_year[year_clicked]
 
                 rank = [i for i in range(1, len(qs_win) + 1)]
 
-                ax1.scatter(rank, qs_win, label="victoire")
-                ax1.scatter(rank, qs_final, label="finale")
-                ax1.scatter(rank, qs_semi, label="demi-finale")
-                ax1.scatter(rank, qs_quart, label="quart de finale")
+                ax1.scatter(rank, qs_win, label="victoire", color="r")
+                ax1.scatter(rank, qs_final, label="finale", color="g")
+                ax1.scatter(rank, qs_semi, label="demi-finale", color="b")
+                ax1.scatter(rank, qs_quart, label="quart de finale", color="y")
 
                 ax1.set_xlim(0, 17)
                 ax1.set_ylim(0, 1)
@@ -298,10 +354,11 @@ class NewWindow:
                 ax1.set_title("format: Choose your opponent")
                 ax1.legend()
 
-                ax2.scatter(rank, qs_win, label="victoire")
-                ax2.scatter(rank, qs_final, label="finale")
-                ax2.scatter(rank, qs_semi, label="demi-finale")
-                ax2.scatter(rank, qs_quart, label="quart de finale")
+                ax2.scatter(rank, official_qs_win, label="victoire", color="r")
+                ax2.scatter(rank, official_qs_final, label="finale", color="g")
+                ax2.scatter(rank, official_qs_semi, label="demi-finale", color="b")
+                ax2.scatter(rank, official_qs_quart, label="quart de finale", color="y")
+                ax2.legend()
 
                 ax2.set_xlim(0, 17)
                 ax2.set_ylim(0, 1)
@@ -309,7 +366,6 @@ class NewWindow:
                 ax2.set_ylabel("probabilité")
 
                 ax2.set_title("format: UEFA officiel")
-                ax2.legend()
 
                 canvas = FigureCanvasTkAgg(fig, master=proba_window)
                 canvas.draw()
@@ -324,7 +380,6 @@ class NewWindow:
 
                 ranking_table = SimpleTable(proba_window, rows=17, columns=2)
 
-                team_list = team_list_year[year_clicked]
                 ranking_table.set(0, 0, "rang faible")
                 ranking_table.set(0, 1, "équipe")
                 for i in range(len(team_list)):
@@ -333,7 +388,6 @@ class NewWindow:
                 ranking_table.grid(row=5, column=1)
 
             if metric_clicked.get() == metric_options[1]:
-                qs_win, qs_final, qs_semi, qs_quart = qs_year[year_clicked]
 
                 rank = [i for i in range(1, len(qs_win) + 1)]
 
@@ -347,7 +401,7 @@ class NewWindow:
                 ax1.set_title("format: Choose your opponent")
                 ax1.legend()
 
-                ax2.scatter(rank, qs_win, label="victoire")
+                ax2.scatter(rank, official_qs_win, label="victoire")
 
                 ax2.set_xlim(0, 17)
                 ax2.set_ylim(0, 1)
@@ -370,7 +424,6 @@ class NewWindow:
 
                 ranking_table = SimpleTable(proba_window, rows=17, columns=2)
 
-                team_list = team_list_year[year_clicked]
                 ranking_table.set(0, 0, "rang faible")
                 ranking_table.set(0, 1, "équipe")
                 for i in range(len(team_list)):
@@ -378,19 +431,148 @@ class NewWindow:
                     ranking_table.set(i + 1, 1, team_list[i].name)
                 ranking_table.grid(row=5, column=1)
 
+            if metric_clicked.get() == metric_options[2]:
+
+                rank = [17-i for i in range(1, len(qs_win) + 1)]
+
+                qs_win_ordered = [y for _, y in sorted(zip(team_list, qs_win), key=lambda x: x[0].elo)]
+
+                qs_final_ordered = [y for _, y in sorted(zip(team_list, qs_final), key=lambda x: x[0].elo)]
+
+                qs_semi_ordered = [y for _, y in sorted(zip(team_list, qs_semi), key=lambda x: x[0].elo)]
+
+                qs_quart_ordered = [y for _, y in sorted(zip(team_list, qs_quart), key=lambda x: x[0].elo)]
+
+                official_qs_win_ordered = [y for _, y in sorted(zip(team_list, official_qs_win), key=lambda x: x[0].elo)]
+
+                official_qs_final_ordered = [y for _, y in sorted(zip(team_list, official_qs_final), key=lambda x: x[0].elo)]
+
+                official_qs_semi_ordered = [y for _, y in sorted(zip(team_list, official_qs_semi), key=lambda x: x[0].elo)]
+
+                official_qs_quart_ordered = [y for _, y in sorted(zip(team_list, official_qs_quart), key=lambda x: x[0].elo)]
+
+                team_list_ordered = sorted(team_list, key=lambda team: team.elo)
+
+                ax1.scatter(rank, qs_win_ordered, label="victoire", color="r")
+                ax1.scatter(rank, qs_final_ordered, label="finale", color="g")
+                ax1.scatter(rank, qs_semi_ordered, label="demi-finale", color="b")
+                ax1.scatter(rank, qs_quart_ordered, label="quart de finale", color="y")
+
+                ax1.set_xlim(0, 17)
+                ax1.set_ylim(0, 1)
+                ax1.set_xlabel("rang faible")
+                ax1.set_ylabel("probabilité")
+
+                ax1.set_title("format: Choose your opponent")
+                ax1.legend()
+
+                ax2.scatter(rank, official_qs_win_ordered, label="victoire", color="r")
+                ax2.scatter(rank, official_qs_final_ordered, label="finale", color="g")
+                ax2.scatter(rank, official_qs_semi_ordered, label="demi-finale", color="b")
+                ax2.scatter(rank, official_qs_quart_ordered, label="quart de finale", color="y")
+                ax2.legend()
+
+                ax2.set_xlim(0, 17)
+                ax2.set_ylim(0, 1)
+                ax2.set_xlabel("rang faible")
+                ax2.set_ylabel("probabilité")
+
+                ax2.set_title("format: UEFA officiel")
+                ax2.legend()
+
+                canvas = FigureCanvasTkAgg(fig, master=proba_window)
+                canvas.draw()
+
+                canvas.get_tk_widget().grid(row=25, column=0)
+
+                toolbar_frame = tk.Frame(proba_window)
+                toolbar_frame.grid(row=500, column=0)
+                toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
+                toolbar.update()
+                canvas.get_tk_widget().grid(row=5, column=0)
+
+                ranking_table = SimpleTable(proba_window, rows=17, columns=2)
+
+                ranking_table.set(0, 0, "rang elo")
+                ranking_table.set(0, 1, "équipe")
+                for i in range(len(team_list)):
+                    ranking_table.set(16 - i, 0, 16 - i)
+                    ranking_table.set(16 - i, 1, team_list_ordered[i].name)
+                ranking_table.grid(row=5, column=1)
+
+            if metric_clicked.get() == metric_options[3]:
+
+                rank = [17 - i for i in range(1, len(qs_win) + 1)]
+
+                qs_win_ordered = [y for _, y in sorted(zip(team_list, qs_win), key=lambda x: x[0].elo)]
+
+                official_qs_win_ordered = [y for _, y in
+                                           sorted(zip(team_list, official_qs_win), key=lambda x: x[0].elo)]
+
+
+                team_list_ordered = sorted(team_list, key=lambda team: team.elo)
+
+                ax1.scatter(rank, qs_win_ordered, label="victoire", color="r")
+
+                ax1.set_xlim(0, 17)
+                ax1.set_ylim(0, 1)
+                ax1.set_xlabel("rang faible")
+                ax1.set_ylabel("probabilité")
+
+                ax1.set_title("format: Choose your opponent")
+                ax1.legend()
+
+                ax2.scatter(rank, official_qs_win_ordered, label="victoire", color="r")
+                ax2.legend()
+
+                ax2.set_xlim(0, 17)
+                ax2.set_ylim(0, 1)
+                ax2.set_xlabel("rang faible")
+                ax2.set_ylabel("probabilité")
+
+                ax2.set_title("format: UEFA officiel")
+                ax2.legend()
+
+                canvas = FigureCanvasTkAgg(fig, master=proba_window)
+                canvas.draw()
+
+                canvas.get_tk_widget().grid(row=25, column=0)
+
+                toolbar_frame = tk.Frame(proba_window)
+                toolbar_frame.grid(row=500, column=0)
+                toolbar = NavigationToolbar2Tk(canvas, toolbar_frame)
+                toolbar.update()
+                canvas.get_tk_widget().grid(row=5, column=0)
+
+                ranking_table = SimpleTable(proba_window, rows=17, columns=2)
+
+                ranking_table.set(0, 0, "rang elo")
+                ranking_table.set(0, 1, "équipe")
+                for i in range(len(team_list)):
+                    ranking_table.set(16 - i, 0, 16 - i)
+                    ranking_table.set(16 - i, 1, team_list_ordered[i].name)
+                ranking_table.grid(row=5, column=1)
+
         metric_clicked.trace("w", show_option)
 
 
 class GUI:
-    def __init__(self, team_list_year, qs_year, scenario_year, victory_matrix_year):
+    def __init__(self, team_list_year, qs_year, scenario_year, official_qs_year, victory_matrix_year,
+                 best_scenario_year, official_best_scenario_year):
         # dictionnaire : cle: annee; contenu: team_list
         self.team_list_year = team_list_year
         # dictionnaire : cle: annee; contenu: [qs_win,qs_final,qs_semi,qs_quart]
         self.qs_year = qs_year
         # dictionnaire : cle: annee; contenu: [final,semi,quart,huitieme]
         self.scenario_year = scenario_year
+        # dictionnaire : cle: annee; contenu: [qs_win,qs_final,qs_semi,qs_quart]
+        self.official_qs_year = official_qs_year
         # dictionnaire : cle: annee; contenu: victory_matrix
         self.victory_matrix_year = victory_matrix_year
+        # dictionnaire : cle: annee; contenu: [final_elo, final_weak, semi_elo, semi_weak, quart_elo, quart_weak]
+        self.best_scenario_year = best_scenario_year
+        # dictionnaire : cle: annee; contenu: [final_elo, final_weak, semi_elo, semi_weak, quart_elo, quart_weak]
+        self.official_best_scenario_year = official_best_scenario_year
 
     def graphic_loop(self):
         root = tk.Tk()
@@ -424,6 +606,8 @@ class GUI:
         def can_you_choose_the_year(*args):
             try:
                 dumb = self.scenario_year[int(year_clicked.get())]
+                dumb = self.official_qs_year[int(year_clicked.get())]
+                dumb = self.qs_year[int(year_clicked.get())]
             except:
                 messagebox.showinfo("Erreur", "Le scénario n'existe pas ou n'a pas été calculé lors des étapes backend."
                                               " CHANGEZ L'ANNEE SVP")
@@ -549,7 +733,8 @@ class GUI:
             if number_of_open_window < max_number_of_window:
                 number_of_open_window += 1
                 int_year_clicked = int(year_clicked.get())
-                NewWindow(root, int_year_clicked, self.team_list_year, self.qs_year)
+                NewWindow(root, int_year_clicked, self.team_list_year, self.qs_year, self.official_qs_year,
+                          self.best_scenario_year, self.official_best_scenario_year)
             else:
                 messagebox.showinfo("Erreur", "Trop de fenêtres ouvertes")
 

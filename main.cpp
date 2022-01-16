@@ -11,7 +11,7 @@ using json = nlohmann::json;
 int main()
 {
 
-    for(int year=2010; year<2022; year++){
+    for(int year=2021; year<2022; year++){
         string fileName;
         getFileName(year,fileName);
         string matrixName = getMatrixFileName(fileName);
@@ -32,7 +32,7 @@ int main()
         vector<vector<int>> Liste_X1,Liste_X2;
         vector<int> X1,X2,ranking;
         for (int i=0;i<petit_N;i++) ranking.push_back(i);
-        algorithm_entire_competition(qS_win,qS_final,qS_semifinal,qS_quarterfinal,qS_liste_result,Liste_X1,Liste_X2,X1,X2,ranking,16,victoryMatrix,playMatrix,false);
+        // algorithm_entire_competition(qS_win,qS_final,qS_semifinal,qS_quarterfinal,qS_liste_result,Liste_X1,Liste_X2,X1,X2,ranking,16,victoryMatrix,playMatrix,false);
         // cout << endl << "calculs finis" << endl;
         // cout << "qS_win: " << qS_win << endl;
         // meme proba partout pour le best
@@ -41,9 +41,9 @@ int main()
 
         //X1 = {0,1,2,3,4,5,6,7};
         //X2 = {13,14,12,9,10,15,11,8};
-        writeQS(qS_win,qS_final,qS_semifinal,qS_quarterfinal,qS_liste_result,fileName);
-        writeScenario(Liste_X1,Liste_X2,fileName,victoryMatrix,playMatrix);
-        //readWriteOfficialScenarioV2(ifstream(official16Name), fileName, victoryMatrix);
+        //writeQS(qS_win,qS_final,qS_semifinal,qS_quarterfinal,qS_liste_result,fileName);
+        //writeScenario(Liste_X1,Liste_X2,fileName,victoryMatrix,playMatrix);
+        readWriteOfficialScenarioV2(ifstream(official16Name), fileName, victoryMatrix);
     }
     return 0;
 }

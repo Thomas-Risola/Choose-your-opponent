@@ -25,6 +25,7 @@ if __name__ == '__main__':
         tir.Round_of_16(day, month, year)
     '''
     
-    graphic = gui.GUI(team_list_year, result.qs_year, result.scenario_year, victory_matrix_year)
+    graphic = gui.GUI(team_list_year, result.qs_year, result.scenario_year, result.official_qs_year,
+                      victory_matrix_year, result.best_scenario_year, result.official_best_scenario_year)
 
     graphic.graphic_loop()
