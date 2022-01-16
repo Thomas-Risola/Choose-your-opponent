@@ -51,10 +51,11 @@ void S_kN(std::vector<int>& S,VectorTree* tree,int k,VectorTree* QOmega_win,Vect
         std::vector<double> qS_final;
         std::vector<double> qS_semifinal;
         std::vector<double> qS_quarterfinal;
-        std::vector<std::vector<double>> qS_liste;
+        std::vector<std::vector<double>> qS_liste(6);
         std::vector<int> X1,X2;
         std::vector<int> ranking=S;
         std::sort(ranking.begin(),ranking.end(),comp);
+
         opponent_choice_optimization_algorithm(qS,qS_final,qS_semifinal,qS_quarterfinal,qS_liste,X1,X2,QOmega_win,QOmega_final,QOmega_semifinal,QOmega_quarterfinal,QOmega_liste,ranking,nb_player_first_round,probability_matrix,play_matrix,greedy);
         Liste_X1.push_back(X1);
         Liste_X2.push_back(X2);
@@ -308,7 +309,7 @@ void opponent_choice_optimization_algorithm(
             store_qS_quarterfinal.at(XN.at(i))=qS_quarterfinal.at(i);
 
     // proba d'aller en en finale 1 vs 2
-    std::vector<double>& store_qS_best_final=(*QOmega_liste[0])(XN); // Enregistrement des probabilités dans QOmega
+    std::vector<double>& store_qS_best_final=(*(QOmega_liste[0]))(XN); // Enregistrement des probabilités dans QOmega
     for(size_t j=0; j<XN.size(); j++){
         qS_liste[0].push_back(qSj_best_final(XN.at(j),QOmega_liste[0], XN1, XN2, probability_matrix));
     }
@@ -319,7 +320,7 @@ void opponent_choice_optimization_algorithm(
 
 }
 
-void algorithm_entire_competition(std::vector<double>& qS,std::vector<double>& qS_final,std::vector<double>& qS_semifinal,std::vector<double>& qS_quarterfinal, std::vector<std::vector<double>> &qS_liste,
+void algorithm_entire_competition(std::vector<double>& qS,std::vector<double>& qS_final,std::vector<double>& qS_semifinal,std::vector<double>& qS_quarterfinal, std::vector<double> &qS_liste_result,
                                   std::vector<std::vector<int>>& Liste_X1,std::vector<std::vector<int>>& Liste_X2,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const int nb_player_first_round,
                                   const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix,bool greedy) {
     // qS: Tournament win probabilities for each player (Output)
@@ -335,9 +336,11 @@ void algorithm_entire_competition(std::vector<double>& qS,std::vector<double>& q
     VectorTree* QOmega_semifinal=empty_Q_P_N(ranking.size());
     VectorTree* QOmega_quarterfinal=empty_Q_P_N(ranking.size());
     std::vector<VectorTree*> QOmegaListe;
-    // std::vector<std::vector<double>> qS_liste(6);
-    for(int i=0; i<6; i++)
-        QOmegaListe[i] = empty_Q_P_N(ranking.size());
+    for(int i=0; i<6; i++){
+        VectorTree* QOmega = empty_Q_P_N(ranking.size());
+        QOmegaListe.push_back(QOmega);
+    }
+    std::vector<std::vector<double>> qS_liste(6);
     //VectorTree* QOmega_scenario=empty_Q_P_N(ranking.size());
     ComparePlayers comp(ranking);
     int n=log2(ranking.size());
@@ -348,6 +351,7 @@ void algorithm_entire_competition(std::vector<double>& qS,std::vector<double>& q
     opponent_choice_optimization_algorithm(qS,qS_final,qS_semifinal,qS_quarterfinal,qS_liste,X1,X2,QOmega_win,QOmega_final,QOmega_semifinal,QOmega_quarterfinal,QOmegaListe,ranking,nb_player_first_round,probability_matrix,play_matrix,greedy); // Appel de l'algorithme pour le niveau souhaité
     Liste_X1.push_back(X1);
     Liste_X2.push_back(X2);
+    qS_liste_result[0] = qS_liste[0][0];
     //QOmega_final->display();
     //QOmega_win->display();
 }

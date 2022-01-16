@@ -11,11 +11,13 @@ if __name__ == '__main__':
     month = 12
     # draw around 12th December each year
 
+    victory_matrix_year = dict()
     team_list_year = dict()
     # problem en 2019, donc j'ai triché
     for year in range(2010, 2022):
         pars = pm.Parser(day, month, year, loaded=True)
         team_list_year[year] = pars.team_list
+        victory_matrix_year[year] = pars.victory_matrix
     result = gr.Result(day, month)
 
     '''
@@ -23,6 +25,6 @@ if __name__ == '__main__':
         tir.Round_of_16(day, month, year)
     '''
     
-    graphic = gui.GUI(team_list_year, result.qs_year, result.scenario_year)
+    graphic = gui.GUI(team_list_year, result.qs_year, result.scenario_year, victory_matrix_year)
 
     graphic.graphic_loop()

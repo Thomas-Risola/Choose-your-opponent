@@ -34,7 +34,7 @@ Imagine::Matrix<bool> getPlayMatrix(std::ifstream file){
 }
 
 
-void writeQS(std::vector<double> qS_win,std::vector<double> qS_final,std::vector<double> qS_semi,std::vector<double> qS_quart, std::string fileName){
+void writeQS(std::vector<double> qS_win,std::vector<double> qS_final,std::vector<double> qS_semi,std::vector<double> qS_quart,std::vector<double> qS_liste, std::string fileName){
     json js;
     js = {
         {"qs_win",qS_win},
@@ -49,6 +49,23 @@ void writeQS(std::vector<double> qS_win,std::vector<double> qS_final,std::vector
         std::ofstream f(qSFileName);
         f << js;
     }
+
+    json js2;
+    js2 = {
+        {"best_final_elo", qS_liste[0]},
+        {"best_final_weak", qS_liste[1]},
+        {"best_quart_elo", qS_liste[2]},
+        {"best_quart_weak", qS_liste[3]},
+        {"best_semi_elo", qS_liste[4]},
+        {"best_semi_weak", qS_liste[5]}
+    };
+
+    {
+        std::string prefix2 = srcPath("json_files/best_scenario-");
+        std::string qSFileName2 = prefix2 + fileName;
+        std::ofstream f2(qSFileName2);
+        f2 << js2;
+    }
 }
 
 void writeScenario(std::vector<std::vector<int>> Liste_X1,std::vector<std::vector<int>> Liste_X2, std::string fileName, const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix){
@@ -56,34 +73,39 @@ void writeScenario(std::vector<std::vector<int>> Liste_X1,std::vector<std::vecto
     json scenario;
     std::vector<std::string> round = {"quart","semi","final","winner"};
     scenario = {
-        {"proba",1},
         {"X1",Liste_X1.back()},
         {"X2",Liste_X2.back()},
-        {"parent",0}
     };
     std::vector<json> list_scenario = {scenario};
-    js = {"round_of_16",list_scenario}; // Hyp tournoi complet
-    int old_sz=8;                       // Hyp tournoi complet
-    std::vector<json> list_js={js};
-    list_scenario.clear();
-    old_sz=4;                           // Hyp tournoi complet
-    for (int i=Liste_X1.size()-2;i>=0;i--) {
-        int curr_sz=Liste_X1.at(i).size();
-        if (old_sz!=curr_sz) {
-            int ii=((old_sz==4)?(0):((old_sz==2)?(1):(2))); // PB pour "winner"
-            old_sz=curr_sz;
-            js = {round[ii],list_scenario};
-            list_js.push_back(js);
-            list_scenario.clear();
-        }
+    std::vector<json> list_scenario_quart;
+    std::vector<json> list_scenario_semi;
+    std::vector<json> list_scenario_final;
+    size_t quart_size = 4;
+    size_t semi_size = 2;
+    size_t final_size = 1;
+
+    for (size_t i=0; i<Liste_X1.size() ; i++) {;
         scenario = {
-            {"proba",1},
             {"X1",Liste_X1.at(i)},
             {"X2",Liste_X2.at(i)},
-            {"parent",0} // pour parent, il faut reconstituer
         };
-        list_scenario.push_back(scenario);
+        if (Liste_X1[i].size() == quart_size) {
+            list_scenario_quart.push_back(scenario);
+        }
+        else if (Liste_X1[i].size() == semi_size) {
+            list_scenario_semi.push_back(scenario);
+        }
+        else if (Liste_X1[i].size() == final_size) {
+            list_scenario_final.push_back(scenario);
+        }
     }
+    js =
+    {
+        {"round_of_16",list_scenario},
+        {"quart", list_scenario_quart},
+        {"semi", list_scenario_semi},
+        {"final", list_scenario_final},
+    };
 
 
 
@@ -91,8 +113,7 @@ void writeScenario(std::vector<std::vector<int>> Liste_X1,std::vector<std::vecto
         std::string prefix = srcPath("json_files/scenario-");
         std::string qSFileName = prefix + fileName;
         std::ofstream f(qSFileName);
-        json list_js_output = {list_js};
-        f << list_js_output;
+        f << js;
     }
 }
 
@@ -293,15 +314,15 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
                 std::vector<int> XN2_quart = X1X2_quart[l][1];
                 std::vector<double> pS_quart = p_S(set_sorted_S_quart,XN1_quart,XN2_quart,probability_matrix);
                 // quart joué
-                for(size_t k=0; k<pS_quart.size(); k++){
+                for(size_t o=0; o<pS_quart.size(); o++){
                     //std::cout << "test" << std::endl;
                     double proba_winner_semi = proba_quart;
-                    proba_winner_semi *= pS[k];
+                    proba_winner_semi *= pS[o];
                     for(size_t i=0; i<16; i++)
-                        if(std::find(set_sorted_S_quart[i].begin(), set_sorted_S_quart[i].end(), l) != set_sorted_S_quart[i].end())
+                        if(std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), i) != set_sorted_S_quart[o].end())
                             qS_semi[i] += proba_winner_semi;
                     std::vector<std::vector<std::vector<int>>> X1X2_semi;
-                    X1X2_semi = draw_round(set_sorted_S_quart[k]);
+                    X1X2_semi = draw_round(set_sorted_S_quart[o]);
                     double size = X1X2_semi.size();
                     double proba_semi = proba_winner_semi;
                     proba_semi *= 1/size;

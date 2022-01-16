@@ -3,7 +3,7 @@ import json
 
 
 class Result:
-    def __init__(self, day, month, fileprefix1="json_files/qs_vector", fileprefix2="json_files/scenario-"):
+    def __init__(self, day, month, fileprefix1="json_files/qs_vector", fileprefix2="json_files/scenario"):
         self.qs_year = dict()
         self.scenario_year = dict()
         for year in range(2010, 2022):
@@ -29,7 +29,6 @@ class Result:
     @staticmethod
     def get_scenario(filename):
         file = open(filename, 'r', encoding="utf-8")
-        dict_list = json.load(file)
         dict_list = json.load(file)
         round_of_16 = dict_list["round_of_16"]
         quart = dict_list["quart"]
