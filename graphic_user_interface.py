@@ -5,14 +5,16 @@ from PIL import ImageTk, Image
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import numpy as np
+import json
+import shlex, subprocess
 
 import ParseurMatrix as pm
+import get_result as gr
+import tirage_8e_8dec as tir
 
 global number_of_open_window
 number_of_open_window = 0
 
-
-# not so simple now but it does the job
 
 class SimpleTable(tk.Frame):
     def __init__(self, parent, rows=10, columns=2, with_button=False, nb_team_round=16, scenario_list=[], team_list=[],
@@ -118,23 +120,23 @@ class SimpleTable(tk.Frame):
             if up:
                 widget = self._widgets[row + 1][column]
                 widget.configure(
-                    bg='red',
+                    bg='#ffb3fe',
                     fg='black',
                     state=tk.NORMAL)
                 widget = self._widgets[row][column]
                 widget.configure(
-                    bg='green',
+                    bg='light green',
                     fg='black',
                     state=tk.DISABLED)
             else:
                 widget = self._widgets[row][column]
                 widget.configure(
-                    bg='red',
+                    bg='#ffb3fe',
                     fg='black',
                     state=tk.NORMAL)
                 widget = self._widgets[row + 1][column]
                 widget.configure(
-                    bg='green',
+                    bg='light green',
                     fg='black',
                     state=tk.DISABLED)
             bad_team_index = winning_teams.index(bad_team)
@@ -172,23 +174,23 @@ class SimpleTable(tk.Frame):
             if up:
                 widget = self._widgets[row][column]
                 widget.configure(
-                    bg='red',
+                    bg='#ffb3fe',
                     fg='black',
                     state=tk.NORMAL)
                 widget = self._widgets[row + 1][column]
                 widget.configure(
-                    bg='green',
+                    bg='light green',
                     fg='black',
                     state=tk.DISABLED)
             else:
                 widget = self._widgets[row + 1][column]
                 widget.configure(
-                    bg='red',
+                    bg='#ffb3fe',
                     fg='black',
                     state=tk.NORMAL)
                 widget = self._widgets[row][column]
                 widget.configure(
-                    bg='green',
+                    bg='light green',
                     fg='black',
                     state=tk.DISABLED)
 
@@ -244,7 +246,7 @@ class SimpleTable(tk.Frame):
             widget = self._widgets[row][column]
             widget.configure(text=value1)
             if value1 in ["8èmes", "Quarts", "Demies", "Finale"]:
-                widget.configure(state="disabled", bg='blue', fg='white')
+                widget.configure(state="disabled", bg='light blue', fg='white')
         else:
             if victory_matrix[team_1][team_2] >= 0.5:
                 up = True
@@ -253,13 +255,13 @@ class SimpleTable(tk.Frame):
                 widget = self._widgets[row][column]
                 widget.configure(text=value1, command=partial(best_team_command, winning_teams, self.scenario_list,
                                                               self.nb_team_round, best_team, bad_team, up),
-                                 bg='green',
+                                 bg='light green',
                                  fg='black',
                                  state=tk.DISABLED)
                 widget = self._widgets[row + 1][column]
                 widget.configure(text=value2, command=partial(bad_team_command, winning_teams, self.scenario_list,
                                                               self.nb_team_round, best_team, bad_team, up),
-                                 bg='red',
+                                 bg='#ffb3fe',
                                  fg='black',
                                  state=tk.NORMAL)
             else:
@@ -269,13 +271,13 @@ class SimpleTable(tk.Frame):
                 widget = self._widgets[row + 1][column]
                 widget.configure(text=value2, command=partial(best_team_command, winning_teams, self.scenario_list,
                                                               self.nb_team_round, best_team, bad_team, up),
-                                 bg='green',
+                                 bg='light green',
                                  fg='black',
                                  state=tk.DISABLED)
                 widget = self._widgets[row][column]
                 widget.configure(text=value1, command=partial(bad_team_command, winning_teams, self.scenario_list,
                                                               self.nb_team_round, best_team, bad_team, up),
-                                 bg='red',
+                                 bg='#ffb3fe',
                                  fg='black', state=tk.NORMAL)
 
 
@@ -603,6 +605,36 @@ class GUI:
         global old_clicked
         old_clicked = year_clicked
 
+        # act like the main if you dont have files
+        def recalculate(year, fast, day=12, month=12):
+            messagebox.showinfo("Message", "Cliquer pour démarrer les calculs, faites une autre activité, "
+                                           "une fenêtre s'ouvrira pour vous prévenir quand ce sera fini." )
+            try:
+                pars = pm.Parser(day, month, year, loaded=False)
+                self.team_list_year[year] = pars.team_list
+                self.victory_matrix_year[year] = pars.victory_matrix
+                result = gr.Result(day, month)
+                #tir.Round_of_16(day, month, year)
+                file = open("json_files/execute_info.txt", 'w', encoding="utf-8")
+                sending_info = dict()
+                sending_info["year"] = year
+                sending_info["fast"] = fast
+                json.dump(sending_info, file, ensure_ascii=False)
+                file.close()
+            except:
+                # the website is the only thing that can crash
+                messagebox.showinfo("Erreur", "Site Down Impossibilité TOTALE d'avoir des résultats")
+
+            cxx_exefile = "C:/ENPC/Temp/build-Choose-your-opponent-Desktop_Qt_5_15_0_MinGW_32_bit-Release/Choose_your_opponent.exe"
+            subprocess.run(cxx_exefile)
+            messagebox.showinfo("Message", "Calculs finis")
+            self.qs_year = result.qs_year
+            self.scenario_year = result.scenario_year
+            self.official_qs_year = result.official_qs_year
+            self.best_scenario_year = result.best_scenario_year
+            self.official_best_scenario_year = result.official_best_scenario_year
+
+
         def can_you_choose_the_year(*args):
             try:
                 dumb = self.scenario_year[int(year_clicked.get())]
@@ -610,7 +642,17 @@ class GUI:
                 dumb = self.qs_year[int(year_clicked.get())]
             except:
                 messagebox.showinfo("Erreur", "Le scénario n'existe pas ou n'a pas été calculé lors des étapes backend."
-                                              " CHANGEZ L'ANNEE SVP")
+                                              " CHANGEZ L'ANNEE SVP ou répondez à la question suivante")
+                MsgBox = tk.messagebox.askquestion('Choix', 'Voulez-vous calculez le scénario?',
+                                                   icon='warning')
+                fast = tk.messagebox.askquestion('Choix', 'Voulez-vous que ce soit rapide (30/40 min au lieu de 12h) mais imprécis?',
+                                                   icon='warning')
+                if MsgBox == 'yes' and fast == 'yes':
+                    recalculate(int(year_clicked.get()), True)
+                elif MsgBox == 'yes' and fast == 'no':
+                    recalculate(int(year_clicked.get()), False)
+
+
                 year_clicked.set(old_clicked.get())
                 return
 

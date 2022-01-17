@@ -19,10 +19,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="fini">
+    <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="ptit travail pendant seance">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/get_result.py" beforeDir="false" afterPath="$PROJECT_DIR$/get_result.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/graphic_user_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/graphic_user_interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/json.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/json.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/json.h" beforeDir="false" afterPath="$PROJECT_DIR$/json.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/json_files/round_of_16_official-12-12-2010.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/round_of_16_official-12-12-2010.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -61,7 +63,6 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
@@ -404,42 +405,7 @@
       <option name="project" value="LOCAL" />
       <updated>1641843345228</updated>
     </task>
-    <task id="LOCAL-00027" summary="scenario sur python + ajout metrique">
-      <created>1642268372588</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1642268372588</updated>
-    </task>
-    <task id="LOCAL-00028" summary="scenario sur python">
-      <created>1642268400536</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1642268400536</updated>
-    </task>
-    <task id="LOCAL-00029" summary="fonctionne sauf les petits problemes">
-      <created>1642298764206</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1642298764206</updated>
-    </task>
-    <task id="LOCAL-00030" summary="fonctionne sauf les petits problemes">
-      <created>1642298906749</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1642298906749</updated>
-    </task>
-    <task id="LOCAL-00031" summary="fini">
-      <created>1642332976343</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1642332976343</updated>
-    </task>
-    <option name="localTasksCounter" value="32" />
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -455,7 +421,9 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="tout supprimer" />
+    <MESSAGE value="int a = 2" />
+    <MESSAGE value="b = 1" />
     <MESSAGE value="c = 3" />
     <MESSAGE value="Creation de la matrice via le site clubelo" />
     <MESSAGE value="? idk why it doesnt work + je change le 0 en 1" />
@@ -477,10 +445,32 @@
     <MESSAGE value="ptit travail pendant seance" />
     <MESSAGE value="official ptit avancement" />
     <MESSAGE value="fichiers round_of_16" />
-    <MESSAGE value="scenario sur python + ajout metrique" />
-    <MESSAGE value="scenario sur python" />
-    <MESSAGE value="fonctionne sauf les petits problemes" />
-    <MESSAGE value="fini" />
-    <option name="LAST_COMMIT_MESSAGE" value="fini" />
+    <option name="LAST_COMMIT_MESSAGE" value="fichiers round_of_16" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1320" height="102" key="GridCell.Tab.0.bottom" timestamp="1642446904277">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1320" height="102" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1642446904277" />
+    <state width="1320" height="102" key="GridCell.Tab.0.center" timestamp="1642446904277">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1320" height="102" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1642446904277" />
+    <state width="1320" height="102" key="GridCell.Tab.0.left" timestamp="1642446904277">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1320" height="102" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1642446904277" />
+    <state width="1320" height="102" key="GridCell.Tab.0.right" timestamp="1642446904277">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1320" height="102" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1642446904277" />
+    <state x="275" y="84" key="Vcs.Push.Dialog.v2" timestamp="1641843347783">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="275" y="84" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1641843347783" />
+    <state x="500" y="278" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1641839147570">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="500" y="278" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.728@0.0.1366.728" timestamp="1641839147570" />
   </component>
 </project>

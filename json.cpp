@@ -163,7 +163,13 @@ std::string getOfficial16FileName(std::string fileName){
     return Official16FileName;
 }
 
+void getTDLOG_info(int &year, bool &fast){
+    std::string file = srcPath("json_files/execute_info.txt");
+    json j = json::parse(file);
+    year = j[0]["year"];
+    fast = j[0]["fast"];
 
+}
 
 void readWriteOfficialScenario(std::ifstream inFileName, std::string outFileName, const Imagine::Matrix<double>& probability_matrix){
     json js = json::parse(inFileName);
@@ -257,7 +263,7 @@ void readWriteOfficialScenario(std::ifstream inFileName, std::string outFileName
 
 
 
-void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileName, const Imagine::Matrix<double>& probability_matrix){
+void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileName, bool fast, const Imagine::Matrix<double>& probability_matrix){
     // proba_winner_x = proba d'arrive au stade x
     json js = json::parse(inFileName);
     json scenario;
@@ -284,11 +290,17 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
     double best_quart_elo = 0;
     double best_quart_weak_ranking = 0;
 
+    size_t taille = list_scenario_huitieme.size();
+    double constante = 1;
 
+    if(fast==true){
+        taille = 10;
+        constante = 100;
+    }
 
     // huitième tiré
     std::cout << list_scenario_huitieme.size() << std::endl;
-    for(size_t j=0; j<list_scenario_huitieme.size(); j++){
+    for(size_t j=0; j<taille; j++){
         std::cout << j << std::endl;
         std::vector<std::vector<int>> set_sorted_S_huitieme;
         std::vector<int> XN1_huitieme = list_scenario_huitieme[j]["X1"];
@@ -298,7 +310,7 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
         for(size_t k=0; k<pS.size(); k++){
 
             double proba_winner_quart = list_scenario_huitieme[j]["proba"];
-            proba_winner_quart *= pS[k];
+            proba_winner_quart *= pS[k]*constante;
             for(size_t i=0; i<16; i++)
                 if(std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), i) != set_sorted_S_huitieme[k].end())
                     qS_quart[i] += proba_winner_quart;
@@ -323,9 +335,9 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
                             qS_semi[i] += proba_winner_semi;
                     std::vector<std::vector<std::vector<int>>> X1X2_semi;
                     X1X2_semi = draw_round(set_sorted_S_quart[o]);
-                    double size = X1X2_semi.size();
+                    double size_semi = X1X2_semi.size();
                     double proba_semi = proba_winner_semi;
-                    proba_semi *= 1/size;
+                    proba_semi *= 1/size_semi;
                     std::vector<std::vector<int>> set_sorted_S_semi;
                     // semi tiré
                     for(size_t m=0; m<X1X2_semi.size(); m++){
