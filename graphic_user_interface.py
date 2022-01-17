@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 import numpy as np
 import json
-import shlex, subprocess
+import subprocess
+import time
 
 import ParseurMatrix as pm
 import get_result as gr
@@ -613,11 +614,12 @@ class GUI:
             messagebox.showinfo("Message", "Cliquer pour démarrer les calculs, faites une autre activité, "
                                            "une fenêtre s'ouvrira pour vous prévenir quand ce sera fini.")
             try:
+                start_time = time.time()
                 pars = pm.Parser(day, month, year, loaded=False)
                 self.team_list_year[year] = pars.team_list
                 self.victory_matrix_year[year] = pars.victory_matrix
                 result = gr.Result(day, month)
-                tir.Round_of_16(day, month, year)
+                #tir.Round_of_16(day, month, year)
                 file = open("json_files/execute_info.txt", 'w', encoding="utf-8")
                 sending_info = dict()
                 sending_info["year"] = year
@@ -628,9 +630,17 @@ class GUI:
                 # the website is the only thing that can crash
                 messagebox.showinfo("Erreur", "Site Down Impossibilité TOTALE d'avoir des résultats")
 
-            cxx_exefile = "build/build-Choose-your-opponent-Desktop_Qt_5_15_0_MinGW_32_bit-Release/Choose_your_opponent.exe"
+            cxx_exefile = "build/build-Choose-your-opponent-Desktop_Qt_5_15_0_MinGW_32_bit-Release" \
+                          "/Choose_your_opponent.exe "
+            # this function wait until the calculations are done according to documentation
             subprocess.run(cxx_exefile)
-            messagebox.showinfo("Message", "Calculs finis")
+            finish_time = time.time()
+            execution_time = finish_time - start_time
+            if execution_time < 100:
+                messagebox.showinfo("Message", "Trop rapide, le .exe est exécuté mais un élément le force à se "
+                                               "terminer instantanément")
+            else:
+                messagebox.showinfo("Message", "Calculs finis")
             self.qs_year = result.qs_year
             self.scenario_year = result.scenario_year
             self.official_qs_year = result.official_qs_year
