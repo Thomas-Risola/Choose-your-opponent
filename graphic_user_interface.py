@@ -214,7 +214,7 @@ class SimpleTable(tk.Frame):
                         winning_teams.append(X2[i])
                 create_final(winning_teams, scenario_list)
             elif nb_team_round == 8:
-                X1,X2 = create_semi(winning_teams, scenario_list)
+                X1, X2 = create_semi(winning_teams, scenario_list)
                 winning_teams = []
                 for i in range(len(X1)):
                     if victory_matrix[X1[i]][X2[i]] >= 0.5:
@@ -435,7 +435,7 @@ class NewWindow:
 
             if metric_clicked.get() == metric_options[2]:
 
-                rank = [17-i for i in range(1, len(qs_win) + 1)]
+                rank = [17 - i for i in range(1, len(qs_win) + 1)]
 
                 qs_win_ordered = [y for _, y in sorted(zip(team_list, qs_win), key=lambda x: x[0].elo)]
 
@@ -445,13 +445,17 @@ class NewWindow:
 
                 qs_quart_ordered = [y for _, y in sorted(zip(team_list, qs_quart), key=lambda x: x[0].elo)]
 
-                official_qs_win_ordered = [y for _, y in sorted(zip(team_list, official_qs_win), key=lambda x: x[0].elo)]
+                official_qs_win_ordered = [y for _, y in
+                                           sorted(zip(team_list, official_qs_win), key=lambda x: x[0].elo)]
 
-                official_qs_final_ordered = [y for _, y in sorted(zip(team_list, official_qs_final), key=lambda x: x[0].elo)]
+                official_qs_final_ordered = [y for _, y in
+                                             sorted(zip(team_list, official_qs_final), key=lambda x: x[0].elo)]
 
-                official_qs_semi_ordered = [y for _, y in sorted(zip(team_list, official_qs_semi), key=lambda x: x[0].elo)]
+                official_qs_semi_ordered = [y for _, y in
+                                            sorted(zip(team_list, official_qs_semi), key=lambda x: x[0].elo)]
 
-                official_qs_quart_ordered = [y for _, y in sorted(zip(team_list, official_qs_quart), key=lambda x: x[0].elo)]
+                official_qs_quart_ordered = [y for _, y in
+                                             sorted(zip(team_list, official_qs_quart), key=lambda x: x[0].elo)]
 
                 team_list_ordered = sorted(team_list, key=lambda team: team.elo)
 
@@ -510,7 +514,6 @@ class NewWindow:
 
                 official_qs_win_ordered = [y for _, y in
                                            sorted(zip(team_list, official_qs_win), key=lambda x: x[0].elo)]
-
 
                 team_list_ordered = sorted(team_list, key=lambda team: team.elo)
 
@@ -608,13 +611,13 @@ class GUI:
         # act like the main if you dont have files
         def recalculate(year, fast, day=12, month=12):
             messagebox.showinfo("Message", "Cliquer pour démarrer les calculs, faites une autre activité, "
-                                           "une fenêtre s'ouvrira pour vous prévenir quand ce sera fini." )
+                                           "une fenêtre s'ouvrira pour vous prévenir quand ce sera fini.")
             try:
                 pars = pm.Parser(day, month, year, loaded=False)
                 self.team_list_year[year] = pars.team_list
                 self.victory_matrix_year[year] = pars.victory_matrix
                 result = gr.Result(day, month)
-                #tir.Round_of_16(day, month, year)
+                tir.Round_of_16(day, month, year)
                 file = open("json_files/execute_info.txt", 'w', encoding="utf-8")
                 sending_info = dict()
                 sending_info["year"] = year
@@ -625,7 +628,7 @@ class GUI:
                 # the website is the only thing that can crash
                 messagebox.showinfo("Erreur", "Site Down Impossibilité TOTALE d'avoir des résultats")
 
-            cxx_exefile = "C:/ENPC/Temp/build-Choose-your-opponent-Desktop_Qt_5_15_0_MinGW_32_bit-Release/Choose_your_opponent.exe"
+            cxx_exefile = "build/build-Choose-your-opponent-Desktop_Qt_5_15_0_MinGW_32_bit-Release/Choose_your_opponent.exe"
             subprocess.run(cxx_exefile)
             messagebox.showinfo("Message", "Calculs finis")
             self.qs_year = result.qs_year
@@ -633,7 +636,6 @@ class GUI:
             self.official_qs_year = result.official_qs_year
             self.best_scenario_year = result.best_scenario_year
             self.official_best_scenario_year = result.official_best_scenario_year
-
 
         def can_you_choose_the_year(*args):
             try:
@@ -645,13 +647,13 @@ class GUI:
                                               " CHANGEZ L'ANNEE SVP ou répondez à la question suivante")
                 MsgBox = tk.messagebox.askquestion('Choix', 'Voulez-vous calculez le scénario?',
                                                    icon='warning')
-                fast = tk.messagebox.askquestion('Choix', 'Voulez-vous que ce soit rapide (30/40 min au lieu de 12h) mais imprécis?',
-                                                   icon='warning')
+                fast = tk.messagebox.askquestion('Choix',
+                                                 'Voulez-vous que ce soit rapide (30/40 min au lieu de 12h) mais imprécis?',
+                                                 icon='warning')
                 if MsgBox == 'yes' and fast == 'yes':
                     recalculate(int(year_clicked.get()), True)
                 elif MsgBox == 'yes' and fast == 'no':
                     recalculate(int(year_clicked.get()), False)
-
 
                 year_clicked.set(old_clicked.get())
                 return
