@@ -317,7 +317,6 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
             std::vector<std::vector<std::vector<int>>> X1X2_quart;
             X1X2_quart = draw_round(set_sorted_S_huitieme[k]);
             double size = X1X2_quart.size();
-            std::cout << size << std::endl;
             double proba_quart = proba_winner_quart;
             proba_quart *= 1/size;
             std::vector<std::vector<int>> set_sorted_S_quart;
@@ -330,7 +329,7 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
                 for(size_t o=0; o<pS_quart.size(); o++){
                     //std::cout << "test" << std::endl;
                     double proba_winner_semi = proba_quart;
-                    proba_winner_semi *= pS[o];
+                    proba_winner_semi *= pS_quart[o];
                     for(size_t i=0; i<16; i++)
                         if(std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), i) != set_sorted_S_quart[o].end())
                             qS_semi[i] += proba_winner_semi;
@@ -350,7 +349,7 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
                         for(size_t n=0; n<pS_semi.size(); n++){
                             //std::cout << "testwin" << std::endl;
                             double proba_winner_final = proba_semi;
-                            proba_winner_final *= pS[n];
+                            proba_winner_final *= pS_semi[n];
                             for(size_t i=0; i<16; i++)
                                 if(set_sorted_S_semi[n][0] == i || set_sorted_S_semi[n][1] == i){
                                     qS_final[i] += proba_winner_final;
