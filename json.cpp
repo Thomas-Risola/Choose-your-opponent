@@ -294,8 +294,9 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
     double constante = 1;
 
     if(fast==true){
+        // on "normalise" cest pas des vrais probs pour le fast case
         taille = 10;
-        constante = 100;
+        constante = list_scenario_huitieme.size()/10;
     }
 
     // huitième tiré
