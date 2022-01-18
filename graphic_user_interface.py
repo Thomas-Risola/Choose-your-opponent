@@ -614,12 +614,12 @@ class GUI:
             messagebox.showinfo("Message", "Cliquer pour démarrer les calculs, faites une autre activité, "
                                            "une fenêtre s'ouvrira pour vous prévenir quand ce sera fini.")
             try:
-                start_time = time.time()
                 pars = pm.Parser(day, month, year, loaded=False)
                 self.team_list_year[year] = pars.team_list
                 self.victory_matrix_year[year] = pars.victory_matrix
                 result = gr.Result(day, month)
-                #tir.Round_of_16(day, month, year)
+                tir.Round_of_16(day, month, year)
+                start_time = time.time()
                 file = open("json_files/execute_info.txt", 'w', encoding="utf-8")
                 sending_info = dict()
                 sending_info["year"] = year
