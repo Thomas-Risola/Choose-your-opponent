@@ -291,12 +291,20 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
     double best_quart_weak_ranking = 0;
 
     size_t taille = list_scenario_huitieme.size();
-    double constante = 1;
-
+    std::vector<double> fast_proba;
     if(fast==true){
         // on "normalise" cest pas des vrais probs pour le fast case
         taille = 10;
-        constante = list_scenario_huitieme.size()/10;
+
+        double sum = 0;
+        for(size_t j=0; j<taille; j++){
+            double proba = list_scenario_huitieme[j]["proba"];
+            sum += proba;
+        }
+        for(size_t j=0; j<taille; j++){
+            double proba = list_scenario_huitieme[j]["proba"];
+            fast_proba.push_back(proba/sum);
+        }
     }
 
     // huitième tiré
@@ -309,9 +317,14 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
         std::vector<double> pS = p_S(set_sorted_S_huitieme,XN1_huitieme,XN2_huitieme,probability_matrix);
         // huitième joué
         for(size_t k=0; k<pS.size(); k++){
-
-            double proba_winner_quart = list_scenario_huitieme[j]["proba"];
-            proba_winner_quart *= pS[k]*constante;
+            double proba_winner_quart;
+            if(fast){
+                proba_winner_quart = fast_proba[j];
+            }
+            else{
+                proba_winner_quart = list_scenario_huitieme[j]["proba"];
+            }
+            proba_winner_quart *= pS[k];
             for(size_t i=0; i<16; i++)
                 if(std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), i) != set_sorted_S_huitieme[k].end())
                     qS_quart[i] += proba_winner_quart;
@@ -357,9 +370,10 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
                                     if(set_sorted_S_semi[n][0] != i)
                                         qS_win[i] += proba_winner_final*probability_matrix(i,set_sorted_S_semi[n][0]);
                                     else
-                                        qS_win[i] += proba_winner_final*probability_matrix(set_sorted_S_semi[n][1],i);
+                                        qS_win[i] += proba_winner_final*probability_matrix(i,set_sorted_S_semi[n][1]);
                                 }
-                            if(set_sorted_S_semi[n][0] == 0 || set_sorted_S_semi[n][1] == 1)
+
+                            if(set_sorted_S_semi[n][0] == 0 && set_sorted_S_semi[n][1] == 1)
                                 best_final_weak_ranking += proba_winner_final;
                             //if(set_sorted_S_semi[n][0] == std::min(elo_ranking[0], elo_ranking[1]) || set_sorted_S_semi[n][1] == std::max(elo_ranking[0], elo_ranking[1]))
                             //    best_final_elo += proba_winner_final;
@@ -399,6 +413,18 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
     std::string qSFileName2 = prefix2 + outFileName;
     std::ofstream f2(qSFileName2);
     f2 << js2;
+
+    // test
+
+    double sum1=0, sum2=0, sum3=0, sum4=0;
+    for(int i=0; i<16; i++){
+        sum1 += qS_win[i];
+        sum2 += qS_final[i];
+        sum3 += qS_semi[i];
+        sum4 += qS_quart[i];
+    }
+
+    //std::cout << sum1 << " " << sum2 <<" " <<  sum3 << " " << sum4 << std::endl;
 
 }
 
