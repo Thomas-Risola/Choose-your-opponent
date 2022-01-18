@@ -165,9 +165,9 @@ std::string getOfficial16FileName(std::string fileName){
 
 void getTDLOG_info(int &year, bool &fast){
     std::string file = srcPath("json_files/execute_info.txt");
-    json j = json::parse(file);
-    year = j[0]["year"];
-    fast = j[0]["fast"];
+    json j = json::parse(std::ifstream(file));
+    year = j["year"];
+    fast = j["fast"];
 
 }
 
@@ -317,6 +317,7 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
             std::vector<std::vector<std::vector<int>>> X1X2_quart;
             X1X2_quart = draw_round(set_sorted_S_huitieme[k]);
             double size = X1X2_quart.size();
+            std::cout << size << std::endl;
             double proba_quart = proba_winner_quart;
             proba_quart *= 1/size;
             std::vector<std::vector<int>> set_sorted_S_quart;
