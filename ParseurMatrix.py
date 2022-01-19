@@ -39,7 +39,7 @@ class Parser:
                 print("Trying connection for around 15 seconds...")
                 self.team_list = Parser.search_and_fill_team_info(day, month, year)
             else:
-                raise Exception("connexion failed...")
+                raise Exception("Already loaded, no need to wait...")
         except:
             if not loaded:
                 print("Failed to connect, trying backup file...")
