@@ -21,19 +21,10 @@
   <component name="ChangeListManager">
     <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="tentative subprocess">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_best_scenario-12-12-2020.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_best_scenario-12-12-2020.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_best_scenario-12-12-2021.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_best_scenario-12-12-2021.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2010.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2010.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2011.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2011.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2012.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2012.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2013.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2013.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2014.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2014.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2015.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2015.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2016.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2016.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2017.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2017.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2018.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2018.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2019.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2019.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2020.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2020.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt.user" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/graphic_user_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/graphic_user_interface.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/json.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/json.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,11 +196,11 @@
     </configuration>
     <list>
       <item itemvalue="Python.ParseurMatrix" />
-      <item itemvalue="Python.graphic_user_interface" />
       <item itemvalue="Python.graphic_user_interface (1)" />
+      <item itemvalue="Python.graphic_user_interface" />
       <item itemvalue="Python.gui" />
-      <item itemvalue="Python.tirage_8e_8dec" />
       <item itemvalue="Python.main" />
+      <item itemvalue="Python.tirage_8e_8dec" />
     </list>
     <recent_temporary>
       <list>
@@ -440,7 +431,14 @@
       <option name="project" value="LOCAL" />
       <updated>1642514244058</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="fichiers bons">
+      <created>1642535835966</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1642535835966</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -456,7 +454,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="int a = 2" />
     <MESSAGE value="b = 1" />
     <MESSAGE value="c = 3" />
     <MESSAGE value="Creation de la matrice via le site clubelo" />
@@ -481,29 +478,30 @@
     <MESSAGE value="fichiers round_of_16" />
     <MESSAGE value="tout fini" />
     <MESSAGE value="tentative subprocess" />
-    <option name="LAST_COMMIT_MESSAGE" value="tentative subprocess" />
+    <MESSAGE value="fichiers bons" />
+    <option name="LAST_COMMIT_MESSAGE" value="fichiers bons" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="659" height="154" key="GridCell.Tab.0.bottom" timestamp="1642534773887">
+    <state width="965" height="154" key="GridCell.Tab.0.bottom" timestamp="1642536719687">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="659" height="154" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1642534773887" />
-    <state width="659" height="154" key="GridCell.Tab.0.center" timestamp="1642534773883">
+    <state width="965" height="154" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1642536719687" />
+    <state width="965" height="154" key="GridCell.Tab.0.center" timestamp="1642536719686">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="659" height="154" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1642534773883" />
-    <state width="659" height="154" key="GridCell.Tab.0.left" timestamp="1642534773883">
+    <state width="965" height="154" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1642536719686" />
+    <state width="965" height="154" key="GridCell.Tab.0.left" timestamp="1642536719686">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="659" height="154" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1642534773883" />
-    <state width="659" height="154" key="GridCell.Tab.0.right" timestamp="1642534773883">
+    <state width="965" height="154" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1642536719686" />
+    <state width="965" height="154" key="GridCell.Tab.0.right" timestamp="1642536719687">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="659" height="154" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1642534773883" />
-    <state x="275" y="84" key="Vcs.Push.Dialog.v2" timestamp="1642514262276">
+    <state width="965" height="154" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1642536719687" />
+    <state x="275" y="84" key="Vcs.Push.Dialog.v2" timestamp="1642535837674">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="275" y="84" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1642514262276" />
+    <state x="275" y="84" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1642535837674" />
     <state x="500" y="278" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1641839147570">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

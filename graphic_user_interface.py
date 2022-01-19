@@ -588,7 +588,6 @@ class GUI:
 
         # 2009 n'existe jamais => juste pour tester si ça marche
         year_options = [
-            "2009",
             "2010",
             "2011",
             "2012",
@@ -658,7 +657,7 @@ class GUI:
                 MsgBox = tk.messagebox.askquestion('Choix', 'Voulez-vous calculez le scénario?',
                                                    icon='warning')
                 fast = tk.messagebox.askquestion('Choix',
-                                                 'Voulez-vous que ce soit rapide (30/40 min au lieu de 12h) mais imprécis?',
+                                                 'Voulez-vous que ce soit "rapide" (2 ou 3h au lieu de 12h) mais imprécis?',
                                                  icon='warning')
                 if MsgBox == 'yes' and fast == 'yes':
                     recalculate(int(year_clicked.get()), True)
