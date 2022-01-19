@@ -22,8 +22,10 @@ Instructions pour utiliser l'application:
 Soit vous téléchargez les fichiers json (contenant les résultats exécutés par l'algorithme MOPSI) directement depuis le git.
 Soit vous ne les téléchargez pas.
 
-Pour créer ces fichiers (cela dure longtemps (minimum 40minutes pour une version inexacte; en moyenne 10h pour la version exacte sur une année), il faut sélectionner une année puis répondre oui à la question du calul 
+Pour créer ces fichiers (cela dure longtemps (minimum 1h pour une version inexacte; en moyenne 10h pour la version exacte sur une année), il faut sélectionner une année puis répondre oui à la question du calul 
 des scénarios.
+L'année 2010 sera laissée vancante exprès pour pouvoir tester la fonctionnalité.
+(ou les messages d'erreurs)
 
 Une fois les fichiers obtenus, vous pouvez parcourir les différentes fenêtres de l'application.
 Il y en a 2: la première avec la sélection de l'année et l'affichage des scénarios interactifs de l'année en cours.
@@ -32,4 +34,5 @@ Sur la deuxième fénêtre on peut sélectionner le type de probabilité que l'o
 le format proposé
 
 Des légendes sont ou seront indiquées pour expliquer certains points
+
 

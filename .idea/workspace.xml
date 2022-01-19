@@ -22,6 +22,7 @@
     <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="tentative subprocess">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt.user" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ParseurMatrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/ParseurMatrix.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/graphic_user_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/graphic_user_interface.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/json.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/json.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
@@ -196,11 +197,11 @@
     </configuration>
     <list>
       <item itemvalue="Python.ParseurMatrix" />
-      <item itemvalue="Python.graphic_user_interface (1)" />
       <item itemvalue="Python.graphic_user_interface" />
+      <item itemvalue="Python.graphic_user_interface (1)" />
       <item itemvalue="Python.gui" />
-      <item itemvalue="Python.main" />
       <item itemvalue="Python.tirage_8e_8dec" />
+      <item itemvalue="Python.main" />
     </list>
     <recent_temporary>
       <list>
@@ -438,7 +439,14 @@
       <option name="project" value="LOCAL" />
       <updated>1642535835966</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="petit changement de texte">
+      <created>1642625651185</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1642625651185</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -454,7 +462,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="b = 1" />
     <MESSAGE value="c = 3" />
     <MESSAGE value="Creation de la matrice via le site clubelo" />
     <MESSAGE value="? idk why it doesnt work + je change le 0 en 1" />
@@ -479,7 +486,8 @@
     <MESSAGE value="tout fini" />
     <MESSAGE value="tentative subprocess" />
     <MESSAGE value="fichiers bons" />
-    <option name="LAST_COMMIT_MESSAGE" value="fichiers bons" />
+    <MESSAGE value="petit changement de texte" />
+    <option name="LAST_COMMIT_MESSAGE" value="petit changement de texte" />
   </component>
   <component name="WindowStateProjectService">
     <state width="965" height="154" key="GridCell.Tab.0.bottom" timestamp="1642536719687">
