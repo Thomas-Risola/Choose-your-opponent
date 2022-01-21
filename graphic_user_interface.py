@@ -295,8 +295,8 @@ class NewWindow:
         metric_options = [
             "Probabilité d'atteindre une étape (rang faible)",
             "probabilité de victoire (rang faible)",
-            "Probabilité d'atteindre une étape (rang elo)",
-            "probabilité de victoire (rang elo)",
+            "Probabilité d'atteindre une étape (rang Elo)",
+            "probabilité de victoire (rang Elo)",
         ]
 
         metric_clicked = tk.StringVar()
@@ -353,6 +353,7 @@ class NewWindow:
                 ax1.set_ylim(0, 1)
                 ax1.set_xlabel("rang faible")
                 ax1.set_ylabel("probabilité")
+                ax1.grid()
 
                 ax1.set_title("format: Choose your opponent")
                 ax1.legend()
@@ -362,6 +363,7 @@ class NewWindow:
                 ax2.scatter(rank, official_qs_semi, label="demi-finale", color="b")
                 ax2.scatter(rank, official_qs_quart, label="quart de finale", color="y")
                 ax2.legend()
+                ax2.grid()
 
                 ax2.set_xlim(0, 17)
                 ax2.set_ylim(0, 1)
@@ -403,6 +405,7 @@ class NewWindow:
 
                 ax1.set_title("format: Choose your opponent")
                 ax1.legend()
+                ax1.grid()
 
                 ax2.scatter(rank, official_qs_win, label="victoire")
 
@@ -410,6 +413,7 @@ class NewWindow:
                 ax2.set_ylim(0, 1)
                 ax2.set_xlabel("rang faible")
                 ax2.set_ylabel("probabilité")
+                ax2.grid()
 
                 ax2.set_title("format: UEFA officiel")
                 ax2.legend()
@@ -467,21 +471,23 @@ class NewWindow:
 
                 ax1.set_xlim(0, 17)
                 ax1.set_ylim(0, 1)
-                ax1.set_xlabel("rang faible")
+                ax1.set_xlabel("rang Elo")
                 ax1.set_ylabel("probabilité")
 
                 ax1.set_title("format: Choose your opponent")
                 ax1.legend()
+                ax1.grid()
 
                 ax2.scatter(rank, official_qs_win_ordered, label="victoire", color="r")
                 ax2.scatter(rank, official_qs_final_ordered, label="finale", color="g")
                 ax2.scatter(rank, official_qs_semi_ordered, label="demi-finale", color="b")
                 ax2.scatter(rank, official_qs_quart_ordered, label="quart de finale", color="y")
                 ax2.legend()
+                ax2.grid()
 
                 ax2.set_xlim(0, 17)
                 ax2.set_ylim(0, 1)
-                ax2.set_xlabel("rang faible")
+                ax2.set_xlabel("rang Elo")
                 ax2.set_ylabel("probabilité")
 
                 ax2.set_title("format: UEFA officiel")
@@ -500,7 +506,7 @@ class NewWindow:
 
                 ranking_table = SimpleTable(proba_window, rows=17, columns=2)
 
-                ranking_table.set(0, 0, "rang elo")
+                ranking_table.set(0, 0, "rang Elo")
                 ranking_table.set(0, 1, "équipe")
                 for i in range(len(team_list)):
                     ranking_table.set(16 - i, 0, 16 - i)
@@ -522,19 +528,21 @@ class NewWindow:
 
                 ax1.set_xlim(0, 17)
                 ax1.set_ylim(0, 1)
-                ax1.set_xlabel("rang faible")
+                ax1.set_xlabel("rang Elo")
                 ax1.set_ylabel("probabilité")
 
                 ax1.set_title("format: Choose your opponent")
                 ax1.legend()
+                ax1.grid()
 
                 ax2.scatter(rank, official_qs_win_ordered, label="victoire", color="r")
                 ax2.legend()
 
                 ax2.set_xlim(0, 17)
                 ax2.set_ylim(0, 1)
-                ax2.set_xlabel("rang faible")
+                ax2.set_xlabel("rang Elo")
                 ax2.set_ylabel("probabilité")
+                ax2.grid()
 
                 ax2.set_title("format: UEFA officiel")
                 ax2.legend()
@@ -552,7 +560,7 @@ class NewWindow:
 
                 ranking_table = SimpleTable(proba_window, rows=17, columns=2)
 
-                ranking_table.set(0, 0, "rang elo")
+                ranking_table.set(0, 0, "rang Elo")
                 ranking_table.set(0, 1, "équipe")
                 for i in range(len(team_list)):
                     ranking_table.set(16 - i, 0, 16 - i)

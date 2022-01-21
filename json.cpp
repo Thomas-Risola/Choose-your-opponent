@@ -294,7 +294,7 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
     std::vector<double> fast_proba;
     if(fast==true){
         // on "normalise" cest pas des vrais probs pour le fast case
-        taille = 10;
+        taille = 200;
 
         double sum = 0;
         for(size_t j=0; j<taille; j++){
