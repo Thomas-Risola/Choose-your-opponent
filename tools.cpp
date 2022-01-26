@@ -606,10 +606,10 @@ double qSj_best_semi_elo(const int j,const VectorTree* QOmega,const std::vector<
     // Assumes all players are in X1,X2
     if(X1.size() <= 2 && X2.size() <= 2){
         // on est en finale donc on est sur d'etre en finale (c'est totologique)
-        if(std::find(XN.begin(),XN.end(),0) != XN.end()
-                && std::find(XN.begin(),XN.end(),1) != XN.end()
-                && std::find(XN.begin(),XN.end(),2) != XN.end()
-                && std::find(XN.begin(),XN.end(),3) != XN.end()
+        if(std::find(XN.begin(),XN.end(),elo[0]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[1]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[2]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[3]) != XN.end()
                 )
             return 1;
         else
