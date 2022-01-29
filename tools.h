@@ -27,9 +27,19 @@ double qSj_quarterfinal(const int j,const VectorTree* QOmega_quarterfinal,const 
 
 double qSj_best_final(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix);
 
-void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<double>& qS_final,std::vector<double>& qS_semifinal,std::vector<double>& qS_quarterfinal,std::vector<std::vector<double>>& qS_liste,std::vector<int>& XN1,std::vector<int>& XN2,VectorTree* QOmega_win,VectorTree* QOmega_final,VectorTree* QOmega_semifinal,VectorTree* QOmega_quarterfinal,std::vector<VectorTree*> QOmega_liste,const std::vector<int>& ranking,const int nb_player_first_round,const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix,bool greedy);
+double qSj_best_final_elo(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const std::vector<int>& elo, const Imagine::Matrix<double>& probability_matrix);
 
-void algorithm_entire_competition(std::vector<double>& qS,std::vector<double>& qS_final,std::vector<double>& qS_semifinal,std::vector<double>& qS_quarterfinal,std::vector<double> &qS_liste,std::vector<std::vector<int>>& Liste_X1,std::vector<std::vector<int>>& Liste_X2,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const int nb_player_first_round,const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix,bool greedy);
+double qSj_best_semi(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix);
+
+double qSj_best_semi_elo(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const std::vector<int>& elo, const Imagine::Matrix<double>& probability_matrix);
+
+double qSj_best_quart(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix);
+
+double qSj_best_quart_elo(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const std::vector<int>& elo, const Imagine::Matrix<double>& probability_matrix);
+
+void opponent_choice_optimization_algorithm(std::vector<double>& qS,std::vector<double>& qS_final,std::vector<double>& qS_semifinal,std::vector<double>& qS_quarterfinal,std::vector<std::vector<double>>& qS_liste,std::vector<int>& XN1,std::vector<int>& XN2,VectorTree* QOmega_win, VectorTree* QOmega_final,VectorTree* QOmega_semifinal,VectorTree* QOmega_quarterfinal,std::vector<VectorTree*> QOmega_liste,const std::vector<int>& ranking,const std::vector<int>& elo,const int nb_player_first_round,const Imagine::Matrix<double>& probability_matrix,const Imagine::Matrix<bool>& play_matrix,bool greedy);
+
+void algorithm_entire_competition(std::vector<double>& qS,std::vector<double>& qS_final,std::vector<double>& qS_semifinal,std::vector<double>& qS_quarterfinal, std::vector<double> &qS_liste_result,std::vector<std::vector<int>>& Liste_X1,std::vector<std::vector<int>>& Liste_X2,std::vector<int>& X1,std::vector<int>& X2,const std::vector<int>& ranking,const std::vector<int>& elo,const int nb_player_first_round,const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix,bool greedy);
 
 void setMatrixVictory(Imagine::Matrix<double> &M);
 
