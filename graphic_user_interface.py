@@ -16,7 +16,6 @@ import tirage_8e_8dec as tir
 global number_of_open_window
 number_of_open_window = 0
 
-
 class SimpleTable(tk.Frame):
     def __init__(self, parent, rows=10, columns=2, with_button=False, nb_team_round=16, scenario_list=[], team_list=[],
                  year=2021):
@@ -46,7 +45,7 @@ class SimpleTable(tk.Frame):
         for column in range(columns):
             self.grid_columnconfigure(column, weight=1)
 
-    def set(self, row, column, value1, value2=None, team_1=None, team_2=None, victory_matrix=None, winning_teams=[]):
+    def set(self, row, column, value1, value2=None, team_1=None, team_2=None, victory_matrix=None, winning_teams=[], bg=None):
         def create_4th(winning_teams, scenario_list):
             games_4th = SimpleTable(self.parent, rows=13, columns=1, with_button=True, nb_team_round=8,
                                     scenario_list=self.scenario_list, team_list=self.team_list,
@@ -245,7 +244,10 @@ class SimpleTable(tk.Frame):
 
         if value2 is None:
             widget = self._widgets[row][column]
-            widget.configure(text=value1)
+            if bg is None:
+                widget.configure(text=value1)
+            else:
+                widget.configure(text=value1, bg=bg)
             if value1 in ["8èmes", "Quarts", "Demies", "Finale"]:
                 widget.configure(state="disabled", bg='light blue', fg='white')
         else:
@@ -594,7 +596,6 @@ class GUI:
         # root.iconbitmap()
         root.geometry("1300x700")
 
-        # 2009 n'existe jamais => juste pour tester si ça marche
         year_options = [
             "2010",
             "2011",
@@ -662,15 +663,19 @@ class GUI:
             except:
                 messagebox.showinfo("Erreur", "Le scénario n'existe pas ou n'a pas été calculé lors des étapes backend."
                                               " CHANGEZ L'ANNEE SVP ou répondez à la question suivante")
-                MsgBox = tk.messagebox.askquestion('Choix', 'Voulez-vous calculez le scénario?',
+                MsgBox = tk.messagebox.askquestion('Choix', 'Voulez-vous calculez le scénario? (Ceci pouvant être '
+                                                            'long, nous vous conseillons de retélécharger les '
+                                                            'fichiers depuis github)',
                                                    icon='warning')
-                fast = tk.messagebox.askquestion('Choix',
-                                                 'Voulez-vous que ce soit "rapide" (2 ou 3h au lieu de 12h) mais imprécis?',
-                                                 icon='warning')
-                if MsgBox == 'yes' and fast == 'yes':
-                    recalculate(int(year_clicked.get()), True)
-                elif MsgBox == 'yes' and fast == 'no':
-                    recalculate(int(year_clicked.get()), False)
+                if MsgBox == 'yes':
+                    fast = tk.messagebox.askquestion('Choix',
+                                                     'Voulez-vous que ce soit "rapide" (2 ou 3h au lieu de 12h) mais '
+                                                     'imprécis?',
+                                                     icon='warning')
+                    if fast == 'yes':
+                        recalculate(int(year_clicked.get()), True)
+                    else:
+                        recalculate(int(year_clicked.get()), False)
 
                 year_clicked.set(old_clicked.get())
                 return
@@ -783,6 +788,17 @@ class GUI:
                               winning_teams)
             games_1th.grid(row=5, column=4)
 
+            ranking_table = SimpleTable(root, rows=17, columns=2)
+
+            ranking_table.set(0, 0, "ordre de choix")
+            ranking_table.set(0, 1, "équipe")
+            for i in range(len(team_list)):
+                ranking_table.set(i + 1, 0, team_list[i].competition_rank)
+                ranking_table.set(i + 1, 1, team_list[i].name)
+            ranking_table.grid(row=5, column=500)
+
+
+
         drop = tk.OptionMenu(root, year_clicked, *year_options)
         drop.grid(row=0, column=0)
 
@@ -804,5 +820,22 @@ class GUI:
                                         command=create_new_window)
 
         proba_window_button.grid(row=0, column=100)
+
+        legend_table1 = SimpleTable(root, rows=3, columns=1)
+
+        legend_table1.set(0, 0, "légende")
+        legend_table1.set(1, 0, "gagnant", bg="light green")
+        legend_table1.set(2, 0, "perdant", bg="#ffb3fe")
+        legend_table1.grid(row=5, column=600)
+
+        legend_table2 = SimpleTable(root, rows=3, columns=1)
+
+        legend_table2.set(0, 0, "légende")
+        legend_table2.set(1, 0, "haut choisit")
+        legend_table2.set(2, 0, "bas est choisi")
+        legend_table2.grid(row=5, column=700)
+
+        legend_text = tk.Label(text="Pour afficher les scénarios, sélectionner une année!")
+        legend_text.grid(row=5, column=800)
 
         root.mainloop()
