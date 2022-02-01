@@ -25,7 +25,7 @@ int main()
     string official16Name = getOfficial16FileName(fileName);
     Imagine::Matrix<double> victoryMatrix = getVictoryMatrix(ifstream(matrixName));
     Imagine::Matrix<bool> playMatrix = getPlayMatrix(ifstream(matrixName));
-    int petit_N=8;
+    int petit_N=16;
     vector<double> qS_win;
     vector<double> qS_final;
     vector<double> qS_semifinal;
