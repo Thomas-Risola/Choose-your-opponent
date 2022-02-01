@@ -393,6 +393,11 @@ void algorithm_entire_competition(
     Liste_X1.push_back(X1);
     Liste_X2.push_back(X2);
     qS_liste_result[0] = qS_liste[0][0];
+    qS_liste_result[1] = qS_liste[1][0];
+    qS_liste_result[2] = qS_liste[2][0];
+    qS_liste_result[3] = qS_liste[3][0];
+    qS_liste_result[4] = qS_liste[4][0];
+    qS_liste_result[5] = qS_liste[5][0];
     //QOmega_final->display();
     //QOmega_win->display();
 }
