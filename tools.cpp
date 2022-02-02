@@ -392,7 +392,6 @@ void algorithm_entire_competition(
     opponent_choice_optimization_algorithm(qS,qS_final,qS_semifinal,qS_quarterfinal,qS_liste,X1,X2,QOmega_win,QOmega_final,QOmega_semifinal,QOmega_quarterfinal,QOmegaListe,ranking,elo,nb_player_first_round,probability_matrix,play_matrix,greedy); // Appel de l'algorithme pour le niveau souhaité
     Liste_X1.push_back(X1);
     Liste_X2.push_back(X2);
-    QOmegaListe[3]->display();
     qS_liste_result[0] = qS_liste[0][0];
     qS_liste_result[1] = qS_liste[1][0];
     qS_liste_result[2] = qS_liste[2][0];
