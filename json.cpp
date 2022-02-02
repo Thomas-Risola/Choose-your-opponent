@@ -372,9 +372,14 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
                                     else
                                         qS_win[i] += proba_winner_final*probability_matrix(i,set_sorted_S_semi[n][1]);
                                 }
+                            if(j == 0 && k ==0 && l==0 && o==0)
+                                std::cout << set_sorted_S_semi[n];
+                            if(set_sorted_S_semi[n][0] == 0){
 
-                            if(set_sorted_S_semi[n][0] == 0 && set_sorted_S_semi[n][1] == 1)
+                                if(set_sorted_S_semi[n][1] == 1){
                                 best_final_weak_ranking += proba_winner_final;
+                                std::cout << "lol" << std::endl;
+                            }}
                             //if(set_sorted_S_semi[n][0] == std::min(elo_ranking[0], elo_ranking[1]) || set_sorted_S_semi[n][1] == std::max(elo_ranking[0], elo_ranking[1]))
                             //    best_final_elo += proba_winner_final;
                         }
