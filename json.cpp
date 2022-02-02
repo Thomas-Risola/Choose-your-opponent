@@ -52,12 +52,12 @@ void writeQS(std::vector<double> qS_win,std::vector<double> qS_final,std::vector
 
     json js2;
     js2 = {
-        {"best_final_elo", qS_liste[0]},
-        {"best_final_weak", qS_liste[1]},
-        {"best_quart_elo", qS_liste[2]},
-        {"best_quart_weak", qS_liste[3]},
-        {"best_semi_elo", qS_liste[4]},
-        {"best_semi_weak", qS_liste[5]}
+        {"best_final_elo", qS_liste[1]},
+        {"best_final_weak", qS_liste[0]},
+        {"best_quart_elo", qS_liste[5]},
+        {"best_quart_weak", qS_liste[4]},
+        {"best_semi_elo", qS_liste[3]},
+        {"best_semi_weak", qS_liste[2]}
     };
 
     {
@@ -263,7 +263,7 @@ void readWriteOfficialScenario(std::ifstream inFileName, std::string outFileName
 
 
 
-void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileName, bool fast, const Imagine::Matrix<double>& probability_matrix){
+void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileName, bool fast, const std::vector<int> elo, const Imagine::Matrix<double>& probability_matrix){
     // proba_winner_x = proba d'arrive au stade x
     json js = json::parse(inFileName);
     json scenario;
@@ -328,6 +328,31 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
             for(size_t i=0; i<16; i++)
                 if(std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), i) != set_sorted_S_huitieme[k].end())
                     qS_quart[i] += proba_winner_quart;
+
+            //if(std::for_each(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), [](auto& item) -> bool
+            //{ return item != 0 && item != 1  && item != 2  && item != 3  && item != 4  && item != 5  && item != 6  && item != 7;})
+
+
+            if(std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), 0) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), 1) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), 2) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), 3) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), 4) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), 5) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), 6) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), 7) != set_sorted_S_huitieme[k].end()
+                    )
+                best_quart_weak_ranking += proba_winner_quart;
+            if(std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), elo[0]) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), elo[1]) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), elo[2]) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), elo[3]) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), elo[4]) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), elo[5]) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), elo[6]) != set_sorted_S_huitieme[k].end()
+                    && std::find(set_sorted_S_huitieme[k].begin(), set_sorted_S_huitieme[k].end(), elo[6]) != set_sorted_S_huitieme[k].end()
+                   )
+                best_quart_elo += proba_winner_quart;
             std::vector<std::vector<std::vector<int>>> X1X2_quart;
             X1X2_quart = draw_round(set_sorted_S_huitieme[k]);
             double size = X1X2_quart.size();
@@ -347,6 +372,18 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
                     for(size_t i=0; i<16; i++)
                         if(std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), i) != set_sorted_S_quart[o].end())
                             qS_semi[i] += proba_winner_semi;
+                    if(std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), 0) != set_sorted_S_quart[o].end()
+                            && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), 1) != set_sorted_S_quart[o].end()
+                            && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), 2) != set_sorted_S_quart[o].end()
+                            && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), 3) != set_sorted_S_quart[o].end()
+                            )
+                        best_quart_weak_ranking += proba_winner_semi;
+                    if(std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), elo[0]) != set_sorted_S_quart[o].end()
+                            && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), elo[1]) != set_sorted_S_quart[o].end()
+                            && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), elo[2]) != set_sorted_S_quart[o].end()
+                            && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), elo[3]) != set_sorted_S_quart[o].end()
+                            )
+                        best_quart_elo += proba_winner_semi;
                     std::vector<std::vector<std::vector<int>>> X1X2_semi;
                     X1X2_semi = draw_round(set_sorted_S_quart[o]);
                     double size_semi = X1X2_semi.size();
@@ -372,8 +409,6 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
                                     else
                                         qS_win[i] += proba_winner_final*probability_matrix(i,set_sorted_S_semi[n][1]);
                                 }
-                            if(j == 0 && k ==0 && l==0 && o==0)
-                                std::cout << set_sorted_S_semi[n];
                             if(set_sorted_S_semi[n][0] == 0){
 
                                 if(set_sorted_S_semi[n][1] == 1){

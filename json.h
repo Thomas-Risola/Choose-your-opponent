@@ -26,5 +26,5 @@ std::string getMatrixFileName(std::string fileName);
 
 std::string getOfficial16FileName(std::string fileName);
 
-void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileName, bool fast, const Imagine::Matrix<double>& probability_matrix);
+void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileName, bool fast, const std::vector<int> elo, const Imagine::Matrix<double>& probability_matrix);
 
