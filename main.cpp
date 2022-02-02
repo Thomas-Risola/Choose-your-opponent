@@ -42,6 +42,6 @@ int main()
     writeQS(qS_win,qS_final,qS_semifinal,qS_quarterfinal,qS_liste_result,fileName);
     writeScenario(Liste_X1,Liste_X2,fileName,victoryMatrix,playMatrix);
     readWriteOfficialScenarioV2(ifstream(official16Name), fileName, fast, victoryMatrix);
-}
+//}
     return 0;
 }
