@@ -20,8 +20,9 @@ if __name__ == '__main__':
         victory_matrix_year[year] = pars.victory_matrix
     result = gr.Result(day, month)
 
-    
-    graphic = gui.GUI(team_list_year, result.qs_year, result.scenario_year, result.official_qs_year,
-                      victory_matrix_year, result.best_scenario_year, result.official_best_scenario_year)
+    tir.all_in_one_official(12, 12, 2021, victory_matrix_year[2021], 10)
 
-    graphic.graphic_loop()
+    #graphic = gui.GUI(team_list_year, result.qs_year, result.scenario_year, result.official_qs_year,
+    #                  victory_matrix_year, result.best_scenario_year, result.official_best_scenario_year)
+
+    #graphic.graphic_loop()

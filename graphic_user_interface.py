@@ -16,6 +16,7 @@ import tirage_8e_8dec as tir
 global number_of_open_window
 number_of_open_window = 0
 
+#not so simple
 class SimpleTable(tk.Frame):
     def __init__(self, parent, rows=10, columns=2, with_button=False, nb_team_round=16, scenario_list=[], team_list=[],
                  year=2021):

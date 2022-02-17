@@ -16,25 +16,24 @@
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
-    <select />
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:dev_mopsi" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="does not work">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/graphic_user_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/graphic_user_interface.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/json.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/json.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2010.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2010.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2011.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2011.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2012.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2012.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2013.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2013.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2014.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2014.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2015.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2015.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2016.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2016.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2017.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2017.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2018.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2018.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/json_files/official_best_scenario-12-12-2021.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_best_scenario-12-12-2021.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2021.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2021.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json_files/qs_vector-12-12-2010.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tirage_8e_8dec.py" beforeDir="false" afterPath="$PROJECT_DIR$/tirage_8e_8dec.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +50,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="5c094d3d2171f5cfe3da6e1b3ccb9955fbad64fe" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -207,11 +206,11 @@
     </configuration>
     <list>
       <item itemvalue="Python.ParseurMatrix" />
-      <item itemvalue="Python.graphic_user_interface" />
       <item itemvalue="Python.graphic_user_interface (1)" />
+      <item itemvalue="Python.graphic_user_interface" />
       <item itemvalue="Python.gui" />
-      <item itemvalue="Python.tirage_8e_8dec" />
       <item itemvalue="Python.main" />
+      <item itemvalue="Python.tirage_8e_8dec" />
     </list>
     <recent_temporary>
       <list>
@@ -449,15 +448,49 @@
       <option name="project" value="LOCAL" />
       <updated>1642332976343</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="légende + fix bug">
+      <created>1643029217932</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1643029217932</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="dev_mopsi" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -466,7 +499,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="c = 3" />
     <MESSAGE value="Creation de la matrice via le site clubelo" />
     <MESSAGE value="? idk why it doesnt work + je change le 0 en 1" />
     <MESSAGE value="typo" />
@@ -491,6 +523,41 @@
     <MESSAGE value="scenario sur python" />
     <MESSAGE value="fonctionne sauf les petits problemes" />
     <MESSAGE value="fini" />
-    <option name="LAST_COMMIT_MESSAGE" value="fini" />
+    <MESSAGE value="légende + fix bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1345" height="199" key="GridCell.Tab.0.bottom" timestamp="1645092736782">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state width="1345" height="199" key="GridCell.Tab.0.bottom/0.0.1366.720@0.0.1366.720" timestamp="1645092736782" />
+    <state width="1345" height="154" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1643030231768" />
+    <state width="1345" height="199" key="GridCell.Tab.0.center" timestamp="1645092736782">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state width="1345" height="199" key="GridCell.Tab.0.center/0.0.1366.720@0.0.1366.720" timestamp="1645092736782" />
+    <state width="1345" height="154" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1643030231768" />
+    <state width="1345" height="199" key="GridCell.Tab.0.left" timestamp="1645092736782">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state width="1345" height="199" key="GridCell.Tab.0.left/0.0.1366.720@0.0.1366.720" timestamp="1645092736782" />
+    <state width="1345" height="154" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1643030231768" />
+    <state width="1345" height="199" key="GridCell.Tab.0.right" timestamp="1645092736782">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state width="1345" height="199" key="GridCell.Tab.0.right/0.0.1366.720@0.0.1366.720" timestamp="1645092736782" />
+    <state width="1345" height="154" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1643030231768" />
+    <state x="513" y="229" key="VCS.EditChangelistDialog" timestamp="1645089312215">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state x="513" y="229" key="VCS.EditChangelistDialog/0.0.1366.720@0.0.1366.720" timestamp="1645089312215" />
+    <state x="275" y="84" key="Vcs.Push.Dialog.v2" timestamp="1643030163110">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="275" y="84" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1643030163110" />
+    <state x="500" y="274" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1643831415130">
+      <screen x="0" y="0" width="1366" height="720" />
+    </state>
+    <state x="500" y="274" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.720@0.0.1366.720" timestamp="1643831415130" />
   </component>
 </project>

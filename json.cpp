@@ -355,6 +355,8 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
                 best_quart_elo += proba_winner_quart;
             std::vector<std::vector<std::vector<int>>> X1X2_quart;
             X1X2_quart = draw_round(set_sorted_S_huitieme[k]);
+
+            //std::cout<< X1X2_quart;
             double size = X1X2_quart.size();
             double proba_quart = proba_winner_quart;
             proba_quart *= 1/size;
@@ -363,8 +365,11 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
             for(size_t l=0; l<X1X2_quart.size(); l++){
                 std::vector<int> XN1_quart = X1X2_quart[l][0];
                 std::vector<int> XN2_quart = X1X2_quart[l][1];
+
                 std::vector<double> pS_quart = p_S(set_sorted_S_quart,XN1_quart,XN2_quart,probability_matrix);
+
                 // quart joué
+
                 for(size_t o=0; o<pS_quart.size(); o++){
                     //std::cout << "test" << std::endl;
                     double proba_winner_semi = proba_quart;
@@ -373,17 +378,17 @@ void readWriteOfficialScenarioV2(std::ifstream inFileName, std::string outFileNa
                         if(std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), i) != set_sorted_S_quart[o].end())
                             qS_semi[i] += proba_winner_semi;
                     if(std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), 0) != set_sorted_S_quart[o].end()
-                            && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), 1) != set_sorted_S_quart[o].end()
-                            && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), 2) != set_sorted_S_quart[o].end()
-                            && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), 3) != set_sorted_S_quart[o].end()
+                            && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), 0) != set_sorted_S_quart[o].end()
+                            && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), 0) != set_sorted_S_quart[o].end()
+                            && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), 0) != set_sorted_S_quart[o].end()
                             )
-                        best_quart_weak_ranking += proba_winner_semi;
+                    {best_semi_weak_ranking += proba_winner_semi; std::cout << "hi";}
                     if(std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), elo[0]) != set_sorted_S_quart[o].end()
                             && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), elo[1]) != set_sorted_S_quart[o].end()
                             && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), elo[2]) != set_sorted_S_quart[o].end()
                             && std::find(set_sorted_S_quart[o].begin(), set_sorted_S_quart[o].end(), elo[3]) != set_sorted_S_quart[o].end()
                             )
-                        best_quart_elo += proba_winner_semi;
+                        best_semi_elo += proba_winner_semi;
                     std::vector<std::vector<std::vector<int>>> X1X2_semi;
                     X1X2_semi = draw_round(set_sorted_S_quart[o]);
                     double size_semi = X1X2_semi.size();

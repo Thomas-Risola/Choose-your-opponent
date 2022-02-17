@@ -1,1 +1,1 @@
-{"best_final_elo":0.0,"best_final_weak":0.0,"best_quart_elo":0.0,"best_quart_weak":0.0,"best_semi_elo":0.0,"best_semi_weak":0.0}
+{"best_final_elo": 0.006550984189931925, "best_final_weak": 0.0022242812246375233, "best_semi_elo": 0.0008902572210929562, "best_semi_weak": 0.0006871711226455488, "best_quart_elo": 2.092096536662074e-05, "best_quart_weak": 0.0013443850700033547, "mean_final": 0, "mean_semi": 0, "mean_quart": 0}
