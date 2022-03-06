@@ -27,13 +27,14 @@
   <component name="ChangeListManager">
     <list default="true" id="303f022e-f407-422a-aa97-abf4c96480e3" name="Default Changelist" comment="does not work">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/graphic_user_interface.py" beforeDir="false" afterPath="$PROJECT_DIR$/graphic_user_interface.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/json.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/json.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/get_result.py" beforeDir="false" afterPath="$PROJECT_DIR$/get_result.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/json_files/best_scenario-12-12-2021.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/best_scenario-12-12-2021.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/json_files/official_best_scenario-12-12-2021.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_best_scenario-12-12-2021.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2021.txt" beforeDir="false" afterPath="$PROJECT_DIR$/json_files/official_qs_vector-12-12-2021.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tirage_8e_8dec.py" beforeDir="false" afterPath="$PROJECT_DIR$/tirage_8e_8dec.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/tools.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -525,39 +526,5 @@
     <MESSAGE value="fini" />
     <MESSAGE value="légende + fix bug" />
     <option name="LAST_COMMIT_MESSAGE" value="" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state width="1345" height="199" key="GridCell.Tab.0.bottom" timestamp="1645092736782">
-      <screen x="0" y="0" width="1366" height="720" />
-    </state>
-    <state width="1345" height="199" key="GridCell.Tab.0.bottom/0.0.1366.720@0.0.1366.720" timestamp="1645092736782" />
-    <state width="1345" height="154" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1643030231768" />
-    <state width="1345" height="199" key="GridCell.Tab.0.center" timestamp="1645092736782">
-      <screen x="0" y="0" width="1366" height="720" />
-    </state>
-    <state width="1345" height="199" key="GridCell.Tab.0.center/0.0.1366.720@0.0.1366.720" timestamp="1645092736782" />
-    <state width="1345" height="154" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1643030231768" />
-    <state width="1345" height="199" key="GridCell.Tab.0.left" timestamp="1645092736782">
-      <screen x="0" y="0" width="1366" height="720" />
-    </state>
-    <state width="1345" height="199" key="GridCell.Tab.0.left/0.0.1366.720@0.0.1366.720" timestamp="1645092736782" />
-    <state width="1345" height="154" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1643030231768" />
-    <state width="1345" height="199" key="GridCell.Tab.0.right" timestamp="1645092736782">
-      <screen x="0" y="0" width="1366" height="720" />
-    </state>
-    <state width="1345" height="199" key="GridCell.Tab.0.right/0.0.1366.720@0.0.1366.720" timestamp="1645092736782" />
-    <state width="1345" height="154" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1643030231768" />
-    <state x="513" y="229" key="VCS.EditChangelistDialog" timestamp="1645089312215">
-      <screen x="0" y="0" width="1366" height="720" />
-    </state>
-    <state x="513" y="229" key="VCS.EditChangelistDialog/0.0.1366.720@0.0.1366.720" timestamp="1645089312215" />
-    <state x="275" y="84" key="Vcs.Push.Dialog.v2" timestamp="1643030163110">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="275" y="84" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1643030163110" />
-    <state x="500" y="274" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1643831415130">
-      <screen x="0" y="0" width="1366" height="720" />
-    </state>
-    <state x="500" y="274" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1366.720@0.0.1366.720" timestamp="1643831415130" />
   </component>
 </project>

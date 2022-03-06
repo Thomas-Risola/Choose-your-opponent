@@ -1,6 +1,7 @@
 #include "tools.h"
 #include "DoubleTree.h"
 
+
 VectorTree* empty_Q_P_N(const unsigned int N,int c_player) {
     // Initializes the set of tournament win probabilities for each possible player set (with 0 values)
     // Each node can be read as: "Is c_player in contention? If yes, descend left, if not, descend right"
@@ -42,6 +43,286 @@ std::vector<double>& VectorTree::operator()(const std::vector<int>& sorted_S,uns
             return child(1)->operator()(sorted_S,pos);
     }
 }
+
+
+
+
+double qSj_mean_final(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix) {
+    if(X1.size() == 0 && X2.size() == 0)
+        return 1;
+    // Computes undiscovered values of QOmega
+    // Assumes all players are in X1,X2
+    if(X1.size() == 1 && X2.size() == 1){
+        // on est en finale donc on est sur d'etre en finale (c'est totologique)
+        if(X1.at(0) == 0 && X2.at(0) == 1)
+            return 1;
+        else
+            return 0;
+    }
+    if(X1.size() == 2 && X2.size() == 2){
+        // on est en demi finale
+        double sum =0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++){
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+        }
+        return sum;
+    }
+    if(X1.size() == 8 && X2.size() == 8){
+        // on est en demi finale
+        double sum =0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++){
+            sum += i*pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+        }
+        return sum;
+    }
+    else{
+        double sum = 0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++)
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+    return sum;
+    }
+}
+
+//#does it work??
+double qSj_mean_final_elo(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const std::vector<int>& elo, const Imagine::Matrix<double>& probability_matrix) {
+    std::vector<int> best_elo = {elo[0],elo[1]};
+    std::sort(best_elo.begin(),best_elo.end());
+
+    if(X1.size() == 0 && X2.size() == 0)
+        return 1;
+    // Computes undiscovered values of QOmega
+    // Assumes all players are in X1,X2
+    if(X1.size() == 1 && X2.size() == 1){
+        // on est en finale donc on est sur d'etre en finale (c'est totologique)
+        if(X1.at(0) == best_elo[0] && X2.at(0) == best_elo[1])
+            return 1;
+        else
+            return 0;
+    }
+    if(X1.size() == 2 && X2.size() == 2){
+        // on est en demi finale
+        double sum =0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++){
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+        }
+        return sum;
+    }
+    else{
+        double sum = 0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++)
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+    return sum;
+    }
+}
+
+
+double qSj_mean_semi(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix) {
+
+    std::vector<int> XN = X1;
+    for(size_t i=0; i<X2.size(); i++)
+        XN.push_back(X2.at(i));
+
+
+    if(X1.size() == 0 && X2.size() == 0)
+        return 1;
+    // Computes undiscovered values of QOmega
+    // Assumes all players are in X1,X2
+    if(X1.size() <= 2 && X2.size() <= 2){
+        // on est en finale donc on est sur d'etre en finale (c'est totologique)
+        if(std::find(XN.begin(),XN.end(),0) != XN.end()
+            && std::find(XN.begin(),XN.end(),1) != XN.end()
+            && std::find(XN.begin(),XN.end(),2) != XN.end()
+            && std::find(XN.begin(),XN.end(),3) != XN.end()
+            )
+            return 1;
+        else
+            return 0;
+    }
+    if(X1.size() == 4 && X2.size() == 4){
+        // on est en quarts finale
+        double sum =0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++){
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+        }
+        return sum;
+    }
+    else{
+        double sum = 0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++)
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+    return sum;
+    }
+}
+
+double qSj_mean_semi_elo(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const std::vector<int>& elo, const Imagine::Matrix<double>& probability_matrix) {
+
+    std::vector<int> XN = X1;
+    for(size_t i=0; i<X2.size(); i++)
+        XN.push_back(X2.at(i));
+
+
+    if(X1.size() == 0 && X2.size() == 0)
+        return 1;
+    // Computes undiscovered values of QOmega
+    // Assumes all players are in X1,X2
+    if(X1.size() <= 2 && X2.size() <= 2){
+        // on est en finale donc on est sur d'etre en finale (c'est totologique)
+        if(std::find(XN.begin(),XN.end(),elo[0]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[1]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[2]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[3]) != XN.end()
+                )
+            return 1;
+        else
+            return 0;
+    }
+    if(X1.size() == 4 && X2.size() == 4){
+        // on est en quarts finale
+        double sum =0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++){
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+        }
+        return sum;
+    }
+    else{
+        double sum = 0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++)
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+    return sum;
+    }
+}
+
+
+double qSj_mean_quart(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const Imagine::Matrix<double>& probability_matrix) {
+
+    std::vector<int> XN = X1;
+    for(size_t i=0; i<X2.size(); i++)
+        XN.push_back(X2.at(i));
+
+
+    if(X1.size() == 0 && X2.size() == 0)
+        return 1;
+    // Computes undiscovered values of QOmega
+    // Assumes all players are in X1,X2
+    if(X1.size() <= 4 && X2.size() <= 4){
+        // on est en finale donc on est sur d'etre en finale (c'est totologique)
+        if(std::find(XN.begin(),XN.end(),0) != XN.end()
+                && std::find(XN.begin(),XN.end(),1) != XN.end()
+                && std::find(XN.begin(),XN.end(),2) != XN.end()
+                && std::find(XN.begin(),XN.end(),3) != XN.end()
+                && std::find(XN.begin(),XN.end(),4) != XN.end()
+                && std::find(XN.begin(),XN.end(),5) != XN.end()
+                && std::find(XN.begin(),XN.end(),6) != XN.end()
+                && std::find(XN.begin(),XN.end(),7) != XN.end()
+                )
+            return 1;
+        else
+            return 0;
+    }
+    if(X1.size() == 8 && X2.size() == 8){
+        // on est en demi finale
+        double sum =0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++){
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+        }
+        return sum;
+    }
+    else{
+        double sum = 0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++)
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+    return sum;
+    }
+}
+
+double qSj_mean_quart_elo(const int j,const VectorTree* QOmega,const std::vector<int>& X1,const std::vector<int>& X2, const std::vector<int>& elo, const Imagine::Matrix<double>& probability_matrix) {
+
+    std::vector<int> XN = X1;
+    for(size_t i=0; i<X2.size(); i++)
+        XN.push_back(X2.at(i));
+
+
+    if(X1.size() == 0 && X2.size() == 0)
+        return 1;
+    // Computes undiscovered values of QOmega
+    // Assumes all players are in X1,X2
+    if(X1.size() <= 4 && X2.size() <= 4){
+        // on est en finale donc on est sur d'etre en finale (c'est totologique)
+        if(std::find(XN.begin(),XN.end(),elo[0]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[1]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[2]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[3]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[4]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[5]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[6]) != XN.end()
+                && std::find(XN.begin(),XN.end(),elo[7]) != XN.end()
+                )
+            return 1;
+        else
+            return 0;
+    }
+    if(X1.size() == 8 && X2.size() == 8){
+        // on est en demi finale
+        double sum =0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++){
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+        }
+        return sum;
+    }
+    else{
+        double sum = 0;
+        std::vector<std::vector<int>> set_sorted_S;
+        std::vector<double> pS
+        =p_S(set_sorted_S,X1,X2,probability_matrix); // Calcul des probabilités de remporter ce match
+        for(unsigned int i=0; i<pS.size(); i++)
+            sum += pS.at(i)*(*QOmega)(set_sorted_S.at(i)).at(j); // Calcul des probabilités detre en finale
+    return sum;
+    }
+}
+
+
+
+
+
+
+
+
 
 void S_kN(std::vector<int>& S,VectorTree* tree,int k,VectorTree* QOmega_win,VectorTree* QOmega_final,VectorTree* QOmega_semifinal,VectorTree* QOmega_quarterfinal,std::vector<VectorTree*> QOmega_liste,std::vector<std::vector<int>>& Liste_X1,std::vector<std::vector<int>>& Liste_X2,const ComparePlayers& comp,const std::vector<int>& elo,const int nb_player_first_round,const Imagine::Matrix<double>& probability_matrix, const Imagine::Matrix<bool>& play_matrix,bool greedy) {
     // Calls the algorithm on all scenarii in tree with k players
@@ -357,7 +638,6 @@ void opponent_choice_optimization_algorithm(
     }
     for (unsigned int i=0;i<XN.size();i++)
         store_qS_best_quart_elo.at(XN.at(i))=qS_liste[5].at(i);
-
 }
 
 void algorithm_entire_competition(

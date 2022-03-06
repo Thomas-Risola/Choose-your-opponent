@@ -60,3 +60,5 @@ class Result:
         semi_weak = dict_list["best_semi_weak"]
         file.close()
         return [final_elo, final_weak, semi_elo, semi_weak, quart_elo, quart_weak]
+
+

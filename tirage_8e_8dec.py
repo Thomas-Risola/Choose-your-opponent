@@ -573,15 +573,12 @@ def draw(winners):
 
 def play_round(set1, set2, victory_matrix):
     winners = []
-    proba = 1
     for i in range(len(set1)):
         if np.random.uniform() < victory_matrix[set1[i]][set2[i]]:
             winners.append(set1[i])
-            proba *= victory_matrix[set1[i]][set2[i]]
         else:
             winners.append(set2[i])
-            proba *= victory_matrix[set2[i]][set1[i]]
-    return winners, proba
+    return winners
 
 def play_tournament(set1, set2, victory_matrix, elo_ranking, proba_scenario, number_monte_carlo):
     proba = dict()
@@ -601,9 +598,12 @@ def play_tournament(set1, set2, victory_matrix, elo_ranking, proba_scenario, num
     proba["moyenne_rang_semi"] = 0
     proba["moyenne_rang_quart"] = 0
 
+    proba["moyenne_rang_finale_elo"] = 0
+    proba["moyenne_rang_semi_elo"] = 0
+    proba["moyenne_rang_quart_elo"] = 0
+
     for k in range(number_monte_carlo):
-        winners_16th, proba_quart = play_round(set1, set2, victory_matrix)
-        proba_quart *= proba_scenario/number_monte_carlo
+        winners_16th = play_round(set1, set2, victory_matrix)
         number_monte_carlo = number_monte_carlo/proba_scenario
         for i in range(16):
             if i in winners_16th:
@@ -623,10 +623,14 @@ def play_tournament(set1, set2, victory_matrix, elo_ranking, proba_scenario, num
             else:
                 break
 
+        for i in range(len(winners_16th)):
+            proba["moyenne_rang_quart"] += (1+winners_16th[i])/len(winners_16th)/number_monte_carlo
+            proba["moyenne_rang_quart_elo"] += (1 + elo_ranking[winners_16th[i]]) / len(winners_16th) / number_monte_carlo
+
         set1_8th, set2_8th = draw(winners_16th)
 
-        winners_8th, proba_semi = play_round(set1_8th, set2_8th, victory_matrix)
-        proba_semi *= proba_quart/105
+        winners_8th = play_round(set1_8th, set2_8th, victory_matrix)
+
         for i in range(16):
             if i in winners_8th:
                 proba["semi"][i] += 1/number_monte_carlo
@@ -647,10 +651,14 @@ def play_tournament(set1, set2, victory_matrix, elo_ranking, proba_scenario, num
             else:
                 break
 
+        for i in range(len(winners_8th)):
+            proba["moyenne_rang_semi"] += (1+winners_8th[i])/len(winners_8th)/number_monte_carlo
+            proba["moyenne_rang_semi_elo"] += (1+elo_ranking[winners_8th[i]])/len(winners_8th)/number_monte_carlo
+
         set1_4th, set2_4th = draw(winners_8th)
 
-        winners_4th, proba_final = play_round(set1_4th, set2_4th, victory_matrix)
-        proba_final *= proba_semi / 3
+        winners_4th = play_round(set1_4th, set2_4th, victory_matrix)
+
         for i in range(16):
             if i in winners_4th:
                 proba["finale"][i] += 1/number_monte_carlo
@@ -669,10 +677,13 @@ def play_tournament(set1, set2, victory_matrix, elo_ranking, proba_scenario, num
             else:
                 break
 
+        for i in range(len(winners_4th)):
+            proba["moyenne_rang_finale"] += (1+winners_4th[i])/len(winners_4th)/number_monte_carlo
+            proba["moyenne_rang_finale_elo"] += (1 + elo_ranking[winners_4th[i]]) / len(winners_4th) / number_monte_carlo
+
         set1_2th, set2_2th = draw(winners_4th)
 
-        winners_2th, proba_win = play_round(set1_2th, set2_2th, victory_matrix)
-        proba_win *= proba_final
+        winners_2th = play_round(set1_2th, set2_2th, victory_matrix)
         for i in range(16):
             if i in winners_2th:
                 proba["win"][i] += 1/number_monte_carlo
@@ -699,6 +710,10 @@ def get_proba(victory_matrix, elo_ranking, filename, number_monte_carlo):
     proba["moyenne_rang_semi"] = 0
     proba["moyenne_rang_quart"] = 0
 
+    proba["moyenne_rang_finale_elo"] = 0
+    proba["moyenne_rang_semi_elo"] = 0
+    proba["moyenne_rang_quart_elo"] = 0
+
     compteur = 0
 
     scenario_list = get_all_scenario(filename)
@@ -710,19 +725,22 @@ def get_proba(victory_matrix, elo_ranking, filename, number_monte_carlo):
         proba_scenario = scenario["proba"]
         tournament_proba = play_tournament(set1, set2, victory_matrix, elo_ranking, proba_scenario, number_monte_carlo)
         for i in range(16):
-            proba["win"][i] += tournament_proba["win"][i]
-            proba["semi"][i] += tournament_proba["semi"][i]
-            proba["quart"][i] += tournament_proba["quart"][i]
-            proba["finale"][i] += tournament_proba["finale"][i]
-        proba["best_finale"] += tournament_proba["best_finale"]
-        proba["best_finale_elo"] += tournament_proba["best_finale_elo"]
-        proba["best_semi"] += tournament_proba["best_semi"]
-        proba["best_semi_elo"] += tournament_proba["best_semi_elo"]
-        proba["best_quart"] += tournament_proba["best_quart"]
-        proba["best_quart_elo"] += tournament_proba["best_quart_elo"]
-        proba["moyenne_rang_finale"] += tournament_proba["moyenne_rang_finale"]
-        proba["moyenne_rang_semi"] += tournament_proba["moyenne_rang_semi"]
-        proba["moyenne_rang_quart"] += tournament_proba["moyenne_rang_quart"]
+            proba["win"][i] += tournament_proba["win"][i]*number_monte_carlo
+            proba["semi"][i] += tournament_proba["semi"][i]*number_monte_carlo
+            proba["quart"][i] += tournament_proba["quart"][i]*number_monte_carlo
+            proba["finale"][i] += tournament_proba["finale"][i]*number_monte_carlo
+        proba["best_finale"] += tournament_proba["best_finale"]*number_monte_carlo
+        proba["best_finale_elo"] += tournament_proba["best_finale_elo"]*number_monte_carlo
+        proba["best_semi"] += tournament_proba["best_semi"]*number_monte_carlo
+        proba["best_semi_elo"] += tournament_proba["best_semi_elo"]*number_monte_carlo
+        proba["best_quart"] += tournament_proba["best_quart"]*number_monte_carlo
+        proba["best_quart_elo"] += tournament_proba["best_quart_elo"]*number_monte_carlo
+        proba["moyenne_rang_finale"] += tournament_proba["moyenne_rang_finale"]*number_monte_carlo
+        proba["moyenne_rang_semi"] += tournament_proba["moyenne_rang_semi"]*number_monte_carlo
+        proba["moyenne_rang_quart"] += tournament_proba["moyenne_rang_quart"]*number_monte_carlo
+        proba["moyenne_rang_finale_elo"] += tournament_proba["moyenne_rang_finale_elo"] * number_monte_carlo
+        proba["moyenne_rang_semi_elo"] += tournament_proba["moyenne_rang_semi_elo"] * number_monte_carlo
+        proba["moyenne_rang_quart_elo"] += tournament_proba["moyenne_rang_quart_elo"] * number_monte_carlo
     return proba
 
 
@@ -749,18 +767,65 @@ def save_proba(filename, proba):
     dict_list["mean_final"] = proba["moyenne_rang_finale"]
     dict_list["mean_semi"] = proba["moyenne_rang_semi"]
     dict_list["mean_quart"] = proba["moyenne_rang_quart"]
+    dict_list["mean_final_elo"] = proba["moyenne_rang_finale_elo"]
+    dict_list["mean_semi_elo"] = proba["moyenne_rang_semi_elo"]
+    dict_list["mean_quart_elo"] = proba["moyenne_rang_quart_elo"]
     json.dump(dict_list, file, ensure_ascii=False)
     file.close()
 
 
-def all_in_one_official(day, month, year, victory_matrix, number_monte_carlo=1000):
+def all_in_one_official(day, month, year, victory_matrix, number_monte_carlo):
     date_string = "-" + str(day) + "-" + str(month) + "-" + str(year) + ".txt"
     round_of_16_filename = "json_files/round_of_16_official" + date_string
     elo_ranking = create_elo_ranking(victory_matrix)
     proba = get_proba(victory_matrix, elo_ranking, round_of_16_filename, number_monte_carlo)
     save_proba(date_string, proba)
+    qs_filename = "json_files/qs_vector" + date_string
+    best_filename = "json_files/best_scenario" + date_string
+    get_mean_scenario(qs_filename, best_filename, elo_ranking)
 
 def create_elo_ranking(victory_matrix):
     weak_rank = [i for i in range(16)]
     elo_rank = sorted(weak_rank, key=lambda i: victory_matrix[0][i])
+    print(elo_rank)
     return elo_rank
+
+def get_mean_scenario(qs_filename, best_filename, elo):
+    file = open(qs_filename, 'r', encoding="utf-8")
+    dict_list = json.load(file)
+    qs_win = dict_list["qs_win"]
+    qs_final = dict_list["qs_final"]
+    qs_semi = dict_list["qs_semi"]
+    qs_quart = dict_list["qs_quart"]
+    file.close()
+
+    mean_final = 0
+    mean_semi = 0
+    mean_quart = 0
+    mean_final_elo = 0
+    mean_semi_elo = 0
+    mean_quart_elo = 0
+
+    for i in range(16):
+        mean_final += qs_final[i]*(i+1)/2
+        mean_semi += qs_semi[i]*(i+1)/4
+        mean_quart += qs_quart[i]*(i+1)/8
+        mean_final_elo += qs_final[elo[i]]*(i+1)/2
+        mean_semi_elo += qs_semi[elo[i]]*(i+1)/4
+        mean_quart_elo += qs_quart[elo[i]]*(i+1)/8
+
+    file = open(best_filename, 'r', encoding="utf-8")
+    dict_list = json.load(file)
+
+    file.close()
+    file = open(best_filename, 'w', encoding="utf-8")
+
+    dict_list["mean_final"] = mean_final
+    dict_list["mean_semi"] = mean_semi
+    dict_list["mean_quart"] = mean_quart
+    dict_list["mean_final_elo"] = mean_final_elo
+    dict_list["mean_semi_elo"] = mean_semi_elo
+    dict_list["mean_quart_elo"] = mean_quart_elo
+    json.dump(dict_list, file, ensure_ascii=False)
+    file.close()
+    return
